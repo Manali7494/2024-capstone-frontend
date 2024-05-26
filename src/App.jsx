@@ -1,5 +1,6 @@
 import './App.css';
-import { Title } from './components';
+import React from 'react';
+import Title from './components';
 
 function App() {
   return (
@@ -11,13 +12,12 @@ function App() {
           target="_blank"
           rel="noopener noreferrer"
         >
-           React
+          React
         </a>
         <Title />
       </header>
     </div>
   );
 }
-
 
 export default App;
