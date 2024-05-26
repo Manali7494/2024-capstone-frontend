@@ -1,0 +1,71 @@
+Resources:
+  ArtifactStoreBucket:
+    Type: 'AWS::S3::Bucket'
+  CodePipelineRole:
+    Type: 'AWS::IAM::Role'
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service: 'codepipeline.amazonaws.com'
+            Action: 'sts:AssumeRole'
+      Policies:
+        - PolicyName: CodePipelinePolicy
+          PolicyDocument:
+            Version: '2012-10-17'
+            Statement:
+              - Effect: Allow
+                Action: '*'
+                Resource: '*'
+  MyPipeline:
+    Type: AWS::CodePipeline::Pipeline
+    Properties:
+      RoleArn: !GetAtt CodePipelineRole.Arn
+      ArtifactStore:
+        Type: S3
+        Location: !Ref ArtifactStoreBucket      
+      Stages:
+        - Name: Source
+          Actions:
+            - Name: Source
+              ActionTypeId:
+                Category: Source
+                Owner: ThirdParty
+                Provider: GitHub
+                Version: 1
+              OutputArtifacts:
+                - Name: SourceOutput
+              Configuration:
+                Owner: Manali7494
+                Repo: 2024-capstone-frontend
+                Branch: main
+                OAuthToken: '{{resolve:secretsmanager:SecretName:SecretString:githubToken}}'
+        - Name: Build
+          Actions:
+            - Name: Build
+              ActionTypeId:
+                Category: Build
+                Owner: AWS
+                Provider: CodeBuild
+                Version: 1
+              InputArtifacts:
+                - Name: SourceOutput
+              OutputArtifacts:
+                - Name: BuildOutput
+              Configuration:
+                ProjectName: PSU-Frontend
+        - Name: Deploy
+          Actions:
+            - Name: Deploy
+              ActionTypeId:
+                Category: Deploy
+                Owner: AWS
+                Provider: Amplify
+                Version: 1
+              InputArtifacts:
+                - Name: BuildOutput
+              Configuration:
+                AppId: d1tar7dey1nggt
+                BranchName: main
