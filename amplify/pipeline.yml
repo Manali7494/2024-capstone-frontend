@@ -1,8 +1,31 @@
 Resources:
+  ArtifactStoreBucket:
+    Type: 'AWS::S3::Bucket'
+  CodePipelineRole:
+    Type: 'AWS::IAM::Role'
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service: 'codepipeline.amazonaws.com'
+            Action: 'sts:AssumeRole'
+      Policies:
+        - PolicyName: CodePipelinePolicy
+          PolicyDocument:
+            Version: '2012-10-17'
+            Statement:
+              - Effect: Allow
+                Action: '*'
+                Resource: '*'
   MyPipeline:
     Type: AWS::CodePipeline::Pipeline
     Properties:
-      RoleArn: arn:aws:iam::215928612026:role/amplify-healthywealthy-dev-ba243-authRole
+      RoleArn: !GetAtt CodePipelineRole.Arn
+      ArtifactStore:
+        Type: S3
+        Location: !Ref ArtifactStoreBucket      
       Stages:
         - Name: Source
           Actions:
@@ -18,7 +41,7 @@ Resources:
                 Owner: Manali7494
                 Repo: 2024-capstone-frontend
                 Branch: main
-                OAuthToken: '{{resolve:ssm:/path/to/github/oauth/token:1}}' # Using SSM parameter store
+                OAuthToken: '{{resolve:secretsmanager:SecretName:SecretString:githubToken}}'
         - Name: Build
           Actions:
             - Name: Build
