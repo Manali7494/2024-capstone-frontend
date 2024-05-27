@@ -26,4 +26,20 @@ describe('Login', () => {
       password: 'password123',
     });
   });
+
+  test('shows an error message when email is in invalid format', () => {
+    const {
+      getByText,
+      getByLabelText,
+      queryByText,
+    } = render(<Login onSubmit={props.onSubmit} />);
+
+    fireEvent.change(getByLabelText(/Email/i), { target: { value: 'invalid email.com' } });
+    fireEvent.change(getByLabelText(/Password/i), { target: { value: 'password123' } });
+
+    fireEvent.click(getByText(/log in/i));
+
+    expect(queryByText('Invalid email')).toBeInTheDocument();
+    expect(props.onSubmit).not.toHaveBeenCalled();
+  });
 });
