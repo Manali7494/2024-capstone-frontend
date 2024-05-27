@@ -10,6 +10,15 @@ describe('Routes', () => {
         <Routes />
       </MemoryRouter>,
     );
-    expect(screen.getByText('Main page')).toBeInTheDocument();
+    expect(screen.getByText('Healthy Wealthy')).toBeInTheDocument();
+  });
+
+  it('renders Login component when at /login', () => {
+    render(
+      <MemoryRouter initialEntries={['/login']}>
+        <Routes />
+      </MemoryRouter>,
+    );
+    expect(screen.getByText('Log in')).toBeInTheDocument();
   });
 });
