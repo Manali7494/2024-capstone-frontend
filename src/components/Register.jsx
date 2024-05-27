@@ -7,7 +7,8 @@ function Register({ onSubmit }) {
   const [password, setPassword] = useState('');
   const [phoneNumber, setPhoneNumber] = useState('');
 
-  const handleSubmit = () => {
+  const handleSubmit = (event) => {
+    event.preventDefault();
     onSubmit({
       email, password, username, phoneNumber,
     });
@@ -28,7 +29,7 @@ function Register({ onSubmit }) {
         Email:
         <input
           id="email"
-          type="email"
+          type="text"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
         />

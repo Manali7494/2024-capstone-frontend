@@ -6,17 +6,16 @@ describe('Register', () => {
   const props = {
     onSubmit: jest.fn(),
   };
-  test('renders fields', () => {
+  test('renders the input fields in the document', () => {
     const { getByLabelText } = render(<Register onSubmit={props.onSubmit} />);
 
-    // Check that the input fields are present in the document
     expect(getByLabelText(/username/i)).toBeInTheDocument();
     expect(getByLabelText(/email/i)).toBeInTheDocument();
     expect(getByLabelText(/password/i)).toBeInTheDocument();
     expect(getByLabelText(/phone number/i)).toBeInTheDocument();
   });
 
-  test('calls onSubmit with the form state on form submission', () => {
+  test('calls onSubmit with the register form state on submission', () => {
     const { getByText, getByLabelText } = render(<Register onSubmit={props.onSubmit} />);
 
     fireEvent.change(getByLabelText(/username/i), {
