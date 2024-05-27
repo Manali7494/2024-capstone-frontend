@@ -21,4 +21,13 @@ describe('Routes', () => {
     );
     expect(screen.getByText('Log in')).toBeInTheDocument();
   });
+
+  it('renders Register component when at /register', () => {
+    render(
+      <MemoryRouter initialEntries={['/register']}>
+        <Routes />
+      </MemoryRouter>,
+    );
+    expect(screen.getByText('Register')).toBeInTheDocument();
+  });
 });
