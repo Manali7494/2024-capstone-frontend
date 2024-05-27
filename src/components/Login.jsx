@@ -4,8 +4,15 @@ import PropTypes from 'prop-types';
 function Login({ onSubmit }) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [error, setError] = useState('');
 
-  const handleSubmit = () => {
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    const emailRegex = /^[a-zA-Z0-9+_.-]+@[a-zA-Z0-9.-]+$/;
+    if (!emailRegex.test(email)) {
+      setError('Invalid email');
+      return;
+    }
     onSubmit({ email, password });
   };
 
@@ -30,6 +37,7 @@ function Login({ onSubmit }) {
         />
       </label>
       <button type="submit">Log in</button>
+      {error && <div>{error}</div>}
     </form>
   );
 }

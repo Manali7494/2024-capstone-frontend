@@ -6,9 +6,15 @@ function Register({ onSubmit }) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [phoneNumber, setPhoneNumber] = useState('');
+  const [error, setError] = useState('');
 
   const handleSubmit = (event) => {
     event.preventDefault();
+    const emailRegex = /^[a-zA-Z0-9+_.-]+@[a-zA-Z0-9.-]+$/;
+    if (!emailRegex.test(email)) {
+      setError('Invalid email');
+      return;
+    }
     onSubmit({
       email, password, username, phoneNumber,
     });
@@ -53,6 +59,7 @@ function Register({ onSubmit }) {
         />
       </label>
       <button type="submit">Register</button>
+      {error && <div>{error}</div>}
     </form>
   );
 }
