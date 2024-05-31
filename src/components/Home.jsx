@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import React from 'react';
 // eslint-disable-next-line no-unused-vars
 import { signIn, signUp } from 'aws-amplify/auth';
