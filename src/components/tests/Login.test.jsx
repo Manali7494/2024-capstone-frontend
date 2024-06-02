@@ -1,11 +1,22 @@
 import React from 'react';
-import { render, fireEvent } from '@testing-library/react';
+import { render, fireEvent, waitFor } from '@testing-library/react';
+import {
+  signIn,
+} from 'aws-amplify/auth';
 import Login from '../Login';
+
+jest.mock('aws-amplify/auth');
+
+jest.mock('aws-amplify/auth', () => ({
+  signIn: jest.fn().mockResolvedValue({ userId: '123' }),
+  fetchAuthSession: jest.fn().mockResolvedValue({ userSub: null }),
+  getCurrentUser: jest.fn().mockResolvedValue({ username: 'user' }),
+}));
 
 describe('Login', () => {
   const props = {
-    onSubmit: jest.fn(),
   };
+
   test('renders email and password fields', () => {
     const { getByLabelText } = render(<Login onSubmit={props.onSubmit} />);
 
@@ -13,7 +24,7 @@ describe('Login', () => {
     expect(getByLabelText(/Password/i)).toBeInTheDocument();
   });
 
-  test('calls onSubmit with email and password when clicked', () => {
+  test('calls onSubmit with email and password when clicked', async () => {
     const { getByLabelText, getByText } = render(<Login onSubmit={props.onSubmit} />);
 
     fireEvent.change(getByLabelText(/Email/i), { target: { value: 'user@gmail.com' } });
@@ -21,9 +32,11 @@ describe('Login', () => {
 
     fireEvent.click(getByText(/log in/i));
 
-    expect(props.onSubmit).toHaveBeenCalledWith({
-      email: 'user@gmail.com',
-      password: 'password123',
+    await waitFor(() => {
+      expect(signIn).toHaveBeenCalledWith({
+        "password": "password123",
+        "username": "user@gmail.com",
+      });
     });
   });
 
@@ -40,6 +53,5 @@ describe('Login', () => {
     fireEvent.click(getByText(/log in/i));
 
     expect(queryByText('Invalid email')).toBeInTheDocument();
-    expect(props.onSubmit).not.toHaveBeenCalled();
   });
 });

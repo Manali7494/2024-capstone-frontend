@@ -7,6 +7,13 @@
     "es6": true,
     "jest": true
   },
+  "parserOptions": {
+    "ecmaVersion": 2020,
+    "sourceType": "module",
+    "ecmaFeatures": {
+      "jsx": true
+    }
+  },
   "rules": {
     "react/jsx-filename-extension": [1, { "extensions": [".jsx"] }],
     "react-hooks/rules-of-hooks": "error",
