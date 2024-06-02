@@ -1,6 +1,13 @@
 import React from 'react';
-import { render, fireEvent } from '@testing-library/react';
+import { render, fireEvent, waitFor } from '@testing-library/react';
+import { signUp } from 'aws-amplify/auth';
 import Register from '../Register';
+
+jest.mock('aws-amplify/auth');
+
+jest.mock('aws-amplify/auth', () => ({
+  signUp: jest.fn().mockResolvedValue({ userId: '123' }),
+}));
 
 describe('Register', () => {
   const props = {
@@ -15,7 +22,7 @@ describe('Register', () => {
     expect(getByLabelText(/phone number/i)).toBeInTheDocument();
   });
 
-  test('calls onSubmit with the register form state on submission', () => {
+  test('calls onSubmit with the register form state on submission', async () => {
     const { getByText, getByLabelText } = render(<Register onSubmit={props.onSubmit} />);
 
     fireEvent.change(getByLabelText(/username/i), {
@@ -33,11 +40,18 @@ describe('Register', () => {
 
     fireEvent.click(getByText(/register/i));
 
-    expect(props.onSubmit).toHaveBeenCalledWith({
-      email: 'user@gmail.com',
-      username: 'user',
-      password: 'password',
-      phoneNumber: '123456',
+    await waitFor(() => {
+      expect(signUp).toHaveBeenCalledWith({
+        options: {
+          userAttributes: {
+            email: 'user@gmail.com',
+            phone_number: '+1123456',
+            preferred_username: 'user',
+          },
+        },
+        password: 'password',
+        username: 'user@gmail.com',
+      });
     });
   });
 
