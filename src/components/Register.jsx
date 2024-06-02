@@ -1,25 +1,45 @@
+/* eslint-disable no-console */
 import React, { useState } from 'react';
-import PropTypes from 'prop-types';
+import { signUp } from 'aws-amplify/auth';
 
-function Register({ onSubmit }) {
+function Register() {
   const [username, setUsername] = useState('');
+  const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [phoneNumber, setPhoneNumber] = useState('');
-  const [error, setError] = useState('');
+  const [display, setDisplay] = useState('');
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
     const emailRegex = /^[a-zA-Z0-9+_.-]+@[a-zA-Z0-9.-]+$/;
     if (!emailRegex.test(email)) {
-      setError('Invalid email');
+      setDisplay('Invalid email');
       return;
     }
-    onSubmit({
-      email, password, username, phoneNumber,
-    });
-  };
 
+    try {
+      const result = await signUp({
+        username: email,
+        password,
+        options: {
+          userAttributes: {
+            email,
+            phone_number: `+1${phoneNumber.replace(/-/g, '')}`,
+            preferred_username: username,
+            name,
+          },
+
+        },
+      });
+
+      const { userId = '' } = result || {};
+      setDisplay('Registration Successful');
+      console.log('userId', userId);
+    } catch (err) {
+      console.log('Error', err);
+    }
+  };
   return (
     <form onSubmit={handleSubmit}>
       <label htmlFor="username">
@@ -31,11 +51,22 @@ function Register({ onSubmit }) {
           onChange={(e) => setUsername(e.target.value)}
         />
       </label>
+      <label htmlFor="name">
+        Name:
+        <input
+          id="name"
+          data-testid="name"
+          type="text"
+          value={name}
+          onChange={(e) => setName(e.target.value)}
+        />
+      </label>
       <label htmlFor="email">
         Email:
         <input
           id="email"
           type="text"
+          placeholder="test@gmail.com"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
         />
@@ -55,17 +86,16 @@ function Register({ onSubmit }) {
           id="phoneNumber"
           type="tel"
           value={phoneNumber}
+          placeholder="123-456-7890"
           onChange={(e) => setPhoneNumber(e.target.value)}
         />
       </label>
       <button type="submit">Register</button>
-      {error && <div>{error}</div>}
+      {display && <div>{display}</div>}
     </form>
   );
 }
 
-Register.propTypes = {
-  onSubmit: PropTypes.func.isRequired,
-};
+Register.propTypes = {};
 
 export default Register;
