@@ -1,5 +1,10 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
+import {
+  Button, TextField, Grid, Paper, Typography,
+} from '@mui/material';
+import { Alert } from '@mui/lab';
+import PasswordInput from './PasswordInput';
 
 function Login({ onSubmit }) {
   const [email, setEmail] = useState('');
@@ -17,28 +22,39 @@ function Login({ onSubmit }) {
   };
 
   return (
-    <form onSubmit={handleSubmit}>
-      <label htmlFor="email">
-        Email:
-        <input
-          id="email"
-          type="text"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-        />
-      </label>
-      <label htmlFor="password">
-        Password:
-        <input
-          id="password"
-          type="password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-        />
-      </label>
-      <button type="submit">Log in</button>
-      {error && <div>{error}</div>}
-    </form>
+    <Grid container justifyContent="center">
+      <Grid item xs={12} sm={8} md={6}>
+        <Paper elevation={3} style={{ padding: '2em', marginTop: '2em' }}>
+          <Typography variant="h5" gutterBottom>
+            Login
+          </Typography>
+          {error && <Alert severity="error">{error}</Alert>}
+
+          <form onSubmit={handleSubmit}>
+            <TextField
+              required
+              fullWidth
+              margin="normal"
+              label="Email"
+              type="text"
+              name="email"
+              onChange={(e) => setEmail(e.target.value)}
+            />
+            <PasswordInput setPassword={setPassword} password={password} />
+
+            <Button
+              type="submit"
+              fullWidth
+              variant="contained"
+              color="primary"
+              style={{ marginTop: '2em' }}
+            >
+              Login
+            </Button>
+          </form>
+        </Paper>
+      </Grid>
+    </Grid>
   );
 }
 

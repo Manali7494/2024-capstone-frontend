@@ -1,5 +1,10 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
+import {
+  Button, TextField, Grid, Paper, Typography,
+} from '@mui/material';
+import { Alert } from '@mui/lab';
+import PasswordInput from './PasswordInput';
 
 function Register({ onSubmit }) {
   const [username, setUsername] = useState('');
@@ -21,46 +26,57 @@ function Register({ onSubmit }) {
   };
 
   return (
-    <form onSubmit={handleSubmit}>
-      <label htmlFor="username">
-        Username:
-        <input
-          id="username"
-          type="text"
-          value={username}
-          onChange={(e) => setUsername(e.target.value)}
-        />
-      </label>
-      <label htmlFor="email">
-        Email:
-        <input
-          id="email"
-          type="text"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-        />
-      </label>
-      <label htmlFor="password">
-        Password:
-        <input
-          id="password"
-          type="password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-        />
-      </label>
-      <label htmlFor="phoneNumber">
-        Phone Number:
-        <input
-          id="phoneNumber"
-          type="tel"
-          value={phoneNumber}
-          onChange={(e) => setPhoneNumber(e.target.value)}
-        />
-      </label>
-      <button type="submit">Register</button>
-      {error && <div>{error}</div>}
-    </form>
+    <Grid container justifyContent="center">
+      <Grid item xs={12} sm={8} md={6}>
+        <Paper elevation={3} style={{ padding: '2em', marginTop: '2em' }}>
+          <Typography variant="h5" gutterBottom>
+            Register
+          </Typography>
+          <form onSubmit={handleSubmit}>
+            <TextField
+              required
+              fullWidth
+              margin="normal"
+              label="Username"
+              type="text"
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
+            />
+            <TextField
+              required
+              fullWidth
+              margin="normal"
+              label="Email"
+              type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+            />
+
+            <PasswordInput setPassword={setPassword} password={password} />
+            <TextField
+              required
+              fullWidth
+              margin="normal"
+              label="Phone Number"
+              type="tel"
+              value={phoneNumber}
+              onChange={(e) => setPhoneNumber(e.target.value)}
+            />
+            <Button
+              type="submit"
+              fullWidth
+              variant="contained"
+              color="primary"
+              style={{ marginTop: '2em' }}
+            >
+              Register
+            </Button>
+            {error && <Alert severity="error">{error}</Alert>}
+
+          </form>
+        </Paper>
+      </Grid>
+    </Grid>
   );
 }
 
