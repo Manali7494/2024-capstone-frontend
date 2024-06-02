@@ -4,6 +4,7 @@ import { signUp } from 'aws-amplify/auth';
 
 function Register() {
   const [username, setUsername] = useState('');
+  const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [phoneNumber, setPhoneNumber] = useState('');
@@ -26,6 +27,7 @@ function Register() {
             email,
             phone_number: `+1${phoneNumber.replace(/-/g, '')}`,
             preferred_username: username,
+            name,
           },
 
         },
@@ -47,6 +49,16 @@ function Register() {
           type="text"
           value={username}
           onChange={(e) => setUsername(e.target.value)}
+        />
+      </label>
+      <label htmlFor="name">
+        Name:
+        <input
+          id="name"
+          data-testid="name"
+          type="text"
+          value={name}
+          onChange={(e) => setName(e.target.value)}
         />
       </label>
       <label htmlFor="email">

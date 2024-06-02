@@ -23,10 +23,17 @@ describe('Register', () => {
   });
 
   test('calls onSubmit with the register form state on submission', async () => {
-    const { getByText, getByLabelText } = render(<Register onSubmit={props.onSubmit} />);
+    const {
+      getByText,
+      getByLabelText,
+      getByTestId,
+    } = render(<Register onSubmit={props.onSubmit} />);
 
     fireEvent.change(getByLabelText(/username/i), {
       target: { value: 'user' },
+    });
+    fireEvent.change(getByTestId('name'), {
+      target: { value: 'User' },
     });
     fireEvent.change(getByLabelText(/email/i), {
       target: { value: 'user@gmail.com' },
@@ -45,6 +52,7 @@ describe('Register', () => {
         options: {
           userAttributes: {
             email: 'user@gmail.com',
+            name: 'User',
             phone_number: '+1123456',
             preferred_username: 'user',
           },

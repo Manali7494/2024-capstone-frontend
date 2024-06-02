@@ -13,10 +13,12 @@ describe('Registration', () => {
   it('allows a user to register', () => {
     const username = 'user';
     const email = 'test@gmail.com';
+    const name = 'User';
     const password = '!Testpassword100';
     const phoneNumber = '123-456-3435';
 
     cy.get('#username').type(username);
+    cy.get('#name').type(name);
     cy.get('#email').type(email);
     cy.get('#password').type(password);
     cy.get('#phoneNumber').type(phoneNumber);
