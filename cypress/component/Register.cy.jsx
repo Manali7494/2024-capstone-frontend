@@ -12,7 +12,7 @@ describe('Registration', () => {
 
   it('allows a user to register', () => {
     const username = 'user';
-    const email = 'manalib2010@gmail.com';
+    const email = 'test@gmail.com';
     const password = '!Testpassword100';
     const phoneNumber = '123-456-3435';
 
