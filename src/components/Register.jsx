@@ -37,7 +37,17 @@ function Register() {
       setDisplay('Registration Successful');
       console.log('userId', userId);
     } catch (err) {
-      console.log('Error', err);
+      console.log('error', err);
+      let errorMessage = 'Error';
+      switch (err.name) {
+        case 'UsernameExistsException':
+          errorMessage = 'Email already exists';
+          break;
+        default:
+          errorMessage = 'An error occurred during registration';
+      }
+
+      setDisplay(errorMessage);
     }
   };
   return (

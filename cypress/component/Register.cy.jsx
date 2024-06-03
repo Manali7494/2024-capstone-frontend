@@ -26,4 +26,21 @@ describe('Registration', () => {
 
     cy.contains('Registration Successful').should('exist');
   });
+
+  it('shows error on duplicate email', () => {
+    const username = 'user';
+    const email = 'test@gmail.com';
+    const name = 'User';
+    const password = '!Testpassword100';
+    const phoneNumber = '123-456-3435';
+
+    cy.get('#username').type(username);
+    cy.get('#name').type(name);
+    cy.get('#email').type(email);
+    cy.get('#password').type(password);
+    cy.get('#phoneNumber').type(phoneNumber);
+    cy.get('form').submit();
+
+    cy.contains('Email already exists').should('exist');
+  });
 });
