@@ -1,6 +1,11 @@
 /* eslint-disable no-console */
 import React, { useState } from 'react';
 import { signUp } from 'aws-amplify/auth';
+import {
+  Button, TextField, Grid, Paper, Typography,
+} from '@mui/material';
+import { Alert } from '@mui/lab';
+import PasswordInput from './PasswordInput';
 
 function Register() {
   const [username, setUsername] = useState('');
@@ -51,59 +56,72 @@ function Register() {
     }
   };
   return (
-    <form onSubmit={handleSubmit}>
-      <label htmlFor="username">
-        Username:
-        <input
-          id="username"
-          type="text"
-          value={username}
-          onChange={(e) => setUsername(e.target.value)}
-        />
-      </label>
-      <label htmlFor="name">
-        Name:
-        <input
-          id="name"
-          data-testid="name"
-          type="text"
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-        />
-      </label>
-      <label htmlFor="email">
-        Email:
-        <input
-          id="email"
-          type="text"
-          placeholder="test@gmail.com"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-        />
-      </label>
-      <label htmlFor="password">
-        Password:
-        <input
-          id="password"
-          type="password"
-          placeholder="!TestPassword100"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-        />
-      </label>
-      <label htmlFor="phoneNumber">
-        Phone Number:
-        <input
-          id="phoneNumber"
-          type="tel"
-          value={phoneNumber}
-          placeholder="123-456-7890"
-          onChange={(e) => setPhoneNumber(e.target.value)}
-        />
-      </label>
-      <button type="submit">Register</button>
-      {display && <div>{display}</div>}
-    </form>
+
+    <Grid container justifyContent="center">
+      <Grid item xs={12} sm={8} md={6}>
+        <Paper elevation={3} style={{ padding: '2em', marginTop: '2em' }}>
+          <Typography variant="h5" gutterBottom>
+            Register
+          </Typography>
+          <form onSubmit={handleSubmit}>
+            <TextField
+              required
+              fullWidth
+              margin="normal"
+              label="Username"
+              type="text"
+              id="username"
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
+            />
+            <TextField
+              required
+              fullWidth
+              margin="normal"
+              label="Name"
+              type="text"
+              id="name"
+              inputProps={{ 'data-testid': 'name' }}
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+            />
+            <TextField
+              required
+              fullWidth
+              margin="normal"
+              label="Email"
+              type="email"
+              id="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+            />
+
+            <PasswordInput setPassword={setPassword} password={password} />
+            <TextField
+              required
+              fullWidth
+              margin="normal"
+              label="Phone Number"
+              type="tel"
+              id="phoneNumber"
+              placeholder="123-456-7890"
+              value={phoneNumber}
+              onChange={(e) => setPhoneNumber(e.target.value)}
+            />
+            <Button
+              type="submit"
+              fullWidth
+              variant="contained"
+              color="primary"
+              style={{ marginTop: '2em' }}
+            >
+              Register
+            </Button>
+            {display && <Alert severity="info">{display}</Alert>}
+          </form>
+        </Paper>
+      </Grid>
+    </Grid>
   );
 }
 
