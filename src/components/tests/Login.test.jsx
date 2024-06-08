@@ -25,24 +25,24 @@ describe('Login', () => {
   });
 
   test('calls onSubmit with email and password when clicked', async () => {
-    const { getByLabelText, getByText } = render(<Login onSubmit={props.onSubmit} />);
+    const { getByLabelText, getByRole } = render(<Login onSubmit={props.onSubmit} />);
 
     fireEvent.change(getByLabelText(/Email/i), { target: { value: 'user@gmail.com' } });
     fireEvent.change(getByLabelText(/Password/i), { target: { value: 'password123' } });
 
-    fireEvent.click(getByText(/log in/i));
+    fireEvent.click(getByRole('button', { name: /login/i }));
 
     await waitFor(() => {
       expect(signIn).toHaveBeenCalledWith({
-        "password": "password123",
-        "username": "user@gmail.com",
+        password: 'password123',
+        username: 'user@gmail.com',
       });
     });
   });
 
   test('shows an error message when email is in invalid format', () => {
     const {
-      getByText,
+      getByRole,
       getByLabelText,
       queryByText,
     } = render(<Login onSubmit={props.onSubmit} />);
@@ -50,8 +50,7 @@ describe('Login', () => {
     fireEvent.change(getByLabelText(/Email/i), { target: { value: 'invalid email.com' } });
     fireEvent.change(getByLabelText(/Password/i), { target: { value: 'password123' } });
 
-    fireEvent.click(getByText(/log in/i));
-
+    fireEvent.click(getByRole('button', { name: /login/i }));
     expect(queryByText('Invalid email')).toBeInTheDocument();
   });
 });
