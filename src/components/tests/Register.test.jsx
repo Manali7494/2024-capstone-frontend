@@ -24,16 +24,16 @@ describe('Register', () => {
 
   test('calls onSubmit with the register form state on submission', async () => {
     const {
-      getByText,
       getByLabelText,
       getByTestId,
+      getByRole,
     } = render(<Register onSubmit={props.onSubmit} />);
 
     fireEvent.change(getByLabelText(/username/i), {
       target: { value: 'user' },
     });
     fireEvent.change(getByTestId('name'), {
-      target: { value: 'User' },
+      target: { value: 'User ABC' },
     });
     fireEvent.change(getByLabelText(/email/i), {
       target: { value: 'user@gmail.com' },
@@ -45,14 +45,14 @@ describe('Register', () => {
       target: { value: '123456' },
     });
 
-    fireEvent.click(getByText(/register/i));
+    fireEvent.click(getByRole('button', { name: /register/i }));
 
     await waitFor(() => {
       expect(signUp).toHaveBeenCalledWith({
         options: {
           userAttributes: {
             email: 'user@gmail.com',
-            name: 'User',
+            name: 'User ABC',
             phone_number: '+1123456',
             preferred_username: 'user',
           },
@@ -65,7 +65,7 @@ describe('Register', () => {
 
   test('shows an error message when email is in invalid format', () => {
     const {
-      getByText,
+      getByRole,
       getByLabelText,
       queryByText,
     } = render(<Register onSubmit={props.onSubmit} />);
@@ -83,7 +83,7 @@ describe('Register', () => {
       target: { value: '123456' },
     });
 
-    fireEvent.click(getByText(/register/i));
+    fireEvent.click(getByRole('button', { name: /register/i }));
 
     expect(queryByText('Invalid email')).toBeInTheDocument();
     expect(props.onSubmit).not.toHaveBeenCalled();

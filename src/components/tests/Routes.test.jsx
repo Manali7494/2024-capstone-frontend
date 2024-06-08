@@ -19,7 +19,7 @@ describe('Routes', () => {
         <Routes />
       </MemoryRouter>,
     );
-    expect(screen.getByText('Log in')).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: /login/i })).toBeInTheDocument();
   });
 
   it('renders Register component when at /register', () => {
@@ -28,6 +28,6 @@ describe('Routes', () => {
         <Routes />
       </MemoryRouter>,
     );
-    expect(screen.getByText('Register')).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: /register/i })).toBeInTheDocument();
   });
 });

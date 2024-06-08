@@ -5,6 +5,11 @@ import {
   signOut,
   fetchAuthSession,
 } from 'aws-amplify/auth';
+import {
+  Button, TextField, Grid, Paper, Typography,
+} from '@mui/material';
+import { Alert } from '@mui/lab';
+import PasswordInput from './PasswordInput';
 
 function Login() {
   const [email, setEmail] = useState('');
@@ -54,33 +59,54 @@ function Login() {
   };
 
   return (
-    <>
-      <form onSubmit={handleSubmit}>
-        <label htmlFor="email">
-          Email:
-          <input
-            id="email"
-            type="text"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-          />
-        </label>
-        <label htmlFor="password">
-          Password:
-          <input
-            id="password"
-            type="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-          />
-        </label>
-        <button type="submit">Log in</button>
-        {display && <div>{display}</div>}
-      </form>
-      {user ? (
-        <button type="button" id="signout" onClick={handleSignOut}>Sign Out</button>
-      ) : null}
-    </>
+
+    <Grid container justifyContent="center">
+      <Grid item xs={12} sm={8} md={6}>
+        <Paper elevation={3} style={{ padding: '2em', marginTop: '2em' }}>
+          <Typography variant="h5" gutterBottom>
+            Login
+          </Typography>
+          {display && <Alert severity="info">{display}</Alert>}
+
+          <form onSubmit={handleSubmit}>
+            <TextField
+              required
+              fullWidth
+              margin="normal"
+              label="Email"
+              type="text"
+              name="email"
+              id="email"
+              onChange={(e) => setEmail(e.target.value)}
+            />
+            <PasswordInput setPassword={setPassword} password={password} />
+
+            <Button
+              type="submit"
+              fullWidth
+              variant="contained"
+              color="primary"
+              style={{ marginTop: '2em' }}
+            >
+              Login
+            </Button>
+            {user ? (
+              <Button
+                type="submit"
+                fullWidth
+                variant="contained"
+                color="primary"
+                style={{ marginTop: '2em' }}
+                id="signout"
+                onClick={handleSignOut}
+              >
+                Sign Out
+              </Button>
+            ) : null}
+          </form>
+        </Paper>
+      </Grid>
+    </Grid>
   );
 }
 
