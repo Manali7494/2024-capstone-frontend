@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import './App.css';
 import React, { useState, useEffect } from 'react';
 import { Amplify } from 'aws-amplify';
