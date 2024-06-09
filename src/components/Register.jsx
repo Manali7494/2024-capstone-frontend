@@ -9,6 +9,18 @@ import { useNavigate } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import PasswordInput from './PasswordInput';
 
+export const isButtonDisabled = ({
+  isPasswordValid, username, name, email, password, phoneNumber,
+}) => {
+  if (!Object.values(isPasswordValid).every(Boolean)) {
+    return true;
+  }
+  if (!username || !name || !email || !password || !phoneNumber) {
+    return true;
+  }
+  return false;
+};
+
 function Register({ setUser, setSnackbar }) {
   const [username, setUsername] = useState('');
   const [name, setName] = useState('');
@@ -23,15 +35,6 @@ function Register({ setUser, setSnackbar }) {
     number: false,
   });
 
-  const isButtonDisabled = () => {
-    if (!Object.values(isPasswordValid).every(Boolean)) {
-      return true;
-    }
-    if (!username || !name || !email || !password || !phoneNumber) {
-      return true;
-    }
-    return false;
-  };
   const navigate = useNavigate();
 
   const handleSubmit = async (event) => {
@@ -114,7 +117,7 @@ function Register({ setUser, setSnackbar }) {
               fullWidth
               margin="normal"
               label="Email"
-              type="email"
+              type="text"
               id="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
@@ -143,7 +146,9 @@ function Register({ setUser, setSnackbar }) {
               variant="contained"
               color="primary"
               style={{ marginTop: '2em' }}
-              disabled={isButtonDisabled}
+              disabled={isButtonDisabled({
+                isPasswordValid, username, name, email, password, phoneNumber,
+              })}
             >
               Register
             </Button>

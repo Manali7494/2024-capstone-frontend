@@ -6,12 +6,25 @@ import App from './App';
 jest.mock('aws-amplify/auth');
 
 describe('App', () => {
-  beforeEach(() => {
+  test('renders Header component', () => {
     getCurrentUser.mockResolvedValue(null);
     fetchAuthSession.mockResolvedValue(null);
+    render(<App />);
+
+    const textElement = screen.getByText('Healthy Wealthy');
+    expect(textElement).toBeInTheDocument();
   });
 
-  test('renders Header component', () => {
+  test('fetch user details', () => {
+    getCurrentUser.mockResolvedValue({
+      userId: 'user:1',
+      signInDetails: {
+        loginId: 'email@email.com',
+      },
+    });
+    fetchAuthSession.mockResolvedValue({
+      userSub: 'user:Sub',
+    });
     render(<App />);
 
     const textElement = screen.getByText('Healthy Wealthy');

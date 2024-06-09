@@ -29,9 +29,18 @@
     "eject": "react-scripts eject",
     "lint": "eslint '**/*.jsx'",
     "cypress": "cypress open",
+    "test:coverage": "CI=true npm test -- --env=jsdom --coverage",
     "cypress:integration": "cypress run --component 'cypress/integration/**/*.{js,jsx}'",
     "cypress:e2e": "cypress run --e2e 'cypress/e2e/**/*.{js,jsx}'"
   },
+  "jest": {
+  "collectCoverageFrom": [
+    "src/**/*.{js,jsx}",
+    "!<rootDir>/src/**/*.js",
+    "!<rootDir>/src/setupTests.js",
+    "!<rootDir>/src/setupFiles.js"
+  ]
+},
   "browserslist": {
     "production": [
       ">0.2%",
