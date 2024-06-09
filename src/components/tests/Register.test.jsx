@@ -1,34 +1,31 @@
 import React from 'react';
 import { render, fireEvent, waitFor } from '@testing-library/react';
 import { signUp } from 'aws-amplify/auth';
+import { BrowserRouter as Router } from 'react-router-dom';
 import Register from '../Register';
-
-jest.mock('aws-amplify/auth');
 
 jest.mock('aws-amplify/auth', () => ({
   signUp: jest.fn().mockResolvedValue({ userId: '123' }),
 }));
 
 describe('Register', () => {
-  const props = {
-    onSubmit: jest.fn(),
+  const mockProps = {
+    setUser: jest.fn(),
+    setSnackbar: jest.fn(),
   };
-  test('renders the input fields in the document', () => {
-    const { getByLabelText } = render(<Register onSubmit={props.onSubmit} />);
 
+  const setup = (props = {}) => render(<Router><Register {...mockProps} {...props} /></Router>);
+
+  test('renders the input fields in the document', () => {
+    const { getByLabelText } = setup();
     expect(getByLabelText(/username/i)).toBeInTheDocument();
     expect(getByLabelText(/email/i)).toBeInTheDocument();
     expect(getByLabelText(/password/i)).toBeInTheDocument();
     expect(getByLabelText(/phone number/i)).toBeInTheDocument();
   });
 
-  test('calls onSubmit with the register form state on submission', async () => {
-    const {
-      getByLabelText,
-      getByTestId,
-      getByRole,
-    } = render(<Register onSubmit={props.onSubmit} />);
-
+  test('calls signUp with the register form state on submission', async () => {
+    const { getByLabelText, getByTestId, getByRole } = setup();
     fireEvent.change(getByLabelText(/username/i), {
       target: { value: 'user' },
     });
@@ -60,16 +57,15 @@ describe('Register', () => {
         password: 'password',
         username: 'user@gmail.com',
       });
+
+      expect(mockProps.setUser).toHaveBeenCalledWith(expect.objectContaining({ email: 'user@gmail.com' }));
+
+      expect(mockProps.setSnackbar).toHaveBeenCalledWith(expect.objectContaining({ message: 'Registration successful', open: true }));
     });
   });
 
   test('shows an error message when email is in invalid format', () => {
-    const {
-      getByRole,
-      getByLabelText,
-      queryByText,
-    } = render(<Register onSubmit={props.onSubmit} />);
-
+    const { getByRole, getByLabelText, queryByText } = setup();
     fireEvent.change(getByLabelText(/username/i), {
       target: { value: 'user' },
     });
@@ -86,6 +82,5 @@ describe('Register', () => {
     fireEvent.click(getByRole('button', { name: /register/i }));
 
     expect(queryByText('Invalid email')).toBeInTheDocument();
-    expect(props.onSubmit).not.toHaveBeenCalled();
   });
 });

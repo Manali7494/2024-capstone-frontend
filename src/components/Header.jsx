@@ -2,10 +2,24 @@ import React from 'react';
 import {
   AppBar, Toolbar, Typography, Button, IconButton,
 } from '@mui/material';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import PropTypes from 'prop-types';
+import {
+  signOut,
+} from 'aws-amplify/auth';
 
-function Header({ user }) {
+function Header({
+  user, setUser, setSnackbar,
+}) {
+  const navigate = useNavigate();
+
+  const handleSignOut = async () => {
+    await signOut({ global: true });
+    setUser(null);
+    setSnackbar({ open: true, message: 'Signed out successfully' });
+    navigate('/login');
+  };
+
   return (
     <AppBar position="static">
       <Toolbar>
@@ -25,6 +39,19 @@ function Header({ user }) {
             </Button>
           </>
         )}
+        {user && (
+        <>
+          <Typography variant="subtitle1" style={{ marginRight: '1em' }} sx={{ ml: 'auto' }}>
+            Logged in as:
+            {user.email}
+          </Typography>
+
+          <Button color="inherit" onClick={handleSignOut}>
+            Logout
+          </Button>
+        </>
+        )}
+
       </Toolbar>
     </AppBar>
   );
@@ -38,6 +65,8 @@ Header.defaultProps = {
 
 Header.propTypes = {
   user: PropTypes.shape({
-    username: PropTypes.string.isRequired,
+    email: PropTypes.string.isRequired,
   }),
+  setUser: PropTypes.func.isRequired,
+  setSnackbar: PropTypes.func.isRequired,
 };

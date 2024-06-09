@@ -1,46 +1,23 @@
 /* eslint-disable no-console */
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
+import PropTypes from 'prop-types';
 import {
-  signIn, getCurrentUser,
-  signOut,
-  fetchAuthSession,
+  signIn,
 } from 'aws-amplify/auth';
 import {
   Button, TextField, Grid, Paper, Typography,
 } from '@mui/material';
 import { Alert } from '@mui/lab';
+import { useNavigate } from 'react-router-dom';
 import PasswordInput from './PasswordInput';
 
-function Login() {
+function Login({ setUserDetails, setSnackbar }) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [display, setDisplay] = useState('');
-  const [user, setUser] = useState(null);
-  const setUserDetails = async () => {
-    const userDetails = await getCurrentUser();
-    setUser(userDetails);
-  };
-  const getUser = async () => {
-    try {
-      const authSession = await fetchAuthSession();
-      if (authSession?.userSub) {
-        setUserDetails();
-      }
-    } catch (err) {
-      console.log('Error', err);
-    }
-  };
 
-  useEffect(() => {
-    getUser();
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  const navigate = useNavigate();
 
-  const handleSignOut = async () => {
-    await signOut({ global: true });
-    setUser(null);
-    setDisplay('Signed out successfully');
-  };
   const handleSubmit = async (event) => {
     event.preventDefault();
     const emailRegex = /^[a-zA-Z0-9+_.-]+@[a-zA-Z0-9.-]+$/;
@@ -51,8 +28,9 @@ function Login() {
 
     try {
       await signIn({ username: email, password });
-      setDisplay('Signed in successfully');
       setUserDetails();
+      navigate('/');
+      setSnackbar({ message: 'Login successful', open: true });
     } catch (err) {
       console.log('Error', err);
     }
@@ -90,19 +68,6 @@ function Login() {
             >
               Login
             </Button>
-            {user ? (
-              <Button
-                type="submit"
-                fullWidth
-                variant="contained"
-                color="primary"
-                style={{ marginTop: '2em' }}
-                id="signout"
-                onClick={handleSignOut}
-              >
-                Sign Out
-              </Button>
-            ) : null}
           </form>
         </Paper>
       </Grid>
@@ -110,6 +75,9 @@ function Login() {
   );
 }
 
-Login.propTypes = {};
+Login.propTypes = {
+  setUserDetails: PropTypes.func.isRequired,
+  setSnackbar: PropTypes.func.isRequired,
+};
 
 export default Login;
