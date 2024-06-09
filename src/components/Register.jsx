@@ -5,15 +5,18 @@ import {
   Button, TextField, Grid, Paper, Typography,
 } from '@mui/material';
 import { Alert } from '@mui/lab';
+import { useNavigate } from 'react-router-dom';
+import PropTypes from 'prop-types';
 import PasswordInput from './PasswordInput';
 
-function Register() {
+function Register({ setUser, setSnackbar }) {
   const [username, setUsername] = useState('');
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [phoneNumber, setPhoneNumber] = useState('');
   const [display, setDisplay] = useState('');
+  const navigate = useNavigate();
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -39,8 +42,13 @@ function Register() {
       });
 
       const { userId = '' } = result || {};
-      setDisplay('Registration Successful');
-      console.log('userId', userId);
+      navigate('/');
+
+      setUser({
+        id: userId,
+        email,
+      });
+      setSnackbar({ message: 'Registration successful', open: true });
     } catch (err) {
       console.log('error', err);
       let errorMessage = 'Error';
@@ -125,6 +133,9 @@ function Register() {
   );
 }
 
-Register.propTypes = {};
+Register.propTypes = {
+  setUser: PropTypes.func.isRequired,
+  setSnackbar: PropTypes.func.isRequired,
+};
 
 export default Register;
