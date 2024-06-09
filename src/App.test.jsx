@@ -1,14 +1,20 @@
 import React from 'react';
 import { render, screen } from '@testing-library/react';
+import { getCurrentUser, fetchAuthSession } from 'aws-amplify/auth';
 import App from './App';
 
-jest.mock('react-router-dom', () => ({
-  BrowserRouter: () => <div data-testid="router"><h1> Router </h1></div>,
-}));
+jest.mock('aws-amplify/auth');
 
-test('renders Router component', () => {
-  render(<App />);
+describe('App', () => {
+  beforeEach(() => {
+    getCurrentUser.mockResolvedValue(null);
+    fetchAuthSession.mockResolvedValue(null);
+  });
 
-  const routerElement = screen.getByTestId('router');
-  expect(routerElement).toBeInTheDocument();
+  test('renders Header component', () => {
+    render(<App />);
+
+    const textElement = screen.getByText('Healthy Wealthy');
+    expect(textElement).toBeInTheDocument();
+  });
 });
