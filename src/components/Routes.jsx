@@ -4,7 +4,7 @@ import Home from './Home';
 import Login from './Login';
 import Register from './Register';
 
-function App() {
+function AppRoutes() {
   return (
     <Routes>
       <Route
@@ -24,4 +24,4 @@ function App() {
   );
 }
 
-export default App;
+export default AppRoutes;

@@ -1,5 +1,5 @@
 import './App.css';
-import React from 'react';
+import React, { useState } from 'react';
 import { Amplify } from 'aws-amplify';
 import {
   BrowserRouter as Router,
@@ -8,6 +8,7 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
 import awsconfig from './aws-exports';
 import Routes from './components/Routes';
+import Header from './components/Header';
 
 Amplify.configure(awsconfig);
 const theme = createTheme({
@@ -25,10 +26,13 @@ const theme = createTheme({
 });
 
 function App() {
+  const [user, setUser] = useState(null);
+
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
       <Router>
+        <Header user={user} setUser={setUser} />
         <Routes />
       </Router>
     </ThemeProvider>
