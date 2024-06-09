@@ -4,7 +4,7 @@ import {
   signIn,
 } from 'aws-amplify/auth';
 import { BrowserRouter as Router } from 'react-router-dom';
-import Login from '../Login';
+import Login, { getErrorMessage } from '../Login';
 
 jest.mock('aws-amplify/auth');
 
@@ -67,6 +67,44 @@ describe('Login', () => {
       expect(signIn).toHaveBeenCalledWith({ username: 'email@email.com', password: 'password123' });
       expect(mockProps.setUserDetails).toHaveBeenCalled();
       expect(mockProps.setSnackbar).toHaveBeenCalledWith({ message: 'Login successful', open: true });
+    });
+  });
+
+  describe('getErrorMessage', () => {
+    it('returns the correct error message for UserNotFoundException', () => {
+      const error = new Error();
+      error.name = 'UserNotFoundException';
+
+      const result = getErrorMessage(error);
+
+      expect(result).toEqual('User not found');
+    });
+
+    it('returns the correct error message for NotAuthorizedException', () => {
+      const error = new Error();
+      error.name = 'NotAuthorizedException';
+
+      const result = getErrorMessage(error);
+
+      expect(result).toEqual('Incorrect password');
+    });
+
+    it('returns the correct error message for UserNotConfirmedException', () => {
+      const error = new Error();
+      error.name = 'UserNotConfirmedException';
+
+      const result = getErrorMessage(error);
+
+      expect(result).toEqual('User not confirmed');
+    });
+
+    it('returns the default error message for unknown errors', () => {
+      const error = new Error();
+      error.name = 'UnknownError';
+
+      const result = getErrorMessage(error);
+
+      expect(result).toEqual('An error occurred during login');
     });
   });
 });

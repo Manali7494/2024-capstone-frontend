@@ -21,6 +21,19 @@ export const isButtonDisabled = ({
   return false;
 };
 
+export const getErrorMessage = (err) => {
+  let errorMessage = 'Error';
+  switch (err.name) {
+    case 'UsernameExistsException':
+      errorMessage = 'Email already exists';
+      break;
+    default:
+      errorMessage = 'An error occurred during registration';
+  }
+
+  return errorMessage;
+};
+
 function Register({ setUser, setSnackbar }) {
   const [username, setUsername] = useState('');
   const [name, setName] = useState('');
@@ -69,17 +82,7 @@ function Register({ setUser, setSnackbar }) {
       });
       setSnackbar({ message: 'Registration successful', open: true });
     } catch (err) {
-      console.log('error', err);
-      let errorMessage = 'Error';
-      switch (err.name) {
-        case 'UsernameExistsException':
-          errorMessage = 'Email already exists';
-          break;
-        default:
-          errorMessage = 'An error occurred during registration';
-      }
-
-      setDisplay(errorMessage);
+      setDisplay(getErrorMessage(err));
     }
   };
   return (
@@ -90,6 +93,7 @@ function Register({ setUser, setSnackbar }) {
           <Typography variant="h5" gutterBottom>
             Register
           </Typography>
+          {display && <Alert severity="error">{display}</Alert>}
           <form onSubmit={handleSubmit}>
             <TextField
               required
@@ -152,7 +156,7 @@ function Register({ setUser, setSnackbar }) {
             >
               Register
             </Button>
-            {display && <Alert severity="info">{display}</Alert>}
+
           </form>
         </Paper>
       </Grid>

@@ -1,10 +1,10 @@
 import React from 'react';
 import {
-  render, fireEvent, waitFor, screen,
+  render, fireEvent, waitFor,
 } from '@testing-library/react';
 import { signUp } from 'aws-amplify/auth';
 import { BrowserRouter as Router } from 'react-router-dom';
-import Register, { isButtonDisabled } from '../Register';
+import Register, { isButtonDisabled, getErrorMessage } from '../Register';
 
 jest.mock('aws-amplify/auth', () => ({
   signUp: jest.fn(),
@@ -118,35 +118,25 @@ describe('Register', () => {
       });
       expect(result).toBe(false);
     });
+  });
 
-    // test('handles errors during registration', async () => {
-    //   const error = new Error();
-    //   error.code = 'UsernameExistsException';
+  describe('getErrorMessage', () => {
+    it('returns the correct error message for UsernameExistsException', () => {
+      const error = new Error();
+      error.name = 'UsernameExistsException';
 
-    //   signUp.mockResolvedValue(
-    //     error,
-    //   );
-    //   const { getByRole, getByLabelText, getByTestId } = setup();
+      const result = getErrorMessage(error);
 
-    //   fireEvent.change(getByLabelText(/username/i), {
-    //     target: { value: 'user' },
-    //   });
-    //   fireEvent.change(getByTestId('name'), {
-    //     target: { value: 'User ABC' },
-    //   });
-    //   fireEvent.change(getByLabelText(/email/i), {
-    //     target: { value: 'email@email.com' },
-    //   });
-    //   fireEvent.change(getByLabelText(/password/i), {
-    //     target: { value: '!Password100' },
-    //   });
-    //   fireEvent.change(getByLabelText(/phone number/i), {
-    //     target: { value: '123456' },
-    //   });
+      expect(result).toEqual('Email already exists');
+    });
 
-    //   fireEvent.click(getByRole('button', { name: /register/i }));
+    it('returns the default error message for unknown errors', () => {
+      const error = new Error();
+      error.name = 'UnknownError';
 
-    //   await screen.findByText('Email already exists');
-    // });
+      const result = getErrorMessage(error);
+
+      expect(result).toEqual('An error occurred during registration');
+    });
   });
 });

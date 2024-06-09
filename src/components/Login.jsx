@@ -11,6 +11,24 @@ import { Alert } from '@mui/lab';
 import { useNavigate } from 'react-router-dom';
 import PasswordInput from './PasswordInput';
 
+export const getErrorMessage = (err) => {
+  let errorMessage = 'Error';
+  switch (err.name) {
+    case 'UserNotFoundException':
+      errorMessage = 'User not found';
+      break;
+    case 'NotAuthorizedException':
+      errorMessage = 'Incorrect password';
+      break;
+    case 'UserNotConfirmedException':
+      errorMessage = 'User not confirmed';
+      break;
+    default:
+      errorMessage = 'An error occurred during login';
+  }
+  return errorMessage;
+};
+
 function Login({ setUserDetails, setSnackbar }) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -32,7 +50,7 @@ function Login({ setUserDetails, setSnackbar }) {
       navigate('/');
       setSnackbar({ message: 'Login successful', open: true });
     } catch (err) {
-      console.log('Error', err);
+      setDisplay(getErrorMessage(err));
     }
   };
 
@@ -44,7 +62,7 @@ function Login({ setUserDetails, setSnackbar }) {
           <Typography variant="h5" gutterBottom>
             Login
           </Typography>
-          {display && <Alert severity="info">{display}</Alert>}
+          {display && <Alert severity="error">{display}</Alert>}
 
           <form onSubmit={handleSubmit}>
             <TextField
