@@ -14,15 +14,15 @@ const setup = (
 describe('Header', () => {
   test('renders Healthy Wealthy title', () => {
     setup();
-    const titleElement = getByText(/Healthy Wealthy/i);
-    expect(titleElement).toBeInTheDocument();
+    const title = getByText(/Healthy Wealthy/i);
+    expect(title).toBeInTheDocument();
   });
 
   test('renders Register and Login buttons when user is not logged in', () => {
     setup();
-    const registerButtonElement = getByRole('link', { name: /Register/i });
-    const loginButtonElement = getByRole('link', { name: /Login/i });
-    expect(registerButtonElement).toBeInTheDocument();
-    expect(loginButtonElement).toBeInTheDocument();
+    const registerButton = getByRole('link', { name: /Register/i });
+    const loginButton = getByRole('link', { name: /Login/i });
+    expect(registerButton).toBeInTheDocument();
+    expect(loginButton).toBeInTheDocument();
   });
 });
