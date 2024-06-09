@@ -46,7 +46,7 @@ function Header({
             {user.email}
           </Typography>
 
-          <Button color="inherit" onClick={handleSignOut}>
+          <Button color="inherit" id="signout" onClick={handleSignOut}>
             Logout
           </Button>
         </>
