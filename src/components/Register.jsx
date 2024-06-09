@@ -16,6 +16,22 @@ function Register({ setUser, setSnackbar }) {
   const [password, setPassword] = useState('');
   const [phoneNumber, setPhoneNumber] = useState('');
   const [display, setDisplay] = useState('');
+  const [isPasswordValid, setIsPasswordValid] = useState({
+    length: false,
+    letter: false,
+    specialChar: false,
+    number: false,
+  });
+
+  const isButtonDisabled = () => {
+    if (!Object.values(isPasswordValid).every(Boolean)) {
+      return true;
+    }
+    if (!username || !name || !email || !password || !phoneNumber) {
+      return true;
+    }
+    return false;
+  };
   const navigate = useNavigate();
 
   const handleSubmit = async (event) => {
@@ -104,7 +120,12 @@ function Register({ setUser, setSnackbar }) {
               onChange={(e) => setEmail(e.target.value)}
             />
 
-            <PasswordInput setPassword={setPassword} password={password} />
+            <PasswordInput
+              setPassword={setPassword}
+              password={password}
+              isPasswordValid={isPasswordValid}
+              setIsPasswordValid={setIsPasswordValid}
+            />
             <TextField
               required
               fullWidth
@@ -122,6 +143,7 @@ function Register({ setUser, setSnackbar }) {
               variant="contained"
               color="primary"
               style={{ marginTop: '2em' }}
+              disabled={isButtonDisabled}
             >
               Register
             </Button>
