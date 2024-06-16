@@ -1,5 +1,5 @@
 import React from 'react';
-import { render, screen } from '@testing-library/react';
+import { render, screen, fireEvent } from '@testing-library/react';
 import NewPost from '../NewPost';
 
 describe('NewPost', () => {
@@ -37,5 +37,53 @@ describe('NewPost', () => {
   test('renders NewPost with submit button', () => {
     render(<NewPost />);
     expect(screen.getByText('Submit')).toBeInTheDocument();
+  });
+
+  test('shows an error message when the name field is empty', () => {
+    const { getByLabelText, getByText, container } = render(<NewPost />);
+    const nameInput = getByLabelText('Name');
+    const submitButton = getByText('Submit');
+
+    fireEvent.click(submitButton);
+
+    const form = container.querySelector('form');
+    form.reportValidity();
+
+    expect(nameInput.validationMessage).toBe('Name is required');
+  });
+
+  test('shows an error message when the price field is empty', () => {
+    const { getByLabelText, getByText, container } = render(<NewPost />);
+    const priceInput = getByLabelText('Price');
+    const submitButton = getByText('Submit');
+
+    fireEvent.click(submitButton);
+
+    const form = container.querySelector('form');
+    form.reportValidity();
+
+    expect(priceInput.validationMessage).toBe('Unit Price is required. It can be 0 if the item is free');
+  });
+
+  test('shows an error message when the quantity field is empty', () => {
+    const { getByLabelText, getByText, container } = render(<NewPost />);
+    const quantityInput = getByLabelText('Quantity');
+    const submitButton = getByText('Submit');
+    fireEvent.click(submitButton);
+
+    const form = container.querySelector('form');
+    form.reportValidity();
+
+    expect(quantityInput.validationMessage).toBe('Quantity is required');
+  });
+
+  test('shows an error message when the purchase date field is empty', () => {
+    const { getByLabelText, getByText, container } = render(<NewPost />);
+    const purchaseDateInput = getByLabelText('Purchase Date');
+    const submitButton = getByText('Submit');
+    fireEvent.click(submitButton);
+    const form = container.querySelector('form');
+    form.reportValidity();
+    expect(purchaseDateInput.validationMessage).toBe('Purchase Date is required');
   });
 });
