@@ -5,6 +5,8 @@ import PropTypes from 'prop-types';
 import Home from './Home';
 import Login from './Login';
 import Register from './Register';
+import NewPost from './NewPost';
+import ErrorPage from './Error';
 
 function AppRoutes({
   setUserDetails, setUser, setSnackbar, user,
@@ -25,6 +27,10 @@ function AppRoutes({
         path="/register"
         element={user ? <Navigate to="/" />
           : <Register setUser={setUser} setSnackbar={setSnackbar} />}
+      />
+      <Route
+        path="/new"
+        element={user ? <NewPost /> : <ErrorPage errorMessage="Cannot visit page to create new post. Please login or register " />}
       />
     </Routes>
   );

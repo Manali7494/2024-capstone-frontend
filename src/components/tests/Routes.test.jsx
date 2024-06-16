@@ -40,4 +40,10 @@ describe('Routes', () => {
     setup('/register', { user: { email: 'email@email.com' } });
     expect(screen.queryByRole('button', { name: /register/i })).not.toBeInTheDocument();
   });
+
+  it('without user at /new, it renders Error page with proper error message', () => {
+    setup('/new', { user: null });
+    expect(screen.getByText('Error')).toBeInTheDocument();
+    expect(screen.getByText('Cannot visit page to create new post. Please login or register')).toBeInTheDocument();
+  });
 });
