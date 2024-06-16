@@ -46,4 +46,9 @@ describe('Routes', () => {
     expect(screen.getByText('Error')).toBeInTheDocument();
     expect(screen.getByText('Cannot visit page to create new post. Please login or register')).toBeInTheDocument();
   });
+
+  it('with user renders NewPost with /new', () => {
+    setup('/new', { user: { email: 'email@email.com' } });
+    expect(screen.getByText('Create Post')).toBeInTheDocument();
+  });
 });
