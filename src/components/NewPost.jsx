@@ -12,6 +12,7 @@ function NewPost() {
   const handleSubmit = async (event) => {
     event.preventDefault();
 
+    // eslint-disable-next-line no-console
     console.log({
       name, description, imageUrl, price, quantity, purchaseDate, expiryDate,
     });
