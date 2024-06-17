@@ -86,4 +86,26 @@ describe('NewPost', () => {
     form.reportValidity();
     expect(purchaseDateInput.validationMessage).toBe('Purchase Date is required');
   });
+
+  test('submits the form when all fields are filled', async () => {
+    const mockFetch = jest.fn(() => Promise.resolve());
+    global.fetch = mockFetch;
+
+    const { getByLabelText, getByText } = render(<NewPost />);
+
+    fireEvent.change(getByLabelText(/name/i), 'Test');
+    fireEvent.change(getByLabelText(/description/i), 'Test description');
+    fireEvent.change(getByLabelText(/price/i), '10');
+    fireEvent.change(getByLabelText(/quantity/i), '1');
+    fireEvent.change(getByLabelText(/purchase date/i), '2024-01-01');
+    fireEvent.change(getByLabelText(/expiry date/i), '2024-12-31');
+
+    const submitButton = getByText('Submit');
+    fireEvent.click(submitButton);
+
+    expect(mockFetch).toHaveBeenCalledWith('/posts', {
+      method: 'POST',
+      body: expect.any(FormData),
+    });
+  });
 });
