@@ -8,14 +8,30 @@ function NewPost() {
   const [quantity, setQuantity] = useState('');
   const [purchaseDate, setPurchaseDate] = useState('');
   const [expiryDate, setExpiryDate] = useState('');
+  const [message, setMessage] = useState('');
 
   const handleSubmit = async (event) => {
     event.preventDefault();
 
-    // eslint-disable-next-line no-console
-    console.log({
-      name, description, imageUrl, price, quantity, purchaseDate, expiryDate,
-    });
+    const formData = new FormData();
+    formData.append('name', name);
+    formData.append('description', description);
+    formData.append('healthy-wealthy-image', imageUrl);
+    formData.append('price', price);
+    formData.append('quantity', quantity);
+    formData.append('purchaseDate', purchaseDate);
+    formData.append('expiryDate', expiryDate);
+
+    try {
+      await fetch('/posts', {
+        method: 'POST',
+        body: formData,
+      });
+
+      setMessage('Post created successfully');
+    } catch (error) {
+      setMessage('Failed to create post');
+    }
   };
 
   return (
@@ -42,6 +58,7 @@ function NewPost() {
         </label>
         <label htmlFor="imageUrl">
           Image URL
+
           <input id="imageUrl" type="file" onChange={(e) => setImageUrl(e.target.files[0])} />
         </label>
         <label htmlFor="price">
@@ -92,6 +109,9 @@ function NewPost() {
         </label>
         <input type="submit" value="Submit" />
       </form>
+      <div>
+        <p>{message && message }</p>
+      </div>
     </>
   );
 }
