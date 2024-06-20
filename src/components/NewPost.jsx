@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import config from '../config';
 
 function NewPost() {
   const [name, setName] = useState('');
@@ -23,7 +24,7 @@ function NewPost() {
     formData.append('expiryDate', expiryDate);
 
     try {
-      await fetch('/posts', {
+      await fetch(`${config.backend_url}/posts`, {
         method: 'POST',
         body: formData,
       });

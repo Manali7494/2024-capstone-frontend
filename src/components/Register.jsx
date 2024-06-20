@@ -8,6 +8,7 @@ import { Alert } from '@mui/lab';
 import { useNavigate } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import PasswordInput from './PasswordInput';
+import config from '../config';
 
 export const isButtonDisabled = ({
   isPasswordValid, username, name, email, password, phoneNumber,
@@ -76,10 +77,25 @@ function Register({ setUser, setSnackbar }) {
       const { userId = '' } = result || {};
       navigate('/');
 
+      await fetch(`${config.backend_url}/users`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          userId,
+          email,
+          username,
+          name,
+          phoneNumber,
+        }),
+      });
+
       setUser({
         id: userId,
         email,
       });
+
       setSnackbar({ message: 'Registration successful', open: true });
     } catch (err) {
       setDisplay(getErrorMessage(err));

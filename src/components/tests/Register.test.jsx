@@ -10,6 +10,12 @@ jest.mock('aws-amplify/auth', () => ({
   signUp: jest.fn(),
 }));
 
+global.fetch = jest.fn(() => Promise.resolve({
+  json: () => Promise.resolve({
+    userId: '1', email: 'test@test.com', username: 'testuser', name: 'Test User', phoneNumber: '1234567890',
+  }),
+}));
+
 signUp.mockResolvedValue({ userId: '123' });
 describe('Register', () => {
   const mockProps = {

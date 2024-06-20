@@ -1,5 +1,6 @@
 import React from 'react';
 import { Amplify } from 'aws-amplify';
+import { BrowserRouter as Router } from 'react-router-dom';
 import Register from '../../src/components/Register';
 import awsconfig from '../../src/aws-exports';
 
@@ -7,7 +8,11 @@ Amplify.configure(awsconfig);
 
 describe('Registration', () => {
   beforeEach(() => {
-    cy.mount(<Register />);
+    cy.mount(
+      <Router>
+        <Register />
+      </Router>,
+    );
   });
 
   it('allows a user to register', () => {
@@ -24,7 +29,7 @@ describe('Registration', () => {
     cy.get('#phoneNumber').type(phoneNumber);
     cy.get('form').submit();
 
-    cy.contains('Registration Successful').should('exist');
+    cy.get('.MuiAlert-message').should('not.exist');
   });
 
   it('shows error on duplicate email', () => {

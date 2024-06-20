@@ -7,7 +7,7 @@ describe('App', () => {
     cy.mount(<Home />);
   });
 
-  it('renders the text healthy wealthy', () => {
-    cy.contains('Healthy Wealthy');
+  it('renders the Home Page', () => {
+    cy.contains('Home Page');
   });
 });
