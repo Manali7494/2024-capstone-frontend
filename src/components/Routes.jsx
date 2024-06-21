@@ -30,7 +30,7 @@ function AppRoutes({
       />
       <Route
         path="/new"
-        element={user ? <NewPost /> : <ErrorPage errorMessage="Cannot visit page to create new post. Please login or register " />}
+        element={user ? <NewPost user={user} /> : <ErrorPage errorMessage="Cannot visit page to create new post. Please login or register " />}
       />
     </Routes>
   );
