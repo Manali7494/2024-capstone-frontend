@@ -70,13 +70,22 @@ function NewPost({ user }) {
             <TextField
               label="Name"
               value={name}
+              data-testid="name"
               error={!!errors.name}
               helperText={errors.name}
               onChange={(e) => setName(e.target.value)}
               fullWidth
               margin="normal"
             />
-            <TextField label="Description" value={description} onChange={(e) => setDescription(e.target.value)} fullWidth margin="normal" />
+            <TextField
+              data-testid="description"
+              label="Description"
+              value={description}
+              onChange={(e) => setDescription(e.target.value)}
+              fullWidth
+              margin="normal"
+            />
+
             <Box>
               {imageUrl && (
               <Alert severity="success" style={{ marginTop: '1em' }}>
@@ -94,6 +103,7 @@ function NewPost({ user }) {
                 {imageUrl ? 'Image Selected' : 'Select Image'}
                 <input
                   type="file"
+                  data-testid="image"
                   hidden
                   onChange={(e) => setImageUrl(e.target.files[0])}
                 />
@@ -102,6 +112,7 @@ function NewPost({ user }) {
             <TextField
               label="Price"
               type="number"
+              data-testid="price"
               error={!!errors.price}
               helperText={errors.price}
               value={price}
@@ -121,6 +132,7 @@ function NewPost({ user }) {
             <TextField
               label="Quantity"
               type="number"
+              data-testid="quantity"
               error={!!errors.quantity}
               helperText={errors.quantity}
               inputProps={{ min: 0 }}
@@ -133,6 +145,7 @@ function NewPost({ user }) {
               <TextField
                 label="Purchase Date"
                 type="date"
+                data-testid="purchase-date"
                 error={!!errors.purchaseDate}
                 helperText={errors.purchaseDate}
                 value={purchaseDate}
@@ -144,6 +157,7 @@ function NewPost({ user }) {
               <TextField
                 label="Expiry Date"
                 type="date"
+                data-testid="expiry-date"
                 value={expiryDate}
                 onChange={(e) => setExpiryDate(e.target.value)}
                 fullWidth
