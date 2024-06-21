@@ -132,9 +132,9 @@ function NewPost({ user }) {
           </form>
         </Paper>
         <Snackbar
-          open={successMessage}
+          open={Boolean(successMessage)}
           autoHideDuration={5000}
-          onClose={() => successMessage('')}
+          onClose={() => setSuccessMessage('')}
           message={successMessage}
         />
       </Grid>
