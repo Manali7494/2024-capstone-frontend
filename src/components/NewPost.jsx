@@ -20,10 +20,19 @@ function NewPost({ user }) {
   const [expiryDate, setExpiryDate] = useState('');
   const [displayError, setDisplayErrorMessage] = useState('');
   const [successMessage, setSuccessMessage] = useState('');
+  const [errors, setErrors] = useState({});
 
   const handleSubmit = async (event) => {
     event.preventDefault();
 
+    const newErrors = {};
+    if (!name.trim()) newErrors.name = 'Name is required';
+    if (!price.trim()) newErrors.price = 'Unit Price is required. It can be 0 if the item is free';
+    if (!quantity.trim()) newErrors.quantity = 'Quantity is required';
+    if (!purchaseDate.trim()) newErrors.purchaseDate = 'Purchase Date is required';
+
+    setErrors(newErrors);
+    if (Object.keys(newErrors).length > 0) return;
     const formData = new FormData();
     formData.append('name', name);
     formData.append('description', description);
@@ -58,7 +67,15 @@ function NewPost({ user }) {
           </Alert>
           )}
           <form onSubmit={handleSubmit}>
-            <TextField label="Name" value={name} onChange={(e) => setName(e.target.value)} fullWidth margin="normal" />
+            <TextField
+              label="Name"
+              value={name}
+              error={!!errors.name}
+              helperText={errors.name}
+              onChange={(e) => setName(e.target.value)}
+              fullWidth
+              margin="normal"
+            />
             <TextField label="Description" value={description} onChange={(e) => setDescription(e.target.value)} fullWidth margin="normal" />
             <Box>
               {imageUrl && (
@@ -85,6 +102,8 @@ function NewPost({ user }) {
             <TextField
               label="Price"
               type="number"
+              error={!!errors.price}
+              helperText={errors.price}
               value={price}
               onChange={(e) => setPrice(e.target.value)}
               fullWidth
@@ -102,6 +121,8 @@ function NewPost({ user }) {
             <TextField
               label="Quantity"
               type="number"
+              error={!!errors.quantity}
+              helperText={errors.quantity}
               inputProps={{ min: 0 }}
               value={quantity}
               onChange={(e) => setQuantity(e.target.value)}
@@ -110,8 +131,10 @@ function NewPost({ user }) {
             />
             <Box display="flex" justifyContent="space-between">
               <TextField
-                label="Date of Purchase"
+                label="Purchase Date"
                 type="date"
+                error={!!errors.purchaseDate}
+                helperText={errors.purchaseDate}
                 value={purchaseDate}
                 onChange={(e) => setPurchaseDate(e.target.value)}
                 fullWidth

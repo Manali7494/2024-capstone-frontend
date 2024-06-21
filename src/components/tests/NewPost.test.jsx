@@ -3,107 +3,92 @@ import { render, screen, fireEvent } from '@testing-library/react';
 import NewPost from '../NewPost';
 
 describe('NewPost', () => {
+  const props = {
+    user: {
+      id: 'user:1',
+    },
+  };
   test('renders NewPost with correct title', () => {
-    render(<NewPost />);
+    render(<NewPost {...props} />);
 
-    expect(screen.getByText('Create Post')).toBeInTheDocument();
-  });
-
-  test('renders NewPost with correct title', () => {
-    render(<NewPost />);
     expect(screen.getByText('Create Post')).toBeInTheDocument();
   });
 
   test('renders NewPost with price field', () => {
-    render(<NewPost />);
-    expect(screen.getByText('Price')).toBeInTheDocument();
+    render(<NewPost {...props} />);
+    expect(screen.getByLabelText('Price')).toBeInTheDocument();
   });
 
   test('renders NewPost with quantity field', () => {
-    render(<NewPost />);
-    expect(screen.getByText('Quantity')).toBeInTheDocument();
+    render(<NewPost {...props} />);
+    expect(screen.getByLabelText('Quantity')).toBeInTheDocument();
   });
 
   test('renders NewPost with purchase date field', () => {
-    render(<NewPost />);
-    expect(screen.getByText('Purchase Date')).toBeInTheDocument();
+    render(<NewPost {...props} />);
+    expect(screen.getByLabelText('Purchase Date')).toBeInTheDocument();
   });
 
   test('renders NewPost with expiry date field', () => {
-    render(<NewPost />);
-    expect(screen.getByText('Expiry Date')).toBeInTheDocument();
+    render(<NewPost {...props} />);
+    expect(screen.getByLabelText('Expiry Date')).toBeInTheDocument();
   });
 
   test('renders NewPost with submit button', () => {
-    render(<NewPost />);
-    expect(screen.getByText('Submit')).toBeInTheDocument();
+    render(<NewPost {...props} />);
+    expect(screen.getByRole('button', { name: /Create Post/i })).toBeInTheDocument();
   });
 
   test('shows an error message when the name field is empty', () => {
-    const { getByLabelText, getByText, container } = render(<NewPost />);
-    const nameInput = getByLabelText('Name');
-    const submitButton = getByText('Submit');
+    const { getByText } = render(<NewPost {...props} />);
+    const submitButton = getByText('Create Post');
 
     fireEvent.click(submitButton);
 
-    const form = container.querySelector('form');
-    form.reportValidity();
-
-    expect(nameInput.validationMessage).toBe('Name is required');
+    expect(getByText('Name is required')).toBeInTheDocument();
   });
 
   test('shows an error message when the price field is empty', () => {
-    const { getByLabelText, getByText, container } = render(<NewPost />);
-    const priceInput = getByLabelText('Price');
-    const submitButton = getByText('Submit');
+    const { getByText } = render(<NewPost {...props} />);
+    const submitButton = getByText('Create Post');
 
     fireEvent.click(submitButton);
 
-    const form = container.querySelector('form');
-    form.reportValidity();
-
-    expect(priceInput.validationMessage).toBe('Unit Price is required. It can be 0 if the item is free');
+    expect(getByText('Unit Price is required. It can be 0 if the item is free')).toBeInTheDocument();
   });
-
   test('shows an error message when the quantity field is empty', () => {
-    const { getByLabelText, getByText, container } = render(<NewPost />);
-    const quantityInput = getByLabelText('Quantity');
-    const submitButton = getByText('Submit');
+    const { getByText } = render(<NewPost {...props} />);
+    const submitButton = getByText('Create Post');
     fireEvent.click(submitButton);
 
-    const form = container.querySelector('form');
-    form.reportValidity();
-
-    expect(quantityInput.validationMessage).toBe('Quantity is required');
+    expect(getByText('Quantity is required')).toBeInTheDocument();
   });
 
-  test('shows an error message when the purchase date field is empty', () => {
-    const { getByLabelText, getByText, container } = render(<NewPost />);
-    const purchaseDateInput = getByLabelText('Purchase Date');
-    const submitButton = getByText('Submit');
+  test('shows an error message when the purchase date is empty', () => {
+    const { getByText } = render(<NewPost {...props} />);
+    const submitButton = getByText('Create Post');
     fireEvent.click(submitButton);
-    const form = container.querySelector('form');
-    form.reportValidity();
-    expect(purchaseDateInput.validationMessage).toBe('Purchase Date is required');
+
+    expect(getByText('Purchase Date is required')).toBeInTheDocument();
   });
 
   test('submits the form when all fields are filled', async () => {
     const mockFetch = jest.fn(() => Promise.resolve());
     global.fetch = mockFetch;
 
-    const { getByLabelText, getByText } = render(<NewPost />);
+    const { getByText } = render(<NewPost {...props} />);
 
-    fireEvent.change(getByLabelText(/name/i), 'Test');
-    fireEvent.change(getByLabelText(/description/i), 'Test description');
-    fireEvent.change(getByLabelText(/price/i), '10');
-    fireEvent.change(getByLabelText(/quantity/i), '1');
-    fireEvent.change(getByLabelText(/purchase date/i), '2024-01-01');
-    fireEvent.change(getByLabelText(/expiry date/i), '2024-12-31');
+    fireEvent.change(screen.getByLabelText(/name/i), { target: { value: 'Test' } });
+    fireEvent.change(screen.getByLabelText(/description/i), { target: { value: 'Test description' } });
+    fireEvent.change(screen.getByLabelText(/price/i), { target: { value: '10' } });
+    fireEvent.change(screen.getByLabelText(/quantity/i), { target: { value: '1' } });
+    fireEvent.change(screen.getByLabelText(/purchase date/i), { target: { value: '2024-01-01' } });
+    fireEvent.change(screen.getByLabelText(/expiry date/i), { target: { value: '2024-12-31' } });
 
-    const submitButton = getByText('Submit');
+    const submitButton = getByText('Create Post');
     fireEvent.click(submitButton);
 
-    expect(mockFetch).toHaveBeenCalledWith('/posts', {
+    expect(mockFetch).toHaveBeenCalledWith(expect.stringMatching(/\/posts/), {
       method: 'POST',
       body: expect.any(FormData),
     });
