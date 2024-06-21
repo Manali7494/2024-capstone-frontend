@@ -76,14 +76,14 @@ describe('NewPost', () => {
     const mockFetch = jest.fn(() => Promise.resolve());
     global.fetch = mockFetch;
 
-    const { getByText } = render(<NewPost {...props} />);
+    const { getByText, getByLabelText } = render(<NewPost {...props} />);
 
-    fireEvent.change(screen.getByLabelText(/name/i), { target: { value: 'Test' } });
-    fireEvent.change(screen.getByLabelText(/description/i), { target: { value: 'Test description' } });
-    fireEvent.change(screen.getByLabelText(/price/i), { target: { value: '10' } });
-    fireEvent.change(screen.getByLabelText(/quantity/i), { target: { value: '1' } });
-    fireEvent.change(screen.getByLabelText(/purchase date/i), { target: { value: '2024-01-01' } });
-    fireEvent.change(screen.getByLabelText(/expiry date/i), { target: { value: '2024-12-31' } });
+    fireEvent.change(getByLabelText(/name/i), { target: { value: 'Test' } });
+    fireEvent.change(getByLabelText(/description/i), { target: { value: 'Test description' } });
+    fireEvent.change(getByLabelText(/price/i), { target: { value: '10' } });
+    fireEvent.change(getByLabelText(/quantity/i), { target: { value: '1' } });
+    fireEvent.change(getByLabelText(/purchase date/i), { target: { value: '2024-01-01' } });
+    fireEvent.change(getByLabelText(/expiry date/i), { target: { value: '2024-12-31' } });
 
     const submitButton = getByText('Create Post');
     fireEvent.click(submitButton);
