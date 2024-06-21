@@ -58,8 +58,8 @@ function NewPost({ user }) {
           </Alert>
           )}
           <form onSubmit={handleSubmit}>
-            <TextField label="Name" value={name} onChange={(e) => setName(e.target.value)} fullWidth margin="normal" />
-            <TextField label="Description" value={description} onChange={(e) => setDescription(e.target.value)} fullWidth margin="normal" />
+            <TextField data-testid="name" label="Name" value={name} onChange={(e) => setName(e.target.value)} fullWidth margin="normal" />
+            <TextField data-testid="description" label="Description" value={description} onChange={(e) => setDescription(e.target.value)} fullWidth margin="normal" />
             <Box>
               {imageUrl && (
               <Alert severity="success" style={{ marginTop: '1em' }}>
@@ -77,6 +77,7 @@ function NewPost({ user }) {
                 {imageUrl ? 'Image Selected' : 'Select Image'}
                 <input
                   type="file"
+                  data-testid="image"
                   hidden
                   onChange={(e) => setImageUrl(e.target.files[0])}
                 />
@@ -85,6 +86,7 @@ function NewPost({ user }) {
             <TextField
               label="Price"
               type="number"
+              data-testid="price"
               value={price}
               onChange={(e) => setPrice(e.target.value)}
               fullWidth
@@ -102,6 +104,7 @@ function NewPost({ user }) {
             <TextField
               label="Quantity"
               type="number"
+              data-testid="quantity"
               inputProps={{ min: 0 }}
               value={quantity}
               onChange={(e) => setQuantity(e.target.value)}
@@ -112,6 +115,7 @@ function NewPost({ user }) {
               <TextField
                 label="Date of Purchase"
                 type="date"
+                data-testid="purchase-date"
                 value={purchaseDate}
                 onChange={(e) => setPurchaseDate(e.target.value)}
                 fullWidth
@@ -121,6 +125,7 @@ function NewPost({ user }) {
               <TextField
                 label="Expiry Date"
                 type="date"
+                data-testid="expiry-date"
                 value={expiryDate}
                 onChange={(e) => setExpiryDate(e.target.value)}
                 fullWidth
