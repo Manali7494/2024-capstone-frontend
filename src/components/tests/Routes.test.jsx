@@ -57,4 +57,9 @@ describe('Routes', () => {
     expect(screen.getByText('Error')).toBeInTheDocument();
     expect(screen.getByText('Cannot edit post')).toBeInTheDocument();
   });
+
+  it('without user at /edit, it renders Error page with proper error message', () => {
+    setup('/posts/1/edit', { user: { email: 'email@email.com' } });
+    expect(screen.getByText('Edit Post')).toBeInTheDocument();
+  });
 });
