@@ -7,6 +7,7 @@ import Login from './Login';
 import Register from './Register';
 import NewPost from './NewPost';
 import ErrorPage from './Error';
+import EditPost from './EditPost';
 
 function AppRoutes({
   setUserDetails, setUser, setSnackbar, user,
@@ -31,6 +32,10 @@ function AppRoutes({
       <Route
         path="/new"
         element={user ? <NewPost user={user} /> : <ErrorPage errorMessage="Cannot visit page to create new post. Please login or register " />}
+      />
+      <Route
+        path="/posts/:id/edit"
+        element={user ? <EditPost user={user} /> : <ErrorPage errorMessage="Cannot edit post" />}
       />
     </Routes>
   );
