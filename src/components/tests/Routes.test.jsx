@@ -60,6 +60,6 @@ describe('Routes', () => {
 
   it('without user at /edit, it renders Error page with proper error message', () => {
     setup('/posts/1/edit', { user: { email: 'email@email.com' } });
-    expect(screen.getByText('Edit Post')).toBeInTheDocument();
+    expect(screen.getByText(/edit post/i)).toBeInTheDocument();
   });
 });
