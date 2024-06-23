@@ -10,6 +10,7 @@ import PropTypes from 'prop-types';
 import { useParams } from 'react-router-dom';
 import EditPostLoading from './EditPostLoading';
 import config from '../config';
+import DeleteConfirmationDialog from './DeleteConfirmationDialog';
 
 function EditPost({ user }) {
   const { id } = useParams();
@@ -207,6 +208,7 @@ function EditPost({ user }) {
               />
             </Box>
             <Button type="submit" variant="contained" color="primary" fullWidth sx={{ mt: 4 }}>Update Post</Button>
+            <DeleteConfirmationDialog />
           </form>
         </Paper>
         <Snackbar

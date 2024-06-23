@@ -161,4 +161,13 @@ describe('EditPost Component', () => {
 
     expect(screen.getByText('Purchase Date is required')).toBeInTheDocument();
   });
+
+  it('shows a button called delete', async () => {
+    render(<EditPost user={mockUser} />);
+    await waitFor(() => expect(screen.getByText('Edit Post')).toBeInTheDocument());
+
+    const deleteButton = screen.getByRole('button', { name: /delete/i });
+
+    expect(deleteButton).toBeInTheDocument();
+  });
 });
