@@ -1,6 +1,10 @@
-/* eslint-disable no-console */
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
+import {
+  Button, Dialog,
+  DialogActions, DialogContent,
+  DialogContentText, DialogTitle,
+} from '@mui/material';
 
 function DeleteConfirmationDialog({ onDeleteConfirm }) {
   const [isOpen, setIsOpen] = useState(false);
@@ -15,22 +19,36 @@ function DeleteConfirmationDialog({ onDeleteConfirm }) {
 
   return (
     <>
-      <button type="button" onClick={openDialog}>Delete</button>
-      {isOpen && (
-        <div className="dialog-overlay">
-          <div className="dialog">
-            <p>Are you sure you want to delete?</p>
-            <button type="button" onClick={closeDialog}>Cancel</button>
-            <button type="button" onClick={handleDelete}>Yes, Delete</button>
-          </div>
-        </div>
-      )}
+      <Button variant="contained" color="error" onClick={openDialog}>
+        Delete
+      </Button>
+      <Dialog
+        open={isOpen}
+        onClose={closeDialog}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+        fullWidth
+        maxWidth="xs"
+      >
+        <DialogTitle id="alert-dialog-title">Confirm Delete</DialogTitle>
+        <DialogContent>
+          <DialogContentText id="alert-dialog-description">
+            Are you sure you want to delete?
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button variant="contained" onClick={closeDialog}>Cancel</Button>
+          <Button variant="contained" onClick={handleDelete} color="error">
+            Yes, Delete
+          </Button>
+        </DialogActions>
+      </Dialog>
     </>
   );
 }
 
-export default DeleteConfirmationDialog;
-
 DeleteConfirmationDialog.propTypes = {
   onDeleteConfirm: PropTypes.func.isRequired,
 };
+
+export default DeleteConfirmationDialog;

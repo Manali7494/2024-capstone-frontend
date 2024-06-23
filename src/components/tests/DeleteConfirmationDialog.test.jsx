@@ -1,5 +1,7 @@
 import React from 'react';
-import { render, fireEvent, screen } from '@testing-library/react';
+import {
+  render, fireEvent, screen, waitForElementToBeRemoved,
+} from '@testing-library/react';
 import '@testing-library/jest-dom/extend-expect';
 import DeleteConfirmationDialog from '../DeleteConfirmationDialog';
 
@@ -18,19 +20,19 @@ describe('DeleteConfirmationDialog', () => {
     expect(screen.getByText('Are you sure you want to delete?')).toBeInTheDocument();
   });
 
-  it('clicking the "Cancel" button closes the dialog', () => {
+  it('clicking the "Cancel" button closes the dialog', async () => {
     render(<DeleteConfirmationDialog {...props} />);
     fireEvent.click(screen.getByText('Delete'));
     fireEvent.click(screen.getByText('Cancel'));
-    expect(screen.queryByText('Are you sure you want to delete?')).not.toBeInTheDocument();
+    await waitForElementToBeRemoved(() => screen.queryByText('Are you sure you want to delete?'));
   });
 
-  it('clicking the "Delete" button in the dialog calls onDeleteConfirm and closes the dialog', () => {
+  it('clicking the "Delete" button in the dialog calls onDeleteConfirm and closes the dialog', async () => {
     render(<DeleteConfirmationDialog {...props} />);
     fireEvent.click(screen.getByText('Delete'));
     fireEvent.click(screen.getByText('Yes, Delete'));
 
     expect(props.onDeleteConfirm).toHaveBeenCalled();
-    expect(screen.queryByText('Are you sure you want to delete?')).not.toBeInTheDocument();
+    await waitForElementToBeRemoved(() => screen.queryByText('Are you sure you want to delete?'));
   });
 });
