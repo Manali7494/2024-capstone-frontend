@@ -42,6 +42,7 @@ function EditPost({ user }) {
         }
         const data = await response.json();
         setPost({
+          id: data.id,
           name: data.name,
           description: data.description,
           price: data.price.toString(),
@@ -74,20 +75,18 @@ function EditPost({ user }) {
     formData.append('expiryDate', post.expiryDate);
     formData.append('sellerId', user.id);
 
-    await fetch(`${config.backend_url}/posts`, {
+    await fetch(`${config.backend_url}/posts/${post.id}`, {
       method: 'POST',
       body: formData,
     });
 
-    setSuccessMessage('Post created successfully');
+    setSuccessMessage('Post updated successfully');
   };
 
   if (loading) {
-    console.log('its running');
     return <EditPostLoading />;
   }
 
-  console.log('post', post);
   const showImage = Boolean(post.imageUrl) || Boolean(imagePreviewUrl);
 
   return (
@@ -95,16 +94,14 @@ function EditPost({ user }) {
       <Grid item xs={12} sm={8} md={6}>
         <Paper elevation={3} style={{ padding: '2em', marginTop: '2em' }}>
           <Typography variant="h5" gutterBottom>
-            Edit Post for
-            {' '}
-            {post.name}
-
+            Edit Post
           </Typography>
 
           <form onSubmit={handleSubmit}>
             <TextField
               label="Name"
               value={post.name}
+              data-testid="name"
               onChange={(e) => setPost((p) => ({ ...p, name: e.target.value }))}
               fullWidth
               margin="normal"
@@ -112,6 +109,7 @@ function EditPost({ user }) {
             <TextField
               label="Description"
               value={post.description}
+              data-testid="description"
               onChange={(e) => setPost((p) => ({ ...p, description: e.target.value }))}
               fullWidth
               margin="normal"
@@ -146,6 +144,7 @@ function EditPost({ user }) {
             <TextField
               label="Price"
               type="number"
+              data-testid="price"
               value={post.price}
               onChange={(e) => setPost((p) => ({ ...p, price: e.target.value }))}
               fullWidth
@@ -158,6 +157,7 @@ function EditPost({ user }) {
             <TextField
               label="Quantity"
               type="number"
+              data-testid="quantity"
               value={post.quantity}
               onChange={(e) => setPost((p) => ({ ...p, quantity: e.target.value }))}
               fullWidth
@@ -174,6 +174,7 @@ function EditPost({ user }) {
                 onChange={(e) => setPost((p) => ({ ...p, purchaseDate: e.target.value }))}
                 fullWidth
                 margin="normal"
+                data-testid="purchaseDate"
                 InputLabelProps={{ shrink: true }}
               />
               <TextField
@@ -183,6 +184,7 @@ function EditPost({ user }) {
                 onChange={(e) => setPost((p) => ({ ...p, expiryDate: e.target.value }))}
                 fullWidth
                 margin="normal"
+                data-testid="expiryDate"
                 InputLabelProps={{ shrink: true }}
               />
             </Box>
