@@ -1,5 +1,5 @@
 import React from 'react';
-import { render, screen } from '@testing-library/react';
+import { render, screen, waitFor } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
 import Routes from '../Routes';
 
@@ -58,8 +58,9 @@ describe('Routes', () => {
     expect(screen.getByText('Cannot edit post')).toBeInTheDocument();
   });
 
-  it('without user at /edit, it renders Error page with proper error message', () => {
+  it('without user at /edit, it renders Error page with proper error message', async () => {
     setup('/posts/1/edit', { user: { email: 'email@email.com' } });
+    await waitFor(() => expect(screen.getByText('Edit Post')).toBeInTheDocument());
     expect(screen.getByText(/edit post/i)).toBeInTheDocument();
   });
 });

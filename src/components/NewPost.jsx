@@ -6,7 +6,7 @@ import {
   Alert,
   Snackbar,
 } from '@mui/material';
-import { PhotoCamera, CheckCircle } from '@mui/icons-material';
+import { PhotoCamera } from '@mui/icons-material';
 import PropTypes from 'prop-types';
 import config from '../config';
 
@@ -20,7 +20,21 @@ function NewPost({ user }) {
   const [expiryDate, setExpiryDate] = useState('');
   const [displayError, setDisplayErrorMessage] = useState('');
   const [successMessage, setSuccessMessage] = useState('');
+  const [imagePreviewUrl, setImagePreviewUrl] = useState('');
   const [errors, setErrors] = useState({});
+
+  const handleImageChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      setImageUrl(file);
+
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setImagePreviewUrl(reader.result);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -67,6 +81,7 @@ function NewPost({ user }) {
           </Alert>
           )}
           <form onSubmit={handleSubmit}>
+
             <TextField
               label="Name"
               value={name}
@@ -85,27 +100,30 @@ function NewPost({ user }) {
               fullWidth
               margin="normal"
             />
-
-            <Box>
-              {imageUrl && (
-              <Alert severity="success" style={{ marginTop: '1em' }}>
-                Selected image:
-                {imageUrl.name}
-              </Alert>
+            <Box style={{
+              display: 'flex', justifyContent: 'center', alignItems: 'center', marginTop: '1em',
+            }}
+            >
+              {imagePreviewUrl && (
+              <Box style={{ marginTop: '1em' }}>
+                <img src={imagePreviewUrl} alt="Preview" style={{ maxWidth: '100%', height: 'auto' }} />
+              </Box>
               )}
+            </Box>
+            <Box>
               <Button
                 variant="contained"
                 component="label"
                 fullWidth
-                startIcon={imageUrl ? <CheckCircle /> : <PhotoCamera />}
+                startIcon={<PhotoCamera />}
                 sx={{ backgroundColor: 'steelblue' }}
               >
-                {imageUrl ? 'Image Selected' : 'Select Image'}
+                Select Image
                 <input
                   type="file"
                   data-testid="image"
                   hidden
-                  onChange={(e) => setImageUrl(e.target.files[0])}
+                  onChange={handleImageChange}
                 />
               </Button>
             </Box>
