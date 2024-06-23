@@ -14,7 +14,7 @@ import config from '../config';
 function EditPost({ user }) {
   const { id } = useParams();
   const [imageFile, setImageFile] = useState(null);
-  const [imagePreviewUrl, setImagePreviewUrl] = useState(''); // identify how to make on change show here
+  const [imagePreviewUrl, setImagePreviewUrl] = useState('');
   const [successMessage, setSuccessMessage] = useState('');
   const [post, setPost] = useState({});
 
