@@ -207,8 +207,12 @@ function EditPost({ user }) {
                 InputLabelProps={{ shrink: true }}
               />
             </Box>
-            <Button type="submit" variant="contained" color="primary" fullWidth sx={{ mt: 4 }}>Update Post</Button>
-            <DeleteConfirmationDialog />
+            <Box display="flex" justifyContent="space-between" alignItems="center" sx={{ mt: 4 }}>
+              <DeleteConfirmationDialog onDeleteConfirm={() => {}} />
+              <Button type="submit" variant="contained" color="primary">
+                Update Post
+              </Button>
+            </Box>
           </form>
         </Paper>
         <Snackbar
