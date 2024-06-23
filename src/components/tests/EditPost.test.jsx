@@ -121,4 +121,44 @@ describe('EditPost Component', () => {
 
     global.fetch.mockRestore();
   });
+
+  it('shows an error message when the name field is empty', async () => {
+    render(<EditPost user={mockUser} />);
+    await waitFor(() => expect(screen.getByText('Edit Post')).toBeInTheDocument());
+    const submitButton = screen.getByRole('button', { name: /update post/i });
+
+    fireEvent.click(submitButton);
+
+    expect(screen.getByText('Name is required')).toBeInTheDocument();
+  });
+
+  it('shows an error message when the price field is empty', async () => {
+    render(<EditPost user={mockUser} />);
+    await waitFor(() => expect(screen.getByText('Edit Post')).toBeInTheDocument());
+    const submitButton = screen.getByRole('button', { name: /update post/i });
+
+    fireEvent.click(submitButton);
+
+    expect(screen.getByText('Unit Price is required. It can be 0 if the item is free')).toBeInTheDocument();
+  });
+
+  it('shows an error message when the quantity field is empty', async () => {
+    render(<EditPost user={mockUser} />);
+    await waitFor(() => expect(screen.getByText('Edit Post')).toBeInTheDocument());
+    const submitButton = screen.getByRole('button', { name: /update post/i });
+
+    fireEvent.click(submitButton);
+
+    expect(screen.getByText('Quantity is required')).toBeInTheDocument();
+  });
+
+  it('shows an error message when the purchase date is empty', async () => {
+    render(<EditPost user={mockUser} />);
+    await waitFor(() => expect(screen.getByText('Edit Post')).toBeInTheDocument());
+    const submitButton = screen.getByRole('button', { name: /update post/i });
+
+    fireEvent.click(submitButton);
+
+    expect(screen.getByText('Purchase Date is required')).toBeInTheDocument();
+  });
 });
