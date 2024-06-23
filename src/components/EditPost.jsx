@@ -17,6 +17,7 @@ function EditPost({ user }) {
   const [imagePreviewUrl, setImagePreviewUrl] = useState('');
   const [successMessage, setSuccessMessage] = useState('');
   const [post, setPost] = useState({});
+  const [errors, setErrors] = useState({});
 
   const [loading, setLoading] = useState(false);
 
@@ -65,6 +66,15 @@ function EditPost({ user }) {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
+
+    const newErrors = {};
+    if (!post.name?.trim()) newErrors.name = 'Name is required';
+    if (!post.price?.trim()) newErrors.price = 'Unit Price is required. It can be 0 if the item is free';
+    console.log('post.quantity', post.quantity);
+    if (!post.quantity?.trim() || Number(post.quantity) === 0) newErrors.quantity = 'Quantity is required';
+    if (!post.purchaseDate?.trim()) newErrors.purchaseDate = 'Purchase Date is required';
+    setErrors(newErrors);
+    if (Object.keys(newErrors).length > 0) return;
     const formData = new FormData();
     formData.append('name', post.name);
     formData.append('description', post.description);
@@ -102,6 +112,8 @@ function EditPost({ user }) {
               label="Name"
               value={post.name}
               data-testid="name"
+              error={!!errors.name}
+              helperText={errors.name}
               onChange={(e) => setPost((p) => ({ ...p, name: e.target.value }))}
               fullWidth
               margin="normal"
@@ -146,6 +158,8 @@ function EditPost({ user }) {
               type="number"
               data-testid="price"
               value={post.price}
+              error={!!errors.price}
+              helperText={errors.price}
               onChange={(e) => setPost((p) => ({ ...p, price: e.target.value }))}
               fullWidth
               margin="normal"
@@ -159,6 +173,8 @@ function EditPost({ user }) {
               type="number"
               data-testid="quantity"
               value={post.quantity}
+              error={!!errors.quantity}
+              helperText={errors.quantity}
               onChange={(e) => setPost((p) => ({ ...p, quantity: e.target.value }))}
               fullWidth
               margin="normal"
@@ -174,6 +190,8 @@ function EditPost({ user }) {
                 onChange={(e) => setPost((p) => ({ ...p, purchaseDate: e.target.value }))}
                 fullWidth
                 margin="normal"
+                error={!!errors.purchaseDate}
+                helperText={errors.purchaseDate}
                 data-testid="purchaseDate"
                 InputLabelProps={{ shrink: true }}
               />
