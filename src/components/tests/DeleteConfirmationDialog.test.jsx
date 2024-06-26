@@ -10,6 +10,9 @@ describe('DeleteConfirmationDialog', () => {
     setDisplayErrorMessage: jest.fn(),
     setSuccessMessage: jest.fn(),
     postId: 'post:1',
+    user: {
+      id: 'user:1',
+    },
   };
   it('dialog is initially not visible', () => {
     render(<DeleteConfirmationDialog {...props} />);
@@ -42,6 +45,10 @@ describe('DeleteConfirmationDialog', () => {
     await waitForElementToBeRemoved(() => screen.queryByText('Are you sure you want to delete?'));
     expect(global.fetch).toHaveBeenCalledWith(expect.stringContaining(`/posts/${props.postId}`), {
       method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ userId: props.user.id }),
     });
     expect(props.setSuccessMessage).toHaveBeenCalledWith('Post successfully deleted');
   });
@@ -59,6 +66,10 @@ describe('DeleteConfirmationDialog', () => {
     await waitForElementToBeRemoved(() => screen.queryByText('Are you sure you want to delete?'));
     expect(global.fetch).toHaveBeenCalledWith(expect.stringContaining(`/posts/${props.postId}`), {
       method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ userId: props.user.id }),
     });
     expect(props.setDisplayErrorMessage).toHaveBeenCalledWith('Failed to delete post');
   });
@@ -73,6 +84,10 @@ describe('DeleteConfirmationDialog', () => {
     await waitForElementToBeRemoved(() => screen.queryByText('Are you sure you want to delete?'));
     expect(global.fetch).toHaveBeenCalledWith(expect.stringContaining(`/posts/${props.postId}`), {
       method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ userId: props.user.id }),
     });
     expect(props.setDisplayErrorMessage).toHaveBeenCalledWith('Failed to delete post');
   });
