@@ -37,7 +37,7 @@ function DeleteConfirmationDialog({ onDeleteConfirm }) {
           </DialogContentText>
         </DialogContent>
         <DialogActions>
-          <Button variant="contained" onClick={closeDialog}>Cancel</Button>
+          <Button variant="contained">Cancel</Button>
           <Button variant="contained" onClick={handleDelete} color="error">
             Yes, Delete
           </Button>

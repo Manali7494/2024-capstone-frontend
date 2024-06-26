@@ -54,7 +54,9 @@ function NewPost({ user }) {
     formData.append('price', price);
     formData.append('quantity', quantity);
     formData.append('purchaseDate', purchaseDate);
-    formData.append('expiryDate', expiryDate);
+    if (expiryDate) {
+      formData.append('expiryDate', expiryDate);
+    }
     formData.append('sellerId', user.id);
 
     try {
