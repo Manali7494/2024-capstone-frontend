@@ -4,6 +4,7 @@ import {
   TextField, Button,
   Box,
   Grid, Paper, Typography, InputAdornment, Snackbar,
+  Alert,
 } from '@mui/material';
 import { PhotoCamera } from '@mui/icons-material';
 import PropTypes from 'prop-types';
@@ -19,6 +20,7 @@ function EditPost({ user }) {
   const [successMessage, setSuccessMessage] = useState('');
   const [post, setPost] = useState({});
   const [errors, setErrors] = useState({});
+  const [displayError, setDisplayErrorMessage] = useState('');
 
   const [loading, setLoading] = useState(false);
 
@@ -107,7 +109,11 @@ function EditPost({ user }) {
           <Typography variant="h5" gutterBottom>
             Edit Post
           </Typography>
-
+          {displayError && (
+          <Alert severity="error" style={{ marginTop: '1em' }}>
+            {displayError}
+          </Alert>
+          )}
           <form onSubmit={handleSubmit}>
             <TextField
               label="Name"
@@ -208,7 +214,11 @@ function EditPost({ user }) {
               />
             </Box>
             <Box display="flex" justifyContent="space-between" alignItems="center" sx={{ mt: 4 }}>
-              <DeleteConfirmationDialog onDeleteConfirm={() => {}} />
+              <DeleteConfirmationDialog
+                postId={id}
+                setSuccessMessage={setSuccessMessage}
+                setDisplayErrorMessage={setDisplayErrorMessage}
+              />
               <Button type="submit" variant="contained" color="primary">
                 Update Post
               </Button>

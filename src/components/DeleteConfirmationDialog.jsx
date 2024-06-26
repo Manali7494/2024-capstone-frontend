@@ -5,18 +5,31 @@ import {
   DialogActions, DialogContent,
   DialogContentText, DialogTitle,
 } from '@mui/material';
+import config from '../config';
 
-function DeleteConfirmationDialog({ onDeleteConfirm }) {
+function DeleteConfirmationDialog({ postId, setSuccessMessage, setDisplayErrorMessage }) {
   const [isOpen, setIsOpen] = useState(false);
 
   const openDialog = () => setIsOpen(true);
   const closeDialog = () => setIsOpen(false);
 
-  const handleDelete = () => {
-    onDeleteConfirm();
-    closeDialog();
-  };
+  const handleDelete = async () => {
+    try {
+      const response = await fetch(`${config.backend_url}/posts/${postId}`, {
+        method: 'DELETE',
+      });
 
+      if (response.ok) {
+        setSuccessMessage('Post successfully deleted');
+      } else {
+        setDisplayErrorMessage('Failed to delete post');
+      }
+    } catch (error) {
+      setDisplayErrorMessage('Failed to delete post');
+    } finally {
+      closeDialog();
+    }
+  };
   return (
     <>
       <Button variant="contained" color="error" onClick={openDialog}>
@@ -48,7 +61,10 @@ function DeleteConfirmationDialog({ onDeleteConfirm }) {
 }
 
 DeleteConfirmationDialog.propTypes = {
-  onDeleteConfirm: PropTypes.func.isRequired,
+  postId: PropTypes.string.isRequired,
+  setSuccessMessage: PropTypes.func.isRequired,
+  setDisplayErrorMessage: PropTypes.func.isRequired,
+
 };
 
 export default DeleteConfirmationDialog;
