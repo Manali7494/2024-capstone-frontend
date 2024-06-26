@@ -28,4 +28,11 @@ describe('DeleteConfirmationDialog', () => {
     expect(props.onDeleteConfirm).toHaveBeenCalled();
     await waitForElementToBeRemoved(() => screen.queryByText('Are you sure you want to delete?'));
   });
+
+  it('clicking the "Cancel" button closes the dialog', async () => {
+    render(<DeleteConfirmationDialog {...props} />);
+    fireEvent.click(screen.getByText('Delete'));
+    fireEvent.click(screen.getByText('Cancel'));
+    await waitForElementToBeRemoved(() => screen.queryByText('Are you sure you want to delete?'));
+  });
 });
