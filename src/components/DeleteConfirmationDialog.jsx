@@ -4,16 +4,19 @@ import {
   Button, Dialog,
   DialogActions, DialogContent,
   DialogContentText, DialogTitle,
+  CircularProgress,
 } from '@mui/material';
 import config from '../config';
 
 function DeleteConfirmationDialog({ postId, setSuccessMessage, setDisplayErrorMessage }) {
   const [isOpen, setIsOpen] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   const openDialog = () => setIsOpen(true);
   const closeDialog = () => setIsOpen(false);
 
   const handleDelete = async () => {
+    setIsLoading(true);
     try {
       const response = await fetch(`${config.backend_url}/posts/${postId}`, {
         method: 'DELETE',
@@ -27,6 +30,7 @@ function DeleteConfirmationDialog({ postId, setSuccessMessage, setDisplayErrorMe
     } catch (error) {
       setDisplayErrorMessage('Failed to delete post');
     } finally {
+      setIsLoading(false);
       closeDialog();
     }
   };
@@ -51,8 +55,8 @@ function DeleteConfirmationDialog({ postId, setSuccessMessage, setDisplayErrorMe
         </DialogContent>
         <DialogActions>
           <Button variant="contained" onClick={closeDialog}>Cancel</Button>
-          <Button variant="contained" onClick={handleDelete} color="error">
-            Yes, Delete
+          <Button variant="contained" onClick={handleDelete} color="error" disabled={isLoading}>
+            {isLoading ? <CircularProgress size={24} color="inherit" /> : 'Yes, Delete'}
           </Button>
         </DialogActions>
       </Dialog>
