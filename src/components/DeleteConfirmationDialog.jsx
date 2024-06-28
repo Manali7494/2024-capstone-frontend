@@ -8,7 +8,9 @@ import {
 } from '@mui/material';
 import config from '../config';
 
-function DeleteConfirmationDialog({ postId, setSuccessMessage, setDisplayErrorMessage }) {
+function DeleteConfirmationDialog({
+  postId, setSuccessMessage, setDisplayErrorMessage, user,
+}) {
   const [isOpen, setIsOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
@@ -20,6 +22,10 @@ function DeleteConfirmationDialog({ postId, setSuccessMessage, setDisplayErrorMe
     try {
       const response = await fetch(`${config.backend_url}/posts/${postId}`, {
         method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ userId: user.id }),
       });
 
       if (response.ok) {
@@ -68,6 +74,9 @@ DeleteConfirmationDialog.propTypes = {
   postId: PropTypes.string.isRequired,
   setSuccessMessage: PropTypes.func.isRequired,
   setDisplayErrorMessage: PropTypes.func.isRequired,
+  user: PropTypes.shape({
+    id: PropTypes.string,
+  }).isRequired,
 
 };
 

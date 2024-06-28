@@ -218,6 +218,7 @@ function EditPost({ user }) {
                 postId={id}
                 setSuccessMessage={setSuccessMessage}
                 setDisplayErrorMessage={setDisplayErrorMessage}
+                user={user}
               />
               <Button type="submit" variant="contained" color="primary">
                 Update Post
