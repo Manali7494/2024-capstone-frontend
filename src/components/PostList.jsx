@@ -58,6 +58,7 @@ export function PostList() {
         const data = await response.json();
         setPosts(data);
       } catch (error) {
+        // eslint-disable-next-line no-console
         console.error('Failed to fetch posts:', error);
       }
     };
