@@ -7,6 +7,7 @@ export function Post({ posts }) {
   const navigate = useNavigate();
   return (
     <div>
+      <h1> Posts </h1>
       <input
         type="text"
         placeholder="Search Posts"
