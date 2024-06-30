@@ -42,6 +42,15 @@ describe('Post Component', () => {
     );
     expect(screen.getByLabelText('Search')).toBeInTheDocument();
   });
+
+  it('renders only posts matching the search term', async () => {
+    const searchText = 'Test';
+    render(
+      <Post posts={posts} search={searchText} setSearch={setSearch} />,
+      { wrapper: BrowserRouter },
+    );
+    expect(screen.getByText('Test Post')).toBeInTheDocument();
+  });
 });
 
 describe('PostList Component', () => {

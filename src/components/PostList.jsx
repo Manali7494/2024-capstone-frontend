@@ -14,6 +14,10 @@ import {
 import config from '../config';
 
 export function Post({ posts, search, setSearch }) {
+  const [inputValue, setInputValue] = useState('');
+  const filteredPosts = posts.filter((post) => post.name
+    .toLowerCase()
+    .includes(search.toLowerCase()));
   return (
     <Box sx={{ flexGrow: 1, m: 2 }}>
       <Typography variant="h4" component="div" gutterBottom>
@@ -23,18 +27,19 @@ export function Post({ posts, search, setSearch }) {
       <Grid container spacing={2} justifyContent="center">
         <Grid item xs={12} sm={8}>
           <TextField
+            id="search"
             label="Search"
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
+            value={inputValue}
+            onChange={(e) => setInputValue(e.target.value)}
             fullWidth
             margin="normal"
             InputProps={{
               endAdornment: (
                 <InputAdornment position="end">
-                  <IconButton aria-label="clearSearch" onClick={() => setSearch('')}>
+                  <IconButton aria-label="clearSearch">
                     <Clear color="primary" />
                   </IconButton>
-                  <IconButton aria-label="textSearch" onClick={() => setSearch(search)}>
+                  <IconButton aria-label="textSearch" data-testid="search-button" onClick={() => setSearch(inputValue)}>
                     <Search color="primary" />
                   </IconButton>
                 </InputAdornment>
@@ -46,13 +51,13 @@ export function Post({ posts, search, setSearch }) {
 
       <Paper elevation={3} style={{ marginTop: '100px' }}>
         <Grid container spacing={4} justifyContent="center">
-          {posts.map((item) => (
+          {filteredPosts.map((item) => (
             <Grid item xs={12} key={item.id}>
-              <Card style={{ margin: '0 auto', width: '50vw' }}>
+              <Card style={{ margin: '0 auto', width: '50vw' }} data-testid={`card-item-${item.id}`}>
                 <CardMedia
                   component="img"
                   height="250px"
-                  image={item.imageUrl}
+                  image={item.imageUrl || 'https://via.placeholder.com/450?text=No+Image+Available'}
                   alt={item.name}
                 />
                 <CardContent>
@@ -118,7 +123,13 @@ export function PostList() {
     fetchPosts();
   }, []);
 
-  return <Post posts={posts} search={search} setSearch={setSearch} />;
+  return (
+    <Post
+      posts={posts}
+      search={search}
+      setSearch={setSearch}
+    />
+  );
 }
 
 export default PostList;
