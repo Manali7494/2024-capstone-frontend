@@ -40,7 +40,7 @@ export function Post({ posts, search, setSearch }) {
             InputProps={{
               endAdornment: (
                 <InputAdornment position="end">
-                  <IconButton aria-label="clearSearch" onClick={clearSearch}>
+                  <IconButton aria-label="clearSearch" onClick={clearSearch} data-testid="clear-button">
                     <Clear color="primary" />
                   </IconButton>
                   <IconButton aria-label="textSearch" data-testid="search-button" onClick={() => setSearch(inputValue)}>
