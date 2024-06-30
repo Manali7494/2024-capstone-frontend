@@ -18,6 +18,10 @@ export function Post({ posts, search, setSearch }) {
   const filteredPosts = posts.filter((post) => post.name
     .toLowerCase()
     .includes(search.toLowerCase()));
+  const clearSearch = () => {
+    setSearch('');
+    setInputValue('');
+  };
   return (
     <Box sx={{ flexGrow: 1, m: 2 }}>
       <Typography variant="h4" component="div" gutterBottom>
@@ -36,7 +40,7 @@ export function Post({ posts, search, setSearch }) {
             InputProps={{
               endAdornment: (
                 <InputAdornment position="end">
-                  <IconButton aria-label="clearSearch">
+                  <IconButton aria-label="clearSearch" onClick={clearSearch} data-testid="clear-button">
                     <Clear color="primary" />
                   </IconButton>
                   <IconButton aria-label="textSearch" data-testid="search-button" onClick={() => setSearch(inputValue)}>
