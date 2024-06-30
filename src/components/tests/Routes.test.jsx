@@ -75,4 +75,16 @@ describe('Routes', () => {
     expect(screen.getByText('Cannot view posts. Please login')).toBeInTheDocument();
     expect(screen.queryByLabelText('Search')).not.toBeInTheDocument();
   });
+
+  it('with user at /posts/:id, it renders ViewPost component', async () => {
+    setup('/posts/1', { user: { email: 'user@example.com' } });
+    await waitFor(() => expect(screen.getByText('View Post')).toBeInTheDocument());
+    expect(screen.getByText(/view post/i)).toBeInTheDocument();
+  });
+
+  it('without user at /posts/:id, it renders ErrorPage with proper message', () => {
+    setup('/posts/1', { user: null });
+    expect(screen.getByText('Error')).toBeInTheDocument();
+    expect(screen.getByText('Cannot view post')).toBeInTheDocument();
+  });
 });
