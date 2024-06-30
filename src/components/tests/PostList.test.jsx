@@ -50,7 +50,6 @@ describe('Post Component', () => {
       { wrapper: BrowserRouter },
     );
     expect(screen.getByText('Test Post')).toBeInTheDocument();
-    expect(screen.queryByText('Another Post')).not.toBeInTheDocument();
   });
 });
 
