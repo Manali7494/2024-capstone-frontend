@@ -1,5 +1,5 @@
 import React from 'react';
-import { render, screen } from '@testing-library/react';
+import { render, screen, fireEvent } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import { BrowserRouter } from 'react-router-dom';
 import { Post, PostList } from '../PostList';
@@ -60,6 +60,19 @@ describe('Post Component', () => {
       { wrapper: BrowserRouter },
     );
     expect(screen.getByText('No posts found.')).toBeInTheDocument();
+  });
+
+  it('clears the search term when the clear search button is clicked', async () => {
+    const searchText = 'Test200';
+    const clearSearchText = '';
+    render(
+      <Post posts={posts} search={searchText} setSearch={setSearch} />,
+      { wrapper: BrowserRouter },
+    );
+
+    expect(screen.queryByText('Test Post')).toBeNull();
+    fireEvent.click(screen.getByRole('button', { name: /clearSearch/i }));
+    expect(setSearch).toHaveBeenCalledWith(clearSearchText);
   });
 });
 
