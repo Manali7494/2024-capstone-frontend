@@ -41,8 +41,8 @@ function AppRoutes({
       />
       <Route
         path="/posts"
-        element={(
-          <PostList />)}
+        element={(user
+          ? <PostList /> : <ErrorPage errorMessage="Cannot view posts. Please login" />)}
       />
 
     </Routes>

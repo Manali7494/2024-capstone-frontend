@@ -64,8 +64,15 @@ describe('Routes', () => {
     expect(screen.getByText(/edit post/i)).toBeInTheDocument();
   });
 
-  it('renders PostList component when at /posts', () => {
-    setup('/posts');
+  it('with user at /posts, it renders PostList component', () => {
+    setup('/posts', { user: { email: 'user@example.com' } });
     expect(screen.getByText('Posts')).toBeInTheDocument();
+  });
+
+  it('without user at /posts, it renders ErrorPage with proper message', () => {
+    setup('/posts', { user: null });
+    expect(screen.getByText('Error')).toBeInTheDocument();
+    expect(screen.getByText('Cannot view posts. Please login')).toBeInTheDocument();
+    expect(screen.queryByLabelText('Search')).not.toBeInTheDocument();
   });
 });
