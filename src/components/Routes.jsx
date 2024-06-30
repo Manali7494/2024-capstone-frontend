@@ -8,6 +8,7 @@ import Register from './Register';
 import NewPost from './NewPost';
 import ErrorPage from './Error';
 import EditPost from './EditPost';
+import ViewPost from './ViewPost';
 import { PostList } from './PostList';
 
 function AppRoutes({
@@ -38,6 +39,10 @@ function AppRoutes({
       <Route
         path="/posts/:id/edit"
         element={user ? <EditPost user={user} /> : <ErrorPage errorMessage="Cannot edit post" />}
+      />
+      <Route
+        path="/posts/:id"
+        element={user ? <ViewPost user={user} /> : <ErrorPage errorMessage="Cannot view post" />}
       />
       <Route
         path="/posts"

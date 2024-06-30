@@ -95,7 +95,7 @@ export function Post({ posts, search, setSearch }) {
                         }
                     </CardContent>
                     <CardActions>
-                      <Button size="small" color="primary" component={Link} to={`/posts/${item.id}/edit`}>
+                      <Button size="small" color="primary" component={Link} to={`/posts/${item.id}`}>
                         Detail
                       </Button>
                     </CardActions>
