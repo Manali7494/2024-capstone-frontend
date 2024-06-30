@@ -12,8 +12,11 @@ import {
   Search, Clear,
 } from '@mui/icons-material';
 import config from '../config';
+import EditPostLoading from './EditPostLoading';
 
-export function Post({ posts, search, setSearch }) {
+export function Post({
+  posts, search, setSearch,
+}) {
   const [inputValue, setInputValue] = useState('');
   const filteredPosts = posts.filter((post) => post.name
     .toLowerCase()
@@ -22,6 +25,7 @@ export function Post({ posts, search, setSearch }) {
     setSearch('');
     setInputValue('');
   };
+
   return (
     <Box sx={{ flexGrow: 1, m: 2 }}>
       <Typography variant="h4" component="div" gutterBottom>
@@ -120,8 +124,10 @@ Post.propTypes = {
 export function PostList() {
   const [posts, setPosts] = useState([]);
   const [search, setSearch] = useState('');
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    setLoading(true);
     const fetchPosts = async () => {
       try {
         const response = await fetch(`${config.backend_url}/posts`);
@@ -134,13 +140,19 @@ export function PostList() {
     };
 
     fetchPosts();
+    setLoading(false);
   }, []);
+
+  if (loading) {
+    return <EditPostLoading />;
+  }
 
   return (
     <Post
       posts={posts}
       search={search}
       setSearch={setSearch}
+      loading={loading}
     />
   );
 }

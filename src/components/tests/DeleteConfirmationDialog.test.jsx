@@ -3,6 +3,7 @@ import {
   render, fireEvent, screen, waitForElementToBeRemoved,
 } from '@testing-library/react';
 import '@testing-library/jest-dom/extend-expect';
+import { BrowserRouter } from 'react-router-dom';
 import DeleteConfirmationDialog from '../DeleteConfirmationDialog';
 
 describe('DeleteConfirmationDialog', () => {
@@ -15,18 +16,18 @@ describe('DeleteConfirmationDialog', () => {
     },
   };
   it('dialog is initially not visible', () => {
-    render(<DeleteConfirmationDialog {...props} />);
+    render(<DeleteConfirmationDialog {...props} />, { wrapper: BrowserRouter });
     expect(screen.queryByText('Are you sure you want to delete?')).not.toBeInTheDocument();
   });
 
   it('clicking the "Delete" button opens the dialog', () => {
-    render(<DeleteConfirmationDialog {...props} />);
+    render(<DeleteConfirmationDialog {...props} />, { wrapper: BrowserRouter });
     fireEvent.click(screen.getByText('Delete'));
     expect(screen.getByText('Are you sure you want to delete?')).toBeInTheDocument();
   });
 
   it('clicking the "Cancel" button closes the dialog', async () => {
-    render(<DeleteConfirmationDialog {...props} />);
+    render(<DeleteConfirmationDialog {...props} />, { wrapper: BrowserRouter });
     fireEvent.click(screen.getByText('Delete'));
     fireEvent.click(screen.getByText('Cancel'));
     await waitForElementToBeRemoved(() => screen.queryByText('Are you sure you want to delete?'));
@@ -37,7 +38,10 @@ describe('DeleteConfirmationDialog', () => {
       ok: true,
       json: () => Promise.resolve({ message: 'Post successfully deleted' }),
     }));
-    const { getByText } = render(<DeleteConfirmationDialog {...props} />);
+    const { getByText } = render(
+      <DeleteConfirmationDialog {...props} />,
+      { wrapper: BrowserRouter },
+    );
     fireEvent.click(getByText('Delete'));
     expect(screen.getByText('Are you sure you want to delete?')).toBeInTheDocument();
     fireEvent.click(screen.getByText('Yes, Delete'));
@@ -58,7 +62,10 @@ describe('DeleteConfirmationDialog', () => {
       ok: false,
       status: 400,
     }));
-    const { getByText } = render(<DeleteConfirmationDialog {...props} />);
+    const { getByText } = render(
+      <DeleteConfirmationDialog {...props} />,
+      { wrapper: BrowserRouter },
+    );
     fireEvent.click(getByText('Delete'));
     expect(screen.getByText('Are you sure you want to delete?')).toBeInTheDocument();
     fireEvent.click(screen.getByText('Yes, Delete'));
@@ -76,7 +83,10 @@ describe('DeleteConfirmationDialog', () => {
 
   it('handles exception thrown during deletion', async () => {
     global.fetch = jest.fn(() => Promise.reject(new Error('Network error')));
-    const { getByText } = render(<DeleteConfirmationDialog {...props} />);
+    const { getByText } = render(
+      <DeleteConfirmationDialog {...props} />,
+      { wrapper: BrowserRouter },
+    );
     fireEvent.click(getByText('Delete'));
     expect(screen.getByText('Are you sure you want to delete?')).toBeInTheDocument();
     fireEvent.click(screen.getByText('Yes, Delete'));

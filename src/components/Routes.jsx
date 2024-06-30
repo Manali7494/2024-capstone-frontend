@@ -19,7 +19,7 @@ function AppRoutes({
       <Route
         path="/"
         element={(
-          <Home />)}
+          <Home user={user} />)}
       />
 
       <Route

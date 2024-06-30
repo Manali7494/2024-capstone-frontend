@@ -8,6 +8,7 @@ import {
 } from '@mui/material';
 import { PhotoCamera } from '@mui/icons-material';
 import PropTypes from 'prop-types';
+import { useNavigate } from 'react-router-dom';
 import config from '../config';
 
 function NewPost({ user }) {
@@ -22,6 +23,7 @@ function NewPost({ user }) {
   const [successMessage, setSuccessMessage] = useState('');
   const [imagePreviewUrl, setImagePreviewUrl] = useState('');
   const [errors, setErrors] = useState({});
+  const navigate = useNavigate();
 
   const handleImageChange = (e) => {
     const file = e.target.files[0];
@@ -60,12 +62,19 @@ function NewPost({ user }) {
     formData.append('sellerId', user.id);
 
     try {
-      await fetch(`${config.backend_url}/posts`, {
+      const result = await fetch(`${config.backend_url}/posts`, {
         method: 'POST',
         body: formData,
       });
+      if (result.ok) {
+        const data = await result.json();
+        const postId = data.id;
+        setSuccessMessage('Post created successfully');
 
-      setSuccessMessage('Post created successfully');
+        setTimeout(() => {
+          navigate(`/posts/${postId}`);
+        }, 3000);
+      }
     } catch (error) {
       setDisplayErrorMessage('Failed to create post');
     }

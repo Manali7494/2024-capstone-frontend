@@ -16,9 +16,14 @@ describe('Routes', () => {
     </MemoryRouter>,
   );
 
-  it('renders Home component when at /', () => {
-    setup('/');
-    expect(screen.getByText('Home Page')).toBeInTheDocument();
+  it('without user renders Home component when at /', () => {
+    setup('/', { user: null });
+    expect(screen.getByText('Please login or register')).toBeInTheDocument();
+  });
+
+  it('with user renders Home component when at /', () => {
+    setup('/', { user: { email: 'email@email.com' } });
+    expect(screen.getByText(/Welcome/i)).toBeInTheDocument();
   });
 
   it('renders Login component when at /login', () => {

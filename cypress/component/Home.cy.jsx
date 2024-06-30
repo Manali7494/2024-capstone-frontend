@@ -8,6 +8,6 @@ describe('App', () => {
   });
 
   it('renders the Home Page', () => {
-    cy.contains('Home Page');
+    cy.contains('Welcome');
   });
 });

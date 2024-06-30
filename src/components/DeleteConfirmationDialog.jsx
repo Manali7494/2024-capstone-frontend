@@ -6,6 +6,7 @@ import {
   DialogContentText, DialogTitle,
   CircularProgress,
 } from '@mui/material';
+import { useNavigate } from 'react-router-dom';
 import config from '../config';
 
 function DeleteConfirmationDialog({
@@ -13,6 +14,7 @@ function DeleteConfirmationDialog({
 }) {
   const [isOpen, setIsOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const navigate = useNavigate();
 
   const openDialog = () => setIsOpen(true);
   const closeDialog = () => setIsOpen(false);
@@ -30,6 +32,9 @@ function DeleteConfirmationDialog({
 
       if (response.ok) {
         setSuccessMessage('Post successfully deleted');
+        setTimeout(() => {
+          navigate('/posts');
+        }, 3000);
       } else {
         setDisplayErrorMessage('Failed to delete post');
       }
