@@ -31,6 +31,7 @@ export function Post({ posts, search, setSearch }) {
       <Grid container spacing={2} justifyContent="center">
         <Grid item xs={12} sm={8}>
           <TextField
+            id="search"
             label="Search"
             value={inputValue}
             onChange={(e) => setInputValue(e.target.value)}
@@ -42,7 +43,7 @@ export function Post({ posts, search, setSearch }) {
                   <IconButton aria-label="clearSearch" onClick={clearSearch}>
                     <Clear color="primary" />
                   </IconButton>
-                  <IconButton aria-label="textSearch" onClick={() => setSearch(inputValue)}>
+                  <IconButton aria-label="textSearch" data-testid="search-button" onClick={() => setSearch(inputValue)}>
                     <Search color="primary" />
                   </IconButton>
                 </InputAdornment>
@@ -55,18 +56,18 @@ export function Post({ posts, search, setSearch }) {
       <Paper elevation={3} style={{ marginTop: '100px' }}>
         <Grid container spacing={4} justifyContent="center">
           {
-            filteredPosts.length === 0 ? (
-              <Typography color="textSecondary">
-                No posts found.
-              </Typography>
-            ) : (
-              filteredPosts.map((item) => (
+
+              filteredPosts.length === 0 ? (
+                <Typography color="textSecondary">
+                  No posts found.
+                </Typography>
+              ) : filteredPosts.map((item) => (
                 <Grid item xs={12} key={item.id}>
-                  <Card style={{ margin: '0 auto', width: '50vw' }}>
+                  <Card style={{ margin: '0 auto', width: '50vw' }} data-testid={`card-item-${item.id}`}>
                     <CardMedia
                       component="img"
                       height="250px"
-                      image={item.imageUrl}
+                      image={item.imageUrl || 'https://via.placeholder.com/450?text=No+Image+Available'}
                       alt={item.name}
                     />
                     <CardContent>
@@ -101,7 +102,7 @@ export function Post({ posts, search, setSearch }) {
                   </Card>
                 </Grid>
               ))
-            )
+
           }
 
         </Grid>
