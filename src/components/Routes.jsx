@@ -8,6 +8,7 @@ import Register from './Register';
 import NewPost from './NewPost';
 import ErrorPage from './Error';
 import EditPost from './EditPost';
+import { PostList } from './PostList';
 
 function AppRoutes({
   setUserDetails, setUser, setSnackbar, user,
@@ -19,6 +20,7 @@ function AppRoutes({
         element={(
           <Home />)}
       />
+
       <Route
         path="/login"
         element={user ? <Navigate to="/" />
@@ -37,6 +39,12 @@ function AppRoutes({
         path="/posts/:id/edit"
         element={user ? <EditPost user={user} /> : <ErrorPage errorMessage="Cannot edit post" />}
       />
+      <Route
+        path="/posts"
+        element={(
+          <PostList />)}
+      />
+
     </Routes>
   );
 }

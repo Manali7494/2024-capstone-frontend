@@ -63,4 +63,9 @@ describe('Routes', () => {
     await waitFor(() => expect(screen.getByText('Edit Post')).toBeInTheDocument());
     expect(screen.getByText(/edit post/i)).toBeInTheDocument();
   });
+
+  it('renders PostList component when at /posts', () => {
+    setup('/posts');
+    expect(screen.getByText('Posts')).toBeInTheDocument();
+  });
 });
