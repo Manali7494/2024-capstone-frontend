@@ -50,6 +50,16 @@ describe('Post Component', () => {
       { wrapper: BrowserRouter },
     );
     expect(screen.getByText('Test Post')).toBeInTheDocument();
+    expect(screen.queryByText('Test Post 2')).toBeNull();
+  });
+
+  it('displays a message when no posts match the search term', async () => {
+    const searchText = 'Nonexistent Post';
+    render(
+      <Post posts={[]} search={searchText} setSearch={setSearch} />,
+      { wrapper: BrowserRouter },
+    );
+    expect(screen.getByText('No posts found.')).toBeInTheDocument();
   });
 });
 

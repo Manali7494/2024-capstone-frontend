@@ -50,47 +50,56 @@ export function Post({ posts, search, setSearch }) {
 
       <Paper elevation={3} style={{ marginTop: '100px' }}>
         <Grid container spacing={4} justifyContent="center">
-          {filteredPosts.map((item) => (
-            <Grid item xs={12} key={item.id}>
-              <Card style={{ margin: '0 auto', width: '50vw' }}>
-                <CardMedia
-                  component="img"
-                  height="250px"
-                  image={item.imageUrl}
-                  alt={item.name}
-                />
-                <CardContent>
-                  <Typography variant="h5" component="div">{item.name}</Typography>
-                  <Typography variant="body2" color="text.secondary">
-                    Quantity:
-                    {item.quantity}
-                  </Typography>
-                  <Typography variant="body2" color="text.secondary">
-                    Price: $
-                    {item.price}
-                  </Typography>
-                  <Typography variant="body2" color="text.secondary">
-                    Purchase Date:
-                    {' '}
-                    {item.purchaseDate}
-                  </Typography>
-                  {
-                      item.expiryDate && (
+          {
+            filteredPosts.length === 0 ? (
+              <Typography color="textSecondary">
+                No posts found.
+              </Typography>
+            ) : (
+              filteredPosts.map((item) => (
+                <Grid item xs={12} key={item.id}>
+                  <Card style={{ margin: '0 auto', width: '50vw' }}>
+                    <CardMedia
+                      component="img"
+                      height="250px"
+                      image={item.imageUrl}
+                      alt={item.name}
+                    />
+                    <CardContent>
+                      <Typography variant="h5" component="div">{item.name}</Typography>
                       <Typography variant="body2" color="text.secondary">
-                        Expiry Date:
-                        {item.expiryDate}
+                        Quantity:
+                        {item.quantity}
                       </Typography>
-                      )
-                    }
-                </CardContent>
-                <CardActions>
-                  <Button size="small" color="primary" component={Link} to={`/posts/${item.id}/edit`}>
-                    Detail
-                  </Button>
-                </CardActions>
-              </Card>
-            </Grid>
-          ))}
+                      <Typography variant="body2" color="text.secondary">
+                        Price: $
+                        {item.price}
+                      </Typography>
+                      <Typography variant="body2" color="text.secondary">
+                        Purchase Date:
+                        {' '}
+                        {item.purchaseDate}
+                      </Typography>
+                      {
+                          item.expiryDate && (
+                          <Typography variant="body2" color="text.secondary">
+                            Expiry Date:
+                            {item.expiryDate}
+                          </Typography>
+                          )
+                        }
+                    </CardContent>
+                    <CardActions>
+                      <Button size="small" color="primary" component={Link} to={`/posts/${item.id}/edit`}>
+                        Detail
+                      </Button>
+                    </CardActions>
+                  </Card>
+                </Grid>
+              ))
+            )
+          }
+
         </Grid>
       </Paper>
     </Box>
