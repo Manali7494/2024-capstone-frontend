@@ -1,6 +1,7 @@
 import React from 'react';
 import {
   Typography, Button, Container, Box,
+  Card, CardContent,
 } from '@mui/material';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
@@ -8,10 +9,17 @@ import { Link } from 'react-router-dom';
 function Home({ user }) {
   if (!user) {
     return (
-      <Container>
-        <Typography variant="h5" component="h2">
-          Please login or register
-        </Typography>
+      <Container style={{
+        display: 'flex', justifyContent: 'center', alignItems: 'center', height: '20vh',
+      }}
+      >
+        <Card>
+          <CardContent style={{ display: 'flex', justifyContent: 'center' }}>
+            <Typography variant="h5" component="h2">
+              Please login or register
+            </Typography>
+          </CardContent>
+        </Card>
       </Container>
     );
   }

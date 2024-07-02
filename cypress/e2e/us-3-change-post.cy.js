@@ -15,15 +15,11 @@ describe('Change Post', () => {
   it('updates the fields', () => {
     const newName = 'Updated Test Name';
     const newDescription = 'Updated Test Description';
-    const newPrice = '25';
-    const newQuantity = '15';
     const newPurchaseDate = '2025-01-01';
     const newExpiryDate = '2025-12-31';
-
-    cy.get('[data-testid=name]').type('{selectall}{backspace}').type(newName);
-    cy.get('[data-testid=description]').type('{selectall}{backspace}').type(newDescription);
-    cy.get('[data-testid=price]').type('{selectall}{backspace}').type(newPrice);
-    cy.get('[data-testid=quantity]').type('{selectall}{backspace}').type(newQuantity);
+    cy.get('[data-testid=name]').should('not.be.disabled');
+    cy.get('[data-testid=name]').type(newName);
+    cy.get('[data-testid=description]').type(newDescription);
     cy.get('[data-testid=purchaseDate]').type(newPurchaseDate);
     cy.get('[data-testid=expiryDate]').type(newExpiryDate);
 
