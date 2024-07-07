@@ -11,6 +11,7 @@ import { useParams, Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import EditPostLoading from './EditPostLoading';
 import config from '../config';
+import Nutrition from './Nutrition';
 
 function ViewPost({ user }) {
   const { id } = useParams();
@@ -48,6 +49,7 @@ function ViewPost({ user }) {
           <Typography variant="h5" gutterBottom>
             View Post
           </Typography>
+          <Nutrition postId={id} />
           <TextField
             label="Name"
             value={post.name || ''}
