@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import config from '../config';
@@ -5,7 +6,18 @@ import config from '../config';
 function Nutrition({ postId }) {
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const [nutritionDetails, setNutritionDetails] = useState(null);
+  const [nutritionDetails, setNutritionDetails] = useState({
+    calories: 0,
+    diet_labels: [],
+    health_labels: [],
+    macronutrients: {
+      fat: 0,
+      carbs: 0,
+      fiber: 0,
+      sugar: 0,
+      protein: 0,
+    },
+  });
 
   const fetchData = async () => {
     setIsLoading(true);
@@ -32,22 +44,23 @@ function Nutrition({ postId }) {
     <div>
       <button type="submit" onClick={toggleDrawer}>Nutrition</button>
       {isDrawerOpen && (
-        <div style={{
-          overflowY: 'auto',
-          position: 'fixed',
-          top: 0,
-          right: 0,
-          width: '300px',
-          height: '100%',
-          background: 'white',
-          padding: '20px',
-          boxSizing: 'border-box',
-        }}
+        <div
+          style={{
+            overflowY: 'auto',
+            position: 'fixed',
+            top: 0,
+            right: 0,
+            width: '300px',
+            height: '100%',
+            background: 'white',
+            padding: '20px',
+            boxSizing: 'border-box',
+          }}
         >
           {isLoading ? (
             <p>Loading...</p>
           ) : (
-            <div>
+            <div data-testid="drawer-content">
               <h2>Nutrition</h2>
 
               <h4>Calories</h4>
