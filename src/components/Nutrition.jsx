@@ -22,15 +22,14 @@ import {
 } from '@mui/icons-material';
 import config from '../config';
 
-function Nutrition({ postId }) {
+function Nutrition({ postId, user }) {
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [nutritionDetails, setNutritionDetails] = useState(null);
-
   const fetchData = async () => {
     setIsLoading(true);
     try {
-      const response = await fetch(`${config.backend_url}/posts/${postId}/nutrition`);
+      const response = await fetch(`${config.backend_url}/posts/${postId}/nutrition?userId=${user.id}`);
       if (!response.ok) {
         throw new Error('Network response was not ok');
       }
@@ -134,6 +133,7 @@ function Nutrition({ postId }) {
 
 Nutrition.propTypes = {
   postId: PropTypes.number.isRequired,
+  user: PropTypes.object.isRequired,
 };
 
 export default Nutrition;
