@@ -15,12 +15,27 @@ import {
   AccordionSummary,
   AccordionDetails,
   Chip,
-
 } from '@mui/material';
 import {
   ExpandMore,
 } from '@mui/icons-material';
 import config from '../config';
+
+function NutritionAccordion({ title, children }) {
+  return (
+    <Accordion>
+      <AccordionSummary expandIcon={<ExpandMore />}>
+        <Typography variant="h6">{title}</Typography>
+      </AccordionSummary>
+      <AccordionDetails>{children}</AccordionDetails>
+    </Accordion>
+  );
+}
+
+NutritionAccordion.propTypes = {
+  title: PropTypes.string.isRequired,
+  children: PropTypes.node.isRequired,
+};
 
 function Nutrition({ postId, user }) {
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
@@ -65,64 +80,60 @@ function Nutrition({ postId, user }) {
             </Container>
           ) : (
             <Box>
-
               <Box textAlign="center">
                 <Typography variant="h5" gutterBottom>Nutrition</Typography>
               </Box>
+              { !parseInt(nutritionDetails.calories, 10) ? (
+                <Box display="flex" justifyContent="center" alignItems="center">
+                  <Typography variant="h6" style={{ color: 'red', fontStyle: 'italic' }}>
+                    No valid nutrition details
+                  </Typography>
+                </Box>
+              ) : (
+                <>
+                  <NutritionAccordion title="Calories">
+                    <Chip label={nutritionDetails.calories} color="primary" />
+                  </NutritionAccordion>
 
-              <Accordion>
-                <AccordionSummary expandIcon={<ExpandMore />}>
-                  <Typography variant="h6">Calories</Typography>
-                </AccordionSummary>
-                <AccordionDetails>
-                  <Chip label={nutritionDetails.calories} color="primary" />
-                </AccordionDetails>
-              </Accordion>
+                  <NutritionAccordion title="Macronutrients">
+                    <List>
+                      {Object.entries(nutritionDetails)
+                        .filter(([key]) => ['fat', 'carbohydrate', 'fiber', 'sugar', 'protein']
+                          .includes(key))
+                        .map(([key, value]) => (
+                          <ListItem key={key}>
+                            <ListItemText primary={(
+                              <Chip
+                                label={`${key.toUpperCase()}: ${parseFloat(value).toFixed(2)}`}
+                              />
+                            )}
+                            />
+                          </ListItem>
+                        ))}
+                    </List>
+                  </NutritionAccordion>
 
-              <Accordion>
-                <AccordionSummary expandIcon={<ExpandMore />}>
-                  <Typography variant="h6">Macronutrients</Typography>
-                </AccordionSummary>
-                <AccordionDetails>
-                  <List>
-                    {Object.entries(nutritionDetails).filter(([key]) => ['fat', 'carbohydrate', 'fiber', 'sugar', 'protein'].includes(key)).map(([key, value]) => (
-                      <ListItem key={key}>
-                        <ListItemText primary={<Chip label={`${key.toUpperCase()}: ${parseFloat(value).toFixed(2)}`} />} />
-                      </ListItem>
-                    ))}
-                  </List>
-                </AccordionDetails>
-              </Accordion>
+                  <NutritionAccordion title="Diet Labels">
+                    <List>
+                      {nutritionDetails.diet_labels.map((label) => (
+                        <ListItem key={label}>
+                          <ListItemText primary={label} />
+                        </ListItem>
+                      ))}
+                    </List>
+                  </NutritionAccordion>
 
-              <Accordion>
-                <AccordionSummary expandIcon={<ExpandMore />}>
-                  <Typography variant="h6">Diet Labels</Typography>
-                </AccordionSummary>
-                <AccordionDetails>
-                  <List>
-                    {nutritionDetails.diet_labels.map((label) => (
-                      <ListItem key={label}>
-                        <ListItemText primary={label} />
-                      </ListItem>
-                    ))}
-                  </List>
-                </AccordionDetails>
-              </Accordion>
-
-              <Accordion>
-                <AccordionSummary expandIcon={<ExpandMore />}>
-                  <Typography variant="h6">Health Labels</Typography>
-                </AccordionSummary>
-                <AccordionDetails>
-                  <List>
-                    {nutritionDetails.health_labels.map((label) => (
-                      <ListItem key={label}>
-                        <ListItemText primary={label} />
-                      </ListItem>
-                    ))}
-                  </List>
-                </AccordionDetails>
-              </Accordion>
+                  <NutritionAccordion title="Health Labels">
+                    <List>
+                      {nutritionDetails.health_labels.map((label) => (
+                        <ListItem key={label}>
+                          <ListItemText primary={label} />
+                        </ListItem>
+                      ))}
+                    </List>
+                  </NutritionAccordion>
+                </>
+              )}
             </Box>
           )}
         </Box>
