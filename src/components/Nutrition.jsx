@@ -20,7 +20,7 @@ import {
   ExpandMore,
 } from '@mui/icons-material';
 import config from '../config';
-
+// Helpers
 function NutritionAccordion({ title, children }) {
   return (
     <Accordion>
@@ -37,31 +37,10 @@ NutritionAccordion.propTypes = {
   children: PropTypes.node.isRequired,
 };
 
-function Nutrition({ postId, user }) {
-  const [isDrawerOpen, setIsDrawerOpen] = useState(false);
-  const [isLoading, setIsLoading] = useState(true);
-  const [nutritionDetails, setNutritionDetails] = useState(null);
-  const fetchData = async () => {
-    setIsLoading(true);
-    try {
-      const response = await fetch(`${config.backend_url}/posts/${postId}/nutrition?userId=${user.id}`);
-      if (!response.ok) {
-        throw new Error('Network response was not ok');
-      }
-      const data = await response.json();
-      setNutritionDetails(data);
-    } catch (error) {
-      console.error('There was an error fetching the nutrition details:', error);
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  const toggleDrawer = () => {
-    setIsDrawerOpen(!isDrawerOpen);
-    if (!isDrawerOpen) fetchData();
-  };
-
+// Drawer
+export function NutritionDrawer({
+  isDrawerOpen, toggleDrawer, isLoading, nutritionDetails,
+}) {
   return (
     <div>
       <Box display="flex" justifyContent="flex-end">
@@ -76,10 +55,11 @@ function Nutrition({ postId, user }) {
             }}
             >
 
-              <CircularProgress />
+              <CircularProgress data-testId="Loading" />
             </Container>
           ) : (
-            <Box>
+            <Box data-testid="drawer-content">
+
               <Box textAlign="center">
                 <Typography variant="h5" gutterBottom>Nutrition</Typography>
               </Box>
@@ -114,10 +94,10 @@ function Nutrition({ postId, user }) {
                   </NutritionAccordion>
 
                   <NutritionAccordion title="Diet Labels">
-                    <List>
+                    <List data-testid="macronutrients">
                       {nutritionDetails.diet_labels.map((label) => (
                         <ListItem key={label}>
-                          <ListItemText primary={label} />
+                          <ListItemText data-testid={label} primary={label} />
                         </ListItem>
                       ))}
                     </List>
@@ -139,6 +119,71 @@ function Nutrition({ postId, user }) {
         </Box>
       </Drawer>
     </div>
+  );
+}
+
+NutritionDrawer.propTypes = {
+  isDrawerOpen: PropTypes.bool.isRequired,
+  toggleDrawer: PropTypes.func.isRequired,
+  isLoading: PropTypes.bool.isRequired,
+  nutritionDetails: PropTypes.shape({
+    calories: PropTypes.number,
+    diet_labels: PropTypes.arrayOf(PropTypes.string),
+    health_labels: PropTypes.arrayOf(PropTypes.string),
+    macronutrients: PropTypes.shape({
+      fat: PropTypes.number,
+      carbs: PropTypes.number,
+      fiber: PropTypes.number,
+      sugar: PropTypes.number,
+      protein: PropTypes.number,
+    }),
+  }).isRequired,
+};
+
+function Nutrition({ postId, user }) {
+  const [isDrawerOpen, setIsDrawerOpen] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+  const [nutritionDetails, setNutritionDetails] = useState({
+    calories: 0,
+    diet_labels: [],
+    health_labels: [],
+    macronutrients: {
+      fat: 0,
+      carbs: 0,
+      fiber: 0,
+      sugar: 0,
+      protein: 0,
+    },
+  });
+
+  const fetchData = async () => {
+    setIsLoading(true);
+    try {
+      const response = await fetch(`${config.backend_url}/posts/${postId}/nutrition?userId=${user.id}`);
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+      const data = await response.json();
+      setNutritionDetails(data);
+    } catch (error) {
+      console.error('There was an error fetching the nutrition details:', error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const toggleDrawer = () => {
+    setIsDrawerOpen(!isDrawerOpen);
+    if (!isDrawerOpen) fetchData();
+  };
+
+  return (
+    <NutritionDrawer
+      toggleDrawer={toggleDrawer}
+      isLoading={isLoading}
+      nutritionDetails={nutritionDetails}
+      isDrawerOpen={isDrawerOpen}
+    />
   );
 }
 
