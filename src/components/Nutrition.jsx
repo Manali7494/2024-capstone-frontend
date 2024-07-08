@@ -25,7 +25,18 @@ import config from '../config';
 function Nutrition({ postId, user }) {
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
-  const [nutritionDetails, setNutritionDetails] = useState(null);
+  const [nutritionDetails, setNutritionDetails] = useState({
+    calories: 0,
+    diet_labels: [],
+    health_labels: [],
+    macronutrients: {
+      fat: 0,
+      carbs: 0,
+      fiber: 0,
+      sugar: 0,
+      protein: 0,
+    },
+  });
   const fetchData = async () => {
     setIsLoading(true);
     try {
@@ -61,10 +72,10 @@ function Nutrition({ postId, user }) {
             }}
             >
 
-              <CircularProgress />
+              <CircularProgress data-testId="Loading" />
             </Container>
           ) : (
-            <Box>
+            <Box data-testid="drawer-content">
 
               <Box textAlign="center">
                 <Typography variant="h5" gutterBottom>Nutrition</Typography>
@@ -79,7 +90,7 @@ function Nutrition({ postId, user }) {
                 </AccordionDetails>
               </Accordion>
 
-              <Accordion>
+              <Accordion data-testid="macronutrients">
                 <AccordionSummary expandIcon={<ExpandMore />}>
                   <Typography variant="h6">Macronutrients</Typography>
                 </AccordionSummary>
@@ -87,7 +98,10 @@ function Nutrition({ postId, user }) {
                   <List>
                     {Object.entries(nutritionDetails).filter(([key]) => ['fat', 'carbohydrate', 'fiber', 'sugar', 'protein'].includes(key)).map(([key, value]) => (
                       <ListItem key={key}>
-                        <ListItemText primary={<Chip label={`${key.toUpperCase()}: ${parseFloat(value).toFixed(2)}`} />} />
+                        <ListItemText
+                          data-testid={key}
+                          primary={<Chip label={`${key.toUpperCase()}: ${parseFloat(value).toFixed(2)}`} />}
+                        />
                       </ListItem>
                     ))}
                   </List>
