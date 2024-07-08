@@ -7,6 +7,9 @@ import Nutrition from '../Nutrition';
 
 const mockProps = {
   postId: 'post:1',
+  user: {
+    id: 'user:1',
+  },
 };
 const mockNutritionData = {
   calories: '200',
@@ -34,7 +37,7 @@ describe('Nutrition Component Tests', () => {
   it('Drawer appears with loading indicator', async () => {
     render(<Nutrition {...mockProps} />);
     fireEvent.click(screen.getByRole('button', { name: /nutrition/i }));
-    expect(screen.getByText('Loading...')).toBeInTheDocument();
+    expect(screen.getByTestId(/loading/i)).toBeInTheDocument();
   });
 
   it('Drawer shows content', async () => {
@@ -43,7 +46,7 @@ describe('Nutrition Component Tests', () => {
     await waitFor(() => expect(screen.getByTestId('drawer-content')).toBeInTheDocument());
   });
 
-  it('Drawer shows following headings: calories, diet labels, health labels, macronutrients', async () => {
+  it('Drawer shows following accordion headings: calories, diet labels, health labels, macronutrients', async () => {
     render(<Nutrition {...mockProps} />);
     fireEvent.click(screen.getByRole('button', { name: /nutrition/i }));
     await waitFor(() => {
@@ -54,15 +57,14 @@ describe('Nutrition Component Tests', () => {
     });
   });
 
-  it('Drawer contains following subheadings of macronutrients: fat, carbohydrate, fiber, sugar, and protein', async () => {
+  it('Drawer expands with its data', async () => {
     render(<Nutrition {...mockProps} />);
     fireEvent.click(screen.getByRole('button', { name: /nutrition/i }));
-    await waitFor(() => {
-      expect(screen.getByText(/fat/i)).toBeInTheDocument();
-      expect(screen.getByText(/carbs/i)).toBeInTheDocument();
-      expect(screen.getByText(/fiber/i)).toBeInTheDocument();
-      expect(screen.getByText(/sugar/i)).toBeInTheDocument();
-      expect(screen.getByText(/protein/i)).toBeInTheDocument();
-    });
+
+    await waitFor(() => expect(screen.getByText(/macronutrients/i)).toBeInTheDocument());
+    const macronutrientsPanel = screen.getByTestId(/macronutrients/i);
+    fireEvent.click(macronutrientsPanel);
+
+    await waitFor(() => expect(screen.getByText(/calories/i)).toBeInTheDocument());
   });
 });

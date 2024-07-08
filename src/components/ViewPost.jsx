@@ -49,7 +49,7 @@ function ViewPost({ user }) {
           <Typography variant="h5" gutterBottom>
             View Post
           </Typography>
-          <Nutrition postId={id} />
+          <Nutrition postId={id} user={user} />
           <TextField
             label="Name"
             value={post.name || ''}

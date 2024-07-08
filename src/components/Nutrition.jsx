@@ -1,11 +1,30 @@
 /* eslint-disable no-console */
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
+import {
+  Button,
+  Drawer,
+  CircularProgress,
+  Typography,
+  List,
+  ListItem,
+  ListItemText,
+  Container,
+  Box,
+  Accordion,
+  AccordionSummary,
+  AccordionDetails,
+  Chip,
+
+} from '@mui/material';
+import {
+  ExpandMore,
+} from '@mui/icons-material';
 import config from '../config';
 
-function Nutrition({ postId }) {
+function Nutrition({ postId, user }) {
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   const [nutritionDetails, setNutritionDetails] = useState({
     calories: 0,
     diet_labels: [],
@@ -18,11 +37,10 @@ function Nutrition({ postId }) {
       protein: 0,
     },
   });
-
   const fetchData = async () => {
     setIsLoading(true);
     try {
-      const response = await fetch(`${config.backend_url}/posts/${postId}/nutrition`);
+      const response = await fetch(`${config.backend_url}/posts/${postId}/nutrition?userId=${user.id}`);
       if (!response.ok) {
         throw new Error('Network response was not ok');
       }
@@ -42,66 +60,94 @@ function Nutrition({ postId }) {
 
   return (
     <div>
-      <button type="submit" onClick={toggleDrawer}>Nutrition</button>
-      {isDrawerOpen && (
-        <div
-          style={{
-            overflowY: 'auto',
-            position: 'fixed',
-            top: 0,
-            right: 0,
-            width: '300px',
-            height: '100%',
-            background: 'white',
-            padding: '20px',
-            boxSizing: 'border-box',
-          }}
-        >
-          {isLoading ? (
-            <p>Loading...</p>
-          ) : (
-            <div data-testid="drawer-content">
-              <h2>Nutrition</h2>
+      <Box display="flex" justifyContent="flex-end">
+        <Button variant="contained" onClick={toggleDrawer}>Nutrition</Button>
+      </Box>
+      <Drawer anchor="right" open={isDrawerOpen} onClose={toggleDrawer}>
+        <Box sx={{ width: 300, padding: 2 }}>
 
-              <h4>Calories</h4>
-              <p>{nutritionDetails.calories}</p>
-              <h4>Macronutrients</h4>
-              <ul>
-                <li>
-                  Fat:
-                  {nutritionDetails.fat}
-                </li>
-                <li>
-                  Carbs:
-                  {nutritionDetails.carbs}
-                </li>
-                <li>
-                  Fiber:
-                  {nutritionDetails.fiber}
-                </li>
-                <li>
-                  Sugar:
-                  {nutritionDetails.sugar}
-                </li>
-                <li>
-                  Protein:
-                  {nutritionDetails.protein}
-                </li>
-              </ul>
-              <h4>Diet Labels</h4>
-              <ul>{nutritionDetails.diet_labels.map((label) => <li key={label}>{label}</li>)}</ul>
-              <h4>Health Labels</h4>
-              <ul>{nutritionDetails.health_labels.map((label) => <li key={label}>{label}</li>)}</ul>
-            </div>
+          {isLoading ? (
+            <Container sx={{
+              display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%',
+            }}
+            >
+
+              <CircularProgress data-testId="Loading" />
+            </Container>
+          ) : (
+            <Box data-testid="drawer-content">
+
+              <Box textAlign="center">
+                <Typography variant="h5" gutterBottom>Nutrition</Typography>
+              </Box>
+
+              <Accordion>
+                <AccordionSummary expandIcon={<ExpandMore />}>
+                  <Typography variant="h6">Calories</Typography>
+                </AccordionSummary>
+                <AccordionDetails>
+                  <Chip label={nutritionDetails.calories} color="primary" />
+                </AccordionDetails>
+              </Accordion>
+
+              <Accordion data-testid="macronutrients">
+                <AccordionSummary expandIcon={<ExpandMore />}>
+                  <Typography variant="h6">Macronutrients</Typography>
+                </AccordionSummary>
+                <AccordionDetails>
+                  <List>
+                    {Object.entries(nutritionDetails).filter(([key]) => ['fat', 'carbohydrate', 'fiber', 'sugar', 'protein'].includes(key)).map(([key, value]) => (
+                      <ListItem key={key}>
+                        <ListItemText
+                          data-testid={key}
+                          primary={<Chip label={`${key.toUpperCase()}: ${parseFloat(value).toFixed(2)}`} />}
+                        />
+                      </ListItem>
+                    ))}
+                  </List>
+                </AccordionDetails>
+              </Accordion>
+
+              <Accordion>
+                <AccordionSummary expandIcon={<ExpandMore />}>
+                  <Typography variant="h6">Diet Labels</Typography>
+                </AccordionSummary>
+                <AccordionDetails>
+                  <List>
+                    {nutritionDetails.diet_labels.map((label) => (
+                      <ListItem key={label}>
+                        <ListItemText primary={label} />
+                      </ListItem>
+                    ))}
+                  </List>
+                </AccordionDetails>
+              </Accordion>
+
+              <Accordion>
+                <AccordionSummary expandIcon={<ExpandMore />}>
+                  <Typography variant="h6">Health Labels</Typography>
+                </AccordionSummary>
+                <AccordionDetails>
+                  <List>
+                    {nutritionDetails.health_labels.map((label) => (
+                      <ListItem key={label}>
+                        <ListItemText primary={label} />
+                      </ListItem>
+                    ))}
+                  </List>
+                </AccordionDetails>
+              </Accordion>
+            </Box>
           )}
-        </div>
-      )}
+        </Box>
+      </Drawer>
     </div>
   );
 }
 
 Nutrition.propTypes = {
   postId: PropTypes.number.isRequired,
+  user: PropTypes.object.isRequired,
 };
 
 export default Nutrition;
