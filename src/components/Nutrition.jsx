@@ -15,49 +15,32 @@ import {
   AccordionSummary,
   AccordionDetails,
   Chip,
-
 } from '@mui/material';
 import {
   ExpandMore,
 } from '@mui/icons-material';
 import config from '../config';
+// Helpers
+function NutritionAccordion({ title, children }) {
+  return (
+    <Accordion>
+      <AccordionSummary expandIcon={<ExpandMore />}>
+        <Typography variant="h6">{title}</Typography>
+      </AccordionSummary>
+      <AccordionDetails>{children}</AccordionDetails>
+    </Accordion>
+  );
+}
 
-function Nutrition({ postId, user }) {
-  const [isDrawerOpen, setIsDrawerOpen] = useState(false);
-  const [isLoading, setIsLoading] = useState(true);
-  const [nutritionDetails, setNutritionDetails] = useState({
-    calories: 0,
-    diet_labels: [],
-    health_labels: [],
-    macronutrients: {
-      fat: 0,
-      carbs: 0,
-      fiber: 0,
-      sugar: 0,
-      protein: 0,
-    },
-  });
-  const fetchData = async () => {
-    setIsLoading(true);
-    try {
-      const response = await fetch(`${config.backend_url}/posts/${postId}/nutrition?userId=${user.id}`);
-      if (!response.ok) {
-        throw new Error('Network response was not ok');
-      }
-      const data = await response.json();
-      setNutritionDetails(data);
-    } catch (error) {
-      console.error('There was an error fetching the nutrition details:', error);
-    } finally {
-      setIsLoading(false);
-    }
-  };
+NutritionAccordion.propTypes = {
+  title: PropTypes.string.isRequired,
+  children: PropTypes.node.isRequired,
+};
 
-  const toggleDrawer = () => {
-    setIsDrawerOpen(!isDrawerOpen);
-    if (!isDrawerOpen) fetchData();
-  };
-
+// Drawer
+export function NutritionDrawer({
+  isDrawerOpen, toggleDrawer, isLoading, nutritionDetails,
+}) {
   return (
     <div>
       <Box display="flex" justifyContent="flex-end">
@@ -80,68 +63,127 @@ function Nutrition({ postId, user }) {
               <Box textAlign="center">
                 <Typography variant="h5" gutterBottom>Nutrition</Typography>
               </Box>
+              { !parseInt(nutritionDetails.calories, 10) ? (
+                <Box display="flex" justifyContent="center" alignItems="center">
+                  <Typography variant="h6" style={{ color: 'red', fontStyle: 'italic' }}>
+                    No valid nutrition details
+                  </Typography>
+                </Box>
+              ) : (
+                <>
+                  <NutritionAccordion title="Calories">
+                    <Chip label={nutritionDetails.calories} color="primary" />
+                  </NutritionAccordion>
 
-              <Accordion>
-                <AccordionSummary expandIcon={<ExpandMore />}>
-                  <Typography variant="h6">Calories</Typography>
-                </AccordionSummary>
-                <AccordionDetails>
-                  <Chip label={nutritionDetails.calories} color="primary" />
-                </AccordionDetails>
-              </Accordion>
+                  <NutritionAccordion title="Macronutrients">
+                    <List>
+                      {Object.entries(nutritionDetails)
+                        .filter(([key]) => ['fat', 'carbohydrate', 'fiber', 'sugar', 'protein']
+                          .includes(key))
+                        .map(([key, value]) => (
+                          <ListItem key={key}>
+                            <ListItemText primary={(
+                              <Chip
+                                label={`${key.toUpperCase()}: ${parseFloat(value).toFixed(2)}`}
+                              />
+                            )}
+                            />
+                          </ListItem>
+                        ))}
+                    </List>
+                  </NutritionAccordion>
 
-              <Accordion data-testid="macronutrients">
-                <AccordionSummary expandIcon={<ExpandMore />}>
-                  <Typography variant="h6">Macronutrients</Typography>
-                </AccordionSummary>
-                <AccordionDetails>
-                  <List>
-                    {Object.entries(nutritionDetails).filter(([key]) => ['fat', 'carbohydrate', 'fiber', 'sugar', 'protein'].includes(key)).map(([key, value]) => (
-                      <ListItem key={key}>
-                        <ListItemText
-                          data-testid={key}
-                          primary={<Chip label={`${key.toUpperCase()}: ${parseFloat(value).toFixed(2)}`} />}
-                        />
-                      </ListItem>
-                    ))}
-                  </List>
-                </AccordionDetails>
-              </Accordion>
+                  <NutritionAccordion title="Diet Labels">
+                    <List data-testid="macronutrients">
+                      {nutritionDetails.diet_labels.map((label) => (
+                        <ListItem key={label}>
+                          <ListItemText data-testid={label} primary={label} />
+                        </ListItem>
+                      ))}
+                    </List>
+                  </NutritionAccordion>
 
-              <Accordion>
-                <AccordionSummary expandIcon={<ExpandMore />}>
-                  <Typography variant="h6">Diet Labels</Typography>
-                </AccordionSummary>
-                <AccordionDetails>
-                  <List>
-                    {nutritionDetails.diet_labels.map((label) => (
-                      <ListItem key={label}>
-                        <ListItemText primary={label} />
-                      </ListItem>
-                    ))}
-                  </List>
-                </AccordionDetails>
-              </Accordion>
-
-              <Accordion>
-                <AccordionSummary expandIcon={<ExpandMore />}>
-                  <Typography variant="h6">Health Labels</Typography>
-                </AccordionSummary>
-                <AccordionDetails>
-                  <List>
-                    {nutritionDetails.health_labels.map((label) => (
-                      <ListItem key={label}>
-                        <ListItemText primary={label} />
-                      </ListItem>
-                    ))}
-                  </List>
-                </AccordionDetails>
-              </Accordion>
+                  <NutritionAccordion title="Health Labels">
+                    <List>
+                      {nutritionDetails.health_labels.map((label) => (
+                        <ListItem key={label}>
+                          <ListItemText primary={label} />
+                        </ListItem>
+                      ))}
+                    </List>
+                  </NutritionAccordion>
+                </>
+              )}
             </Box>
           )}
         </Box>
       </Drawer>
     </div>
+  );
+}
+
+NutritionDrawer.propTypes = {
+  isDrawerOpen: PropTypes.bool.isRequired,
+  toggleDrawer: PropTypes.func.isRequired,
+  isLoading: PropTypes.bool.isRequired,
+  nutritionDetails: PropTypes.shape({
+    calories: PropTypes.number,
+    diet_labels: PropTypes.arrayOf(PropTypes.string),
+    health_labels: PropTypes.arrayOf(PropTypes.string),
+    macronutrients: PropTypes.shape({
+      fat: PropTypes.number,
+      carbs: PropTypes.number,
+      fiber: PropTypes.number,
+      sugar: PropTypes.number,
+      protein: PropTypes.number,
+    }),
+  }).isRequired,
+};
+
+function Nutrition({ postId, user }) {
+  const [isDrawerOpen, setIsDrawerOpen] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+  const [nutritionDetails, setNutritionDetails] = useState({
+    calories: 0,
+    diet_labels: [],
+    health_labels: [],
+    macronutrients: {
+      fat: 0,
+      carbs: 0,
+      fiber: 0,
+      sugar: 0,
+      protein: 0,
+    },
+  });
+
+  const fetchData = async () => {
+    setIsLoading(true);
+    try {
+      const response = await fetch(`${config.backend_url}/posts/${postId}/nutrition?userId=${user.id}`);
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+      const data = await response.json();
+      setNutritionDetails(data);
+    } catch (error) {
+      console.error('There was an error fetching the nutrition details:', error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const toggleDrawer = () => {
+    setIsDrawerOpen(!isDrawerOpen);
+    if (!isDrawerOpen) fetchData();
+  };
+
+  return (
+    <NutritionDrawer
+      toggleDrawer={toggleDrawer}
+      isLoading={isLoading}
+      nutritionDetails={nutritionDetails}
+      isDrawerOpen={isDrawerOpen}
+    />
   );
 }
 
