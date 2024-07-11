@@ -15,8 +15,8 @@ describe('Add Post', () => {
   });
 
   it('fills in the fields', () => {
-    const name = 'Test Name';
-    const description = 'Test Description';
+    const name = 'Banana';
+    const description = 'Box of bananas';
     const price = '20';
     const quantity = '10';
     const purchaseDate = '2024-01-01';
