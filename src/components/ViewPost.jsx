@@ -71,22 +71,24 @@ function ViewPost({ user }) {
           <Typography variant="h5" gutterBottom>
             View Post
           </Typography>
-          <button
+          <Button
             onClick={handleInterestClick}
-            type="button"
+            variant="contained"
             style={{
               backgroundColor: isUserInterested ? 'green' : 'grey',
               color: isUserInterested ? 'white' : 'black',
             }}
           >
-            {' '}
             Interested
-          </button>
-          {
-            isUserInterested && (
-              <button type="button">ContactInformation</button>
-            )
-          }
+          </Button>
+          {isUserInterested && (
+          <Button
+            type="button"
+            variant="contained"
+          >
+            Contact Information
+          </Button>
+          )}
           <Nutrition postId={id} user={user} />
           <TextField
             label="Name"
