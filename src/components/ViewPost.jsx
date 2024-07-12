@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import React, { useState, useEffect } from 'react';
 import {
   Box,
@@ -17,16 +18,18 @@ function ViewPost({ user }) {
   const { id } = useParams();
   const [post, setPost] = useState({});
   const [loading, setLoading] = useState(true);
+  const [isUserInterested, setIsUserInterested] = useState(false);
 
   useEffect(() => {
     const fetchPostData = async () => {
       try {
-        const response = await fetch(`${config.backend_url}/posts/${id}`);
+        const response = await fetch(`${config.backend_url}/posts/${id}?userId=${user.id}`);
         if (!response.ok) {
           throw new Error('Could not fetch post data');
         }
         const data = await response.json();
         setPost(data);
+        setIsUserInterested(data.isUserInterested);
       } catch (error) {
         // eslint-disable-next-line no-console
         console.error('Fetch error:', error);
@@ -36,11 +39,30 @@ function ViewPost({ user }) {
     };
 
     fetchPostData();
-  }, [id]);
+  }, [id, user]);
 
   if (loading) {
     return <EditPostLoading />;
   }
+
+  const handleInterestClick = async () => {
+    try {
+      await fetch(`${config.backend_url}/posts/${id}/interested`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          userId: user.id,
+        }),
+
+      });
+      setIsUserInterested(!isUserInterested);
+      console.log('Interested status updated:');
+    } catch (error) {
+      console.error('Error updating interested status:', error);
+    }
+  };
 
   return (
     <Grid container justifyContent="center">
@@ -49,6 +71,22 @@ function ViewPost({ user }) {
           <Typography variant="h5" gutterBottom>
             View Post
           </Typography>
+          <button
+            onClick={handleInterestClick}
+            type="button"
+            style={{
+              backgroundColor: isUserInterested ? 'green' : 'grey',
+              color: isUserInterested ? 'white' : 'black',
+            }}
+          >
+            {' '}
+            Interested
+          </button>
+          {
+            isUserInterested && (
+              <button type="button">ContactInformation</button>
+            )
+          }
           <Nutrition postId={id} user={user} />
           <TextField
             label="Name"
