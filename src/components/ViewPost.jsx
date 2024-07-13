@@ -13,6 +13,7 @@ import PropTypes from 'prop-types';
 import EditPostLoading from './EditPostLoading';
 import config from '../config';
 import Nutrition from './Nutrition';
+import ContactInformationDialog from './ContactInformationDialog';
 
 function ViewPost({ user }) {
   const { id } = useParams();
@@ -82,12 +83,7 @@ function ViewPost({ user }) {
             Interested
           </Button>
           {isUserInterested && (
-          <Button
-            type="button"
-            variant="contained"
-          >
-            Contact Information
-          </Button>
+            <ContactInformationDialog userId={user.id} />
           )}
           <Nutrition postId={id} user={user} />
           <TextField
