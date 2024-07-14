@@ -6,6 +6,7 @@ import {
   Paper,
   Typography,
   TextField,
+  CircularProgress,
   Button,
 } from '@mui/material';
 import { useParams, Link } from 'react-router-dom';
@@ -19,8 +20,8 @@ function ViewPost({ user }) {
   const { id } = useParams();
   const [post, setPost] = useState({});
   const [loading, setLoading] = useState(true);
+  const [interestedLoading, setInterestedLoading] = useState(false);
   const [isUserInterested, setIsUserInterested] = useState(false);
-
   useEffect(() => {
     const fetchPostData = async () => {
       try {
@@ -47,6 +48,7 @@ function ViewPost({ user }) {
   }
 
   const handleInterestClick = async () => {
+    setInterestedLoading(true);
     try {
       await fetch(`${config.backend_url}/posts/${id}/interested`, {
         method: 'POST',
@@ -62,8 +64,23 @@ function ViewPost({ user }) {
       console.log('Interested status updated:');
     } catch (error) {
       console.error('Error updating interested status:', error);
+    } finally {
+      setInterestedLoading(false);
     }
   };
+
+  const interestedButton = (
+    <Button
+      onClick={handleInterestClick}
+      variant="contained"
+      style={{
+        backgroundColor: isUserInterested ? 'green' : 'grey',
+        color: isUserInterested ? 'white' : 'black',
+      }}
+    >
+      Interested
+    </Button>
+  );
 
   return (
     <Grid container justifyContent="center">
@@ -72,16 +89,15 @@ function ViewPost({ user }) {
           <Typography variant="h5" gutterBottom>
             View Post
           </Typography>
-          <Button
-            onClick={handleInterestClick}
-            variant="contained"
-            style={{
-              backgroundColor: isUserInterested ? 'green' : 'grey',
-              color: isUserInterested ? 'white' : 'black',
-            }}
-          >
-            Interested
-          </Button>
+          {
+            interestedLoading ? (
+              <div data-testid="loading">
+                <CircularProgress />
+              </div>
+            ) : (
+              interestedButton
+            )
+          }
           {isUserInterested && (
             <ContactInformationDialog userId={user.id} />
           )}
