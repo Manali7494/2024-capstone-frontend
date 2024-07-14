@@ -70,24 +70,17 @@ function ViewPost({ user }) {
   };
 
   const interestedButton = (
-    <>
-      <button
-        onClick={handleInterestClick}
-        type="button"
-        style={{
-          backgroundColor: isUserInterested ? 'green' : 'grey',
-          color: isUserInterested ? 'white' : 'black',
-        }}
-      >
-        {' '}
-        Interested
-      </button>
-      {
-        isUserInterested && (
-          <button type="button">Contact Information</button>
-        )
-      }
-    </>
+    <button
+      onClick={handleInterestClick}
+      type="button"
+      style={{
+        backgroundColor: isUserInterested ? 'green' : 'grey',
+        color: isUserInterested ? 'white' : 'black',
+      }}
+    >
+      {' '}
+      Interested
+    </button>
   );
 
   return (
