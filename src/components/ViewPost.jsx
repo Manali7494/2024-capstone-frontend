@@ -9,6 +9,9 @@ import {
   CircularProgress,
   Button,
 } from '@mui/material';
+import {
+  Favorite,
+} from '@mui/icons-material';
 import { useParams, Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import EditPostLoading from './EditPostLoading';
@@ -72,11 +75,12 @@ function ViewPost({ user }) {
   const interestedButton = (
     <Button
       onClick={handleInterestClick}
-      variant="contained"
+      variant="outlined"
       style={{
         backgroundColor: isUserInterested ? 'green' : 'grey',
         color: isUserInterested ? 'white' : 'black',
       }}
+      startIcon={<Favorite />}
     >
       Interested
     </Button>
@@ -89,7 +93,12 @@ function ViewPost({ user }) {
           <Typography variant="h5" gutterBottom>
             View Post
           </Typography>
-          {
+          <Box display="flex" justifyContent="flex-end" pb={2}>
+
+            {isUserInterested && (
+            <ContactInformationDialog userId={post.seller_id} />
+            )}
+            {
             interestedLoading ? (
               <div data-testid="loading">
                 <CircularProgress />
@@ -98,9 +107,7 @@ function ViewPost({ user }) {
               interestedButton
             )
           }
-          {isUserInterested && (
-            <ContactInformationDialog userId={user.id} />
-          )}
+          </Box>
           <Nutrition postId={id} user={user} />
           <TextField
             label="Name"

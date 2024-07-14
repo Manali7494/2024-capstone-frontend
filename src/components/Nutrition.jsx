@@ -18,6 +18,7 @@ import {
 } from '@mui/material';
 import {
   ExpandMore,
+  Menu as MenuIcon,
 } from '@mui/icons-material';
 import config from '../config';
 // Helpers
@@ -44,7 +45,7 @@ export function NutritionDrawer({
   return (
     <div>
       <Box display="flex" justifyContent="flex-end">
-        <Button variant="contained" onClick={toggleDrawer}>Nutrition</Button>
+        <Button variant="outlined" onClick={toggleDrawer} startIcon={<MenuIcon />}>Nutrition</Button>
       </Box>
       <Drawer anchor="right" open={isDrawerOpen} onClose={toggleDrawer}>
         <Box sx={{ width: 300, padding: 2 }}>
