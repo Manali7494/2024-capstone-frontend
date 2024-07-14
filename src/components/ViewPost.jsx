@@ -14,6 +14,7 @@ import PropTypes from 'prop-types';
 import EditPostLoading from './EditPostLoading';
 import config from '../config';
 import Nutrition from './Nutrition';
+import ContactInformationDialog from './ContactInformationDialog';
 
 function ViewPost({ user }) {
   const { id } = useParams();
@@ -69,26 +70,16 @@ function ViewPost({ user }) {
   };
 
   const interestedButton = (
-    <>
-      <Button
-        onClick={handleInterestClick}
-        variant="contained"
-        style={{
-          backgroundColor: isUserInterested ? 'green' : 'grey',
-          color: isUserInterested ? 'white' : 'black',
-        }}
-      >
-        Interested
-      </Button>
-      {isUserInterested && (
-      <Button
-        type="button"
-        variant="contained"
-      >
-        Contact Information
-      </Button>
-      )}
-    </>
+    <Button
+      onClick={handleInterestClick}
+      variant="contained"
+      style={{
+        backgroundColor: isUserInterested ? 'green' : 'grey',
+        color: isUserInterested ? 'white' : 'black',
+      }}
+    >
+      Interested
+    </Button>
   );
 
   return (
@@ -107,6 +98,9 @@ function ViewPost({ user }) {
               interestedButton
             )
           }
+          {isUserInterested && (
+            <ContactInformationDialog userId={user.id} />
+          )}
           <Nutrition postId={id} user={user} />
           <TextField
             label="Name"

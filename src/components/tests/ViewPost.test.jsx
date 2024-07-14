@@ -75,4 +75,21 @@ describe('ViewPost', () => {
 
     expect(await screen.findByRole('button', { name: /Contact Information/i })).toBeInTheDocument();
   });
+
+  it('Shows contact information', async () => {
+    render(
+      <ViewPost user={user} />,
+      { wrapper: BrowserRouter },
+    );
+    await screen.findByRole('button', { name: /interested/i });
+    fireEvent.click(screen.getByRole('button', { name: /interested/i }));
+
+    expect(await screen.findByRole('button', { name: /Contact Information/i })).toBeInTheDocument();
+
+    fireEvent.click(screen.getByRole('button', { name: /Contact Information/i }));
+
+    await screen.findByText(/Email Address/i);
+    expect(screen.getByText(/Email Address/i)).toBeInTheDocument();
+    expect(screen.getByText(/Phone Number/i)).toBeInTheDocument();
+  });
 });
