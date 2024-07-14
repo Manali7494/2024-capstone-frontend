@@ -89,9 +89,9 @@ describe('ViewPost', () => {
 
     fireEvent.click(screen.getByRole('button', { name: /Contact Information/i }));
 
-    await screen.findByText(/Email Address/i);
-    expect(screen.getByText(/Email Address/i)).toBeInTheDocument();
-    expect(screen.getByText(/Phone Number/i)).toBeInTheDocument();
+    await screen.getByTestId(/contact-email/i);
+    expect(screen.getByTestId(/contact-email/i)).toBeInTheDocument();
+    expect(screen.getByTestId(/contact-number/i)).toBeInTheDocument();
   });
 
   it('Unselect favourite and hide contact information', async () => {

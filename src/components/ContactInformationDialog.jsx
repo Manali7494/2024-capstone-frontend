@@ -51,6 +51,7 @@ function ContactInformationDialog({ userId }) {
             margin="dense"
             id="email"
             label="Email Address"
+            data-testid="contact-email"
             type="email"
             fullWidth
             value={contactInformation.email}
@@ -60,6 +61,7 @@ function ContactInformationDialog({ userId }) {
             margin="dense"
             id="phone"
             label="Phone Number"
+            data-testid="contact-number"
             type="tel"
             fullWidth
             value={contactInformation.phoneNumber}
