@@ -99,7 +99,7 @@ function ViewPost({ user }) {
             )
           }
           {isUserInterested && (
-          <ContactInformationDialog userId={user.id} />
+            <ContactInformationDialog userId={user.id} />
           )}
           <Nutrition postId={id} user={user} />
           <TextField
