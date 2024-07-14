@@ -1,6 +1,7 @@
 import React from 'react';
 import {
   render, screen, waitFor, fireEvent,
+  waitForElementToBeRemoved,
 } from '@testing-library/react';
 import { BrowserRouter } from 'react-router-dom';
 import ViewPost from '../ViewPost';
@@ -91,5 +92,23 @@ describe('ViewPost', () => {
     await screen.findByText(/Email Address/i);
     expect(screen.getByText(/Email Address/i)).toBeInTheDocument();
     expect(screen.getByText(/Phone Number/i)).toBeInTheDocument();
+  });
+
+  it('Unselect favourite and hide contact information', async () => {
+    render(
+      <ViewPost user={user} />,
+      { wrapper: BrowserRouter },
+    );
+    await screen.findByRole('button', { name: /interested/i });
+    fireEvent.click(screen.getByRole('button', { name: /interested/i }));
+
+    await screen.findByRole('button', { name: /Contact Information/i });
+
+    expect(await screen.findByRole('button', { name: /Contact Information/i })).toBeInTheDocument();
+    fireEvent.click(screen.getByRole('button', { name: /interested/i }));
+
+    await waitForElementToBeRemoved(() => screen.queryByText(/Contact Information/i));
+
+    expect(screen.queryByRole('button', { name: /Contact Information/i })).not.toBeInTheDocument();
   });
 });

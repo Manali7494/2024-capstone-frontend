@@ -60,7 +60,7 @@ function ViewPost({ user }) {
         }),
 
       });
-      setIsUserInterested(!isUserInterested ? !isUserInterested : isUserInterested);
+      setIsUserInterested(!isUserInterested);
       console.log('Interested status updated:');
     } catch (error) {
       console.error('Error updating interested status:', error);
