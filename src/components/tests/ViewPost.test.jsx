@@ -76,7 +76,7 @@ describe('ViewPost', () => {
     expect(await screen.findByRole('button', { name: /Contact Information/i })).toBeInTheDocument();
   });
 
-  it('shows contact information dialog', async () => {
+  it('Shows contact information', async () => {
     render(
       <ViewPost user={user} />,
       { wrapper: BrowserRouter },
