@@ -1,0 +1,35 @@
+Resources:
+  ArtifactStoreBucket:
+    Type: 'AWS::S3::Bucket'
+  AppCognitoUserPool:
+    Type: 'AWS::Cognito::UserPool'
+    Properties:
+      UserPoolName: AppUserPool
+      AutoVerifiedAttributes:
+        - email
+      Schema:
+        - Name: email
+          Required: true
+          Mutable: true
+          AttributeDataType: String
+        - Name: phone_number
+          Required: true
+          Mutable: true
+          AttributeDataType: String
+        - Name: preferred_username
+          Required: true
+          Mutable: true
+          AttributeDataType: String        
+  AppCognitoUserPoolClient:
+    Type: 'AWS::Cognito::UserPoolClient'
+    Properties:
+      UserPoolId: !Ref AppCognitoUserPool
+      ClientName: AppUserPoolClient
+  AppCognitoIdentityPool:
+    Type: 'AWS::Cognito::IdentityPool'
+    Properties:
+      IdentityPoolName: AppIdentityPool
+      AllowUnauthenticatedIdentities: false
+      CognitoIdentityProviders:
+        - ClientId: !Ref AppCognitoUserPoolClient
+          ProviderName: !GetAtt AppCognitoUserPool.ProviderName 
