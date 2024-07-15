@@ -10,6 +10,7 @@ import {
 import {
   ExpandMore,
   ArrowUpward,
+  ArrowDownward,
 } from '@mui/icons-material';
 
 function PostSort({
@@ -41,12 +42,14 @@ function PostSort({
                   <ExpandMore />
                 </IconButton>
                 <IconButton onClick={() => setSortDirection(sortDirection === 'asc' ? 'desc' : 'asc')}>
-                  <ArrowUpward />
+                  { sortDirection === 'asc' ? <ArrowUpward /> : <ArrowDownward /> }
                 </IconButton>
               </InputAdornment>
               )}
           >
             <MenuItem value="price">Price</MenuItem>
+            <MenuItem value="purchase_date">Purchase Date</MenuItem>
+            <MenuItem value="expiry_date">Expiry Date</MenuItem>
           </Select>
         </FormControl>
       </Grid>

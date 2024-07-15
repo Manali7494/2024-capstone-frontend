@@ -15,6 +15,24 @@ import config from '../config';
 import EditPostLoading from './EditPostLoading';
 import PostSort from './PostSort';
 
+const getSortFunction = (sortKey, direction = 'asc') => {
+  const sortFunctions = {
+    price: {
+      asc: (a, b) => a.price - b.price,
+    },
+    purchase_date: {
+      asc: (a, b) => new Date(a.purchaseDate) - new Date(b.purchaseDate),
+      desc: (a, b) => new Date(b.purchaseDate) - new Date(a.purchaseDate),
+    },
+    expiry_date: {
+      asc: (a, b) => new Date(a.expiryDate) - new Date(b.expiryDate),
+      desc: (a, b) => new Date(b.expiryDate) - new Date(a.expiryDate),
+    },
+  };
+
+  return sortFunctions[sortKey][direction];
+};
+
 export function Post({
   posts, search, setSearch,
 }) {
@@ -30,7 +48,9 @@ export function Post({
     setInputValue('');
   };
 
-  const sortedPosts = [...filteredPosts].sort((a, b) => (sortDirection === 'asc' ? a.price - b.price : b.price - a.price));
+  const sortedPosts = [...filteredPosts].sort(
+    getSortFunction(sortField, sortDirection),
+  );
 
   return (
     <Box sx={{ flexGrow: 1, m: 2 }}>
