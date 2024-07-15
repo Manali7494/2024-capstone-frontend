@@ -6,20 +6,21 @@ import {
   Grid, Paper, Typography, Box, InputAdornment,
   Card, CardActions, CardMedia, CardContent, IconButton,
   Button,
-  Select, FormControl,
 
 } from '@mui/material';
 import {
-  Search, Clear, ExpandMore,
-  ArrowUpward,
+  Search, Clear,
 } from '@mui/icons-material';
 import config from '../config';
 import EditPostLoading from './EditPostLoading';
+import PostSort from './PostSort';
 
 export function Post({
   posts, search, setSearch,
 }) {
   const [inputValue, setInputValue] = useState('');
+  const [sortField, setSortField] = useState('price');
+  const [sortDirection, setSortDirection] = useState('asc');
 
   const filteredPosts = posts.filter((post) => post.name
     .toLowerCase()
@@ -28,6 +29,8 @@ export function Post({
     setSearch('');
     setInputValue('');
   };
+
+  const sortedPosts = [...filteredPosts].sort((a, b) => (sortDirection === 'asc' ? a.price - b.price : b.price - a.price));
 
   return (
     <Box sx={{ flexGrow: 1, m: 2 }}>
@@ -60,44 +63,22 @@ export function Post({
         </Grid>
       </Grid>
 
-      <Grid container spacing={2} alignItems="center" justifyContent="center">
-        <Grid item xs={12} sm={6}>
-          <FormControl fullWidth>
-            <Select
-              IconComponent={() => null}
-              value=""
-              sx={{ color: 'primary.main' }}
-              startAdornment={(
-                <InputAdornment position="start">
-                  <Typography variant="body1">Sort by:</Typography>
-                </InputAdornment>
-              )}
-              endAdornment={(
-                <InputAdornment position="end">
-                  <IconButton
-                    edge="end"
-                  >
-                    <ExpandMore />
-                  </IconButton>
-                  <IconButton>
-                    <ArrowUpward />
-                  </IconButton>
-                </InputAdornment>
-              )}
-            />
-          </FormControl>
-        </Grid>
-      </Grid>
+      <PostSort
+        sortField={sortField}
+        setSortField={setSortField}
+        setSortDirection={setSortDirection}
+        sortDirection={sortDirection}
+      />
 
       <Paper elevation={3} style={{ marginTop: '100px' }}>
         <Grid container spacing={4} justifyContent="center">
           {
 
-              filteredPosts.length === 0 ? (
+              sortedPosts.length === 0 ? (
                 <Typography color="textSecondary">
                   No posts found.
                 </Typography>
-              ) : filteredPosts.map((item) => (
+              ) : sortedPosts.map((item) => (
                 <Grid item xs={12} key={item.id}>
                   <Card style={{ margin: '0 auto', width: '50vw' }} data-testid={`card-item-${item.id}`}>
                     <CardMedia
