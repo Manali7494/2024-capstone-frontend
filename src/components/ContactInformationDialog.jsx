@@ -5,6 +5,10 @@ import {
 } from '@mui/material';
 import PropTypes from 'prop-types';
 
+import {
+  ContactPage,
+} from '@mui/icons-material';
+
 function ContactInformationDialog({ userId }) {
   const [open, setOpen] = useState(false);
   const [contactInformation, setContactInformation] = useState({});
@@ -36,7 +40,7 @@ function ContactInformationDialog({ userId }) {
 
   return (
     <div>
-      <Button variant="contained" onClick={handleClickOpen}>
+      <Button variant="outlined" onClick={handleClickOpen} startIcon={<ContactPage />}>
         Contact Information
       </Button>
       <Dialog open={open} onClose={handleClose}>
@@ -47,9 +51,9 @@ function ContactInformationDialog({ userId }) {
             margin="dense"
             id="email"
             label="Email Address"
+            data-testid="contact-email"
             type="email"
             fullWidth
-            variant="standard"
             value={contactInformation.email}
             disabled
           />
@@ -57,9 +61,9 @@ function ContactInformationDialog({ userId }) {
             margin="dense"
             id="phone"
             label="Phone Number"
+            data-testid="contact-number"
             type="tel"
             fullWidth
-            variant="standard"
             value={contactInformation.phoneNumber}
             disabled
           />
