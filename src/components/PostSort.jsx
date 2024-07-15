@@ -50,6 +50,7 @@ function PostSort({
             <MenuItem value="price">Price</MenuItem>
             <MenuItem value="purchase_date">Purchase Date</MenuItem>
             <MenuItem value="expiry_date">Expiry Date</MenuItem>
+            <MenuItem value="quantity">Quantity</MenuItem>
           </Select>
         </FormControl>
       </Grid>
