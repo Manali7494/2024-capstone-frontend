@@ -84,3 +84,5 @@ describe('PostList Component', () => {
 });
 
 // Add tests
+
+//  add tests for function logic
