@@ -82,3 +82,5 @@ describe('PostList Component', () => {
     expect(global.fetch).toHaveBeenCalledTimes(1);
   });
 });
+
+// Add tests
