@@ -20,7 +20,6 @@ export function Post({
   posts, search, setSearch,
 }) {
   const [inputValue, setInputValue] = useState('');
-  const [open, setOpen] = useState(false);
 
   const filteredPosts = posts.filter((post) => post.name
     .toLowerCase()
@@ -77,7 +76,6 @@ export function Post({
                 <InputAdornment position="end">
                   <IconButton
                     edge="end"
-                    onClick={() => setOpen(!open)}
                   >
                     <ExpandMore />
                   </IconButton>
