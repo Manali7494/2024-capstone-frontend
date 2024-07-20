@@ -8,6 +8,7 @@ import PropTypes from 'prop-types';
 import {
   ContactPage,
 } from '@mui/icons-material';
+import config from '../config';
 
 function ContactInformationDialog({ userId }) {
   const [open, setOpen] = useState(false);
@@ -16,7 +17,7 @@ function ContactInformationDialog({ userId }) {
   const handleClickOpen = () => {
     const fetchContactInformation = async () => {
       try {
-        const response = await fetch(`/users/${userId}/contactInformation`);
+        const response = await fetch(`${config.backend_url}/users/${userId}/contactInformation`);
         if (!response.ok) {
           throw new Error('Network response was not ok');
         }
