@@ -5,9 +5,14 @@ import {
   Grid, Paper, Typography, Box,
   Card, CardActions, CardMedia, CardContent,
   Button,
+  Select, FormControl,
+  InputAdornment, IconButton,
 
 } from '@mui/material';
-
+import {
+  ExpandMore,
+  ArrowUpward,
+} from '@mui/icons-material';
 import config from '../config';
 import EditPostLoading from './EditPostLoading';
 import PostSearch from './PostSearch';
@@ -16,6 +21,7 @@ export function Post({
   posts, search, setSearch,
 }) {
   const [inputValue, setInputValue] = useState('');
+
   const filteredPosts = posts.filter((post) => post.name
     .toLowerCase()
     .includes(search.toLowerCase()));
@@ -36,6 +42,35 @@ export function Post({
         clearSearch={clearSearch}
         setSearch={setSearch}
       />
+
+      <Grid container spacing={2} alignItems="center" justifyContent="center">
+        <Grid item xs={12} sm={6}>
+          <FormControl fullWidth>
+            <Select
+              IconComponent={() => null}
+              value=""
+              sx={{ color: 'primary.main' }}
+              startAdornment={(
+                <InputAdornment position="start">
+                  <Typography variant="body1">Sort by:</Typography>
+                </InputAdornment>
+              )}
+              endAdornment={(
+                <InputAdornment position="end">
+                  <IconButton
+                    edge="end"
+                  >
+                    <ExpandMore />
+                  </IconButton>
+                  <IconButton>
+                    <ArrowUpward />
+                  </IconButton>
+                </InputAdornment>
+              )}
+            />
+          </FormControl>
+        </Grid>
+      </Grid>
 
       <Paper elevation={3} style={{ marginTop: '100px' }}>
         <Grid container spacing={4} justifyContent="center">
