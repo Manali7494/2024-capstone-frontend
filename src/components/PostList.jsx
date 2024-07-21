@@ -15,6 +15,7 @@ const getSortFunction = (sortKey, direction = 'asc') => {
   const sortFunctions = {
     price: {
       asc: (a, b) => a.price - b.price,
+      desc: (a, b) => b.price - a.price,
     },
     purchase_date: {
       asc: (a, b) => new Date(a.purchaseDate) - new Date(b.purchaseDate),
@@ -23,6 +24,10 @@ const getSortFunction = (sortKey, direction = 'asc') => {
     expiry_date: {
       asc: (a, b) => new Date(a.expiryDate) - new Date(b.expiryDate),
       desc: (a, b) => new Date(b.expiryDate) - new Date(a.expiryDate),
+    },
+    quantity: {
+      asc: (a, b) => a.quantity - b.quantity,
+      desc: (a, b) => b.quantity - a.quantity,
     },
   };
 
