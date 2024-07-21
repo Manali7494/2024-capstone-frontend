@@ -1,0 +1,275 @@
+
+Description: CloudFormation template
+
+Parameters:
+  GitHubOwner:
+    Type: String
+    Description: GitHub repository owner
+  GitHubFrontEndRepo:
+    Type: String
+    Description: GitHub repository name for the frontend
+  GitHubBackEndRepo:
+    Type: String
+    Description: GitHub repository name for the backend
+  GitHubBranch:
+    Type: String
+    Default: main
+    Description: GitHub repository branch to use
+  GitHubToken:
+    Type: String
+    Description: GitHub Token for accessing the repository
+  UserPoolsId:
+    Type: String
+    Description: Cognito User Pools ID
+  UserPoolsWebClientId:
+    Type: String
+    Description: Cognito User Pools Web Client ID
+
+Resources:
+  CodePipeline:
+    Type: AWS::CodePipeline::Pipeline
+    Properties:
+      RoleArn: !GetAtt CodePipelineRole.Arn
+      ArtifactStore:
+        Type: S3
+        Location: !Ref ArtifactStoreBucket
+      Stages:
+        - Name: Source
+          Actions:
+            - Name: SourceFrontEnd
+              ActionTypeId:
+                Category: Source
+                Owner: ThirdParty
+                Provider: GitHub
+                Version: 1
+              OutputArtifacts:
+                - Name: FrontEndSourceOutput
+              Configuration:
+                Owner: !Ref GitHubOwner
+                Repo: !Ref GitHubFrontEndRepo
+                Branch: !Ref GitHubBranch
+                OAuthToken: !Ref GitHubToken
+              RunOrder: 1
+            - Name: SourceBackEnd
+              ActionTypeId:
+                Category: Source
+                Owner: ThirdParty
+                Provider: GitHub
+                Version: 1
+              OutputArtifacts:
+                - Name: BackEndSourceOutput
+              Configuration:
+                Owner: !Ref GitHubOwner
+                Repo: !Ref GitHubBackEndRepo
+                Branch: !Ref GitHubBranch
+                OAuthToken: !Ref GitHubToken
+              RunOrder: 2
+        - Name: Build
+          Actions:
+            - Name: BuildFrontend
+              ActionTypeId:
+                Category: Build
+                Owner: AWS
+                Provider: CodeBuild
+                Version: 1
+              InputArtifacts:
+                - Name: SourceOutput
+              OutputArtifacts:
+                - Name: BuildOutput
+              Configuration:
+                ProjectName: !Ref CodeBuildProject
+              RunOrder: 1
+            - Name: BuildBackend
+              ActionTypeId:
+                Category: Build
+                Owner: AWS
+                Provider: CodeBuild
+                Version: 1
+              InputArtifacts:
+                - Name: SourceOutput
+              OutputArtifacts:
+                - Name: BuildOutput
+              Configuration:
+                ProjectName: !Ref CodeBuildBackendProject
+              RunOrder: 2
+          
+        - Name: Deploy
+          Actions:
+            - Name: DeployFrontend
+              ActionTypeId:
+                Category: Invoke
+                Owner: AWS
+                Provider: Lambda
+                Version: 1
+              Configuration:
+                FunctionName: !Ref DeploymentFunction
+                UserParameters: !Sub |
+                  {
+                    "appId": "<AmplifyAppId>", 
+                    "branchName": "<AmplifyBranchName>",
+                    "artifactUrl": "#{BuildOutput}"
+                  }
+              RunOrder: 1
+            - Name: DeployBackend
+              ActionTypeId:
+                Category: Deploy
+                Owner: AWS
+                Provider: ElasticBeanstalk
+                Version: 1
+              Configuration:
+                ApplicationName: "<ElasticBeanstalkApplicationName>"
+                EnvironmentName: "<ElasticBeanstalkEnvironmentName>"
+                VersionLabel: "#{BuildOutput::versionLabel}"
+              RunOrder: 2        
+  CodePipelineRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service: codepipeline.amazonaws.com
+            Action: sts:AssumeRole
+      Policies:
+        - PolicyName: CodePipelinePolicy
+          PolicyDocument:
+            Statement:
+              - Effect: Allow
+                Action: '*'
+                Resource: '*'
+
+  ArtifactStoreBucket:
+    Type: AWS::S3::Bucket
+
+  CodeBuildProject:
+    Type: AWS::CodeBuild::Project
+    Properties:
+      Environment:
+        Type: LINUX_CONTAINER
+        ComputeType: BUILD_GENERAL1_SMALL
+        Image: aws/codebuild/standard:4.0
+        EnvironmentVariables:
+          - Name: USER_POOLS_ID
+            Value: !Ref UserPoolsId
+          - Name: USER_POOLS_WEB_CLIENT_ID
+            Value: !Ref UserPoolsWebClientId
+      Source:
+        Type: CODEPIPELINE
+      Artifacts:
+        Type: CODEPIPELINE
+      ServiceRole: !GetAtt CodeBuildRole.Arn
+
+  CodeBuildBackendProject:
+    Type: AWS::CodeBuild::Project
+    Properties:
+      Environment:
+        Type: LINUX_CONTAINER
+        ComputeType: BUILD_GENERAL1_SMALL
+        Image: aws/codebuild/standard:4.0
+        EnvironmentVariables:
+          - Name: USER_POOLS_ID
+            Value: !Ref UserPoolsId
+          - Name: USER_POOLS_WEB_CLIENT_ID
+            Value: !Ref UserPoolsWebClientId
+      Source:
+        Type: CODEPIPELINE
+      Artifacts:
+        Type: CODEPIPELINE
+      ServiceRole: !GetAtt CodeBuildRole.Arn
+      BuildSpec: |
+        version: 0.2
+        phases:
+          install:
+            commands:
+              - npm install
+          pre_build:
+            commands:
+              - echo Installing dependencies
+          build:
+            commands:
+              - npm run test
+        artifacts:
+          files:
+            - '**/*'
+        cache:
+          paths:
+            - '/root/.npm/*'
+
+  CodeBuildRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service: codebuild.amazonaws.com
+            Action: sts:AssumeRole
+      Policies:
+        - PolicyName: CodeBuildPolicy
+          PolicyDocument:
+            Statement:
+              - Effect: Allow
+                Action: '*'
+                Resource: '*'
+
+  DeploymentFunction:
+    Type: AWS::Lambda::Function
+    Properties:
+      Handler: index.handler
+      Role: !GetAtt DeploymentFunctionRole.Arn
+      Runtime: nodejs20.x
+      Code:
+        ZipFile: |
+          const AWS = require('aws-sdk');
+          const amplify = new AWS.Amplify({region: 'us-west-2'});
+          
+          exports.handler = async (event) => {
+            const appId = process.env.APP_ID;
+            const branchName = process.env.BRANCH_NAME;
+            
+            try {
+              const response = await amplify.startJob({
+                appId,
+                branchName,
+                jobType: 'RELEASE',
+                jobReason: 'Lambda triggered deployment',
+              }).promise();
+                          
+              return {
+                statusCode: 200,
+                body: JSON.stringify({
+                  message: 'Deployment initiated successfully',
+                  jobId: response.jobId,
+                }),
+              };
+            } catch (error) {
+              return {
+                statusCode: 500,
+                body: JSON.stringify({
+                  message: 'Error initiating deployment',
+                  error: error.message,
+                }),
+              };
+            }
+          };
+  DeploymentFunctionRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service: lambda.amazonaws.com
+            Action: sts:AssumeRole
+      Policies:
+        - PolicyName: DeploymentFunctionPolicy
+          PolicyDocument:
+            Statement:
+              - Effect: Allow
+                Action: '*'
+                Resource: '*'
+
+Outputs:
+  PipelineUrl:
+    Description: URL of the build pipeline in AWS CodePipeline
+    Value: !Sub https://console.aws.amazon.com/codesuite/codepipeline/pipelines/${CodePipeline.Name}/view
