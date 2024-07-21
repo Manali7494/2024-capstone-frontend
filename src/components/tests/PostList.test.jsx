@@ -1,6 +1,7 @@
 import React from 'react';
 import {
   render, screen, fireEvent, within,
+
 } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import { BrowserRouter } from 'react-router-dom';
@@ -113,6 +114,60 @@ describe('Post Component', () => {
     const postList = screen.getAllByTestId(/card-item-/i);
     const firstPost = postList[0];
     expect(within(firstPost).getByText(/Price:\s*\$10/)).toBeInTheDocument();
+  });
+
+  it('sorts by dates', async () => {
+    const sortPosts = [
+      {
+        id: 2,
+        name: 'Test Post 2',
+        description: 'Test Description 2',
+        imageUrl: 'test2.jpg',
+        price: '20',
+        quantity: '2',
+        purchaseDate: '2024-01-02',
+        expiryDate: '2024-11-20',
+      }, {
+        id: 1,
+        name: 'Test Post',
+        description: 'Test Description',
+        imageUrl: 'test.jpg',
+        price: '10',
+        quantity: '1',
+        purchaseDate: '2024-03-10',
+        expiryDate: '2024-12-31',
+
+      }];
+    const searchText = '';
+    render(
+      <Post posts={sortPosts} search={searchText} setSearch={setSearch} />,
+      { wrapper: BrowserRouter },
+    );
+    expect(screen.getByText(/sort by:/i)).toBeInTheDocument();
+    expect(screen.getByText('Price')).toBeInTheDocument();
+
+    // Select purchase date
+    const toggleButton = screen.getByTestId('toggle-sort-field-dropdown');
+    fireEvent.click(toggleButton);
+
+    fireEvent.click(screen.getByText('Purchase Date'));
+    const postList = screen.getAllByTestId(/card-item-/i);
+    const firstPost = postList[0];
+    expect(within(firstPost).getByText(/Purchase Date:\s*2024-01-02/)).toBeInTheDocument();
+
+    // Toggle direction
+    fireEvent.click(screen.getByTestId('sort-direction-asc'));
+    expect(screen.getByTestId('sort-direction-desc')).toBeInTheDocument();
+    const postListDesc = screen.getAllByTestId(/card-item-/i);
+    const firstPostDesc = postListDesc[0];
+    expect(within(firstPostDesc).getByText(/Purchase Date:\s*2024-03-10/)).toBeInTheDocument();
+
+    // Select expiry date
+    fireEvent.click(toggleButton);
+    fireEvent.click(screen.getByText('Expiry Date'));
+    const postListExpiry = screen.getAllByTestId(/card-item-/i);
+    const firstPostExpiry = postListExpiry[0];
+    expect(within(firstPostExpiry).getByText(/Expiry Date:\s*2024-12-31/)).toBeInTheDocument();
   });
 });
 
