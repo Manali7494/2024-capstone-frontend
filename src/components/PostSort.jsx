@@ -40,7 +40,10 @@ function PostSort({
                 >
                   <ExpandMore />
                 </IconButton>
-                <IconButton onClick={() => setSortDirection(sortDirection === 'asc' ? 'desc' : 'asc')}>
+                <IconButton
+                  data-testid={sortDirection === 'asc' ? 'sort-direction-asc' : 'sort-direction-desc'}
+                  onClick={() => setSortDirection(sortDirection === 'asc' ? 'desc' : 'asc')}
+                >
                   <ArrowUpward />
                 </IconButton>
               </InputAdornment>
