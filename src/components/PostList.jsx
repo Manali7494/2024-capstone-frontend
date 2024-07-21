@@ -2,18 +2,14 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import {
-  TextField,
-  Grid, Paper, Typography, Box, InputAdornment,
-  Card, CardActions, CardMedia, CardContent, IconButton,
+  Grid, Paper, Typography, Box,
+  Card, CardActions, CardMedia, CardContent,
   Button,
-
 } from '@mui/material';
-import {
-  Search, Clear,
-} from '@mui/icons-material';
 import config from '../config';
 import EditPostLoading from './EditPostLoading';
 import PostSort from './PostSort';
+import PostSearch from './PostSearch';
 
 const getSortFunction = (sortKey, direction = 'asc') => {
   const sortFunctions = {
@@ -58,30 +54,12 @@ export function Post({
         Posts
       </Typography>
 
-      <Grid container spacing={2} justifyContent="center">
-        <Grid item xs={12} sm={8}>
-          <TextField
-            id="search"
-            label="Search"
-            value={inputValue}
-            onChange={(e) => setInputValue(e.target.value)}
-            fullWidth
-            margin="normal"
-            InputProps={{
-              endAdornment: (
-                <InputAdornment position="end">
-                  <IconButton aria-label="clearSearch" onClick={clearSearch} data-testid="clear-button">
-                    <Clear color="primary" />
-                  </IconButton>
-                  <IconButton aria-label="textSearch" data-testid="search-button" onClick={() => setSearch(inputValue)}>
-                    <Search color="primary" />
-                  </IconButton>
-                </InputAdornment>
-              ),
-            }}
-          />
-        </Grid>
-      </Grid>
+      <PostSearch
+        inputValue={inputValue}
+        setInputValue={setInputValue}
+        clearSearch={clearSearch}
+        setSearch={setSearch}
+      />
 
       <PostSort
         sortField={sortField}

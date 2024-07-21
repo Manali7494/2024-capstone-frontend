@@ -1,5 +1,7 @@
 import React from 'react';
-import { render, screen, fireEvent } from '@testing-library/react';
+import {
+  render, screen, fireEvent, within,
+} from '@testing-library/react';
 import '@testing-library/jest-dom';
 import { BrowserRouter } from 'react-router-dom';
 import { Post, PostList } from '../PostList';
@@ -74,6 +76,44 @@ describe('Post Component', () => {
     fireEvent.click(screen.getByRole('button', { name: /clearSearch/i }));
     expect(setSearch).toHaveBeenCalledWith(clearSearchText);
   });
+
+  it('renders default sort functionality', () => {
+    const sortPosts = [
+      {
+        id: 2,
+        name: 'Test Post 2',
+        description: 'Test Description 2',
+        imageUrl: 'test2.jpg',
+        price: '20',
+        quantity: '2',
+        purchaseDate: '2024-01-02',
+        expiryDate: '2024-12-30',
+      }, {
+        id: 1,
+        name: 'Test Post',
+        description: 'Test Description',
+        imageUrl: 'test.jpg',
+        price: '10',
+        quantity: '1',
+        purchaseDate: '2024-01-01',
+        expiryDate: '2024-12-31',
+
+      }];
+    const searchText = '';
+    render(
+      <Post posts={sortPosts} search={searchText} setSearch={setSearch} />,
+      { wrapper: BrowserRouter },
+    );
+
+    expect(screen.getByText('Posts')).toBeInTheDocument();
+    expect(screen.getByText(/sort by:/i)).toBeInTheDocument();
+    expect(screen.getByText('Price')).toBeInTheDocument();
+    const sortButton = screen.getByTestId('sort-direction-asc');
+    expect(sortButton).toBeInTheDocument();
+    const postList = screen.getAllByTestId(/card-item-/i);
+    const firstPost = postList[0];
+    expect(within(firstPost).getByText(/Price:\s*\$10/)).toBeInTheDocument();
+  });
 });
 
 describe('PostList Component', () => {
@@ -82,7 +122,3 @@ describe('PostList Component', () => {
     expect(global.fetch).toHaveBeenCalledTimes(1);
   });
 });
-
-// Add tests
-
-//  add tests for function logic
