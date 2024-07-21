@@ -74,6 +74,20 @@ describe('Post Component', () => {
     fireEvent.click(screen.getByRole('button', { name: /clearSearch/i }));
     expect(setSearch).toHaveBeenCalledWith(clearSearchText);
   });
+
+  // it.only('renders default sort functionality', () => {
+  //   const sortPosts = [{
+  //     id: 1, name: 'Test Post', description: 'Test Description', imageUrl: 'test.jpg', price: '10', quantity: '1', purchaseDate: '2024-01-01', expiryDate: '2024-12-31',
+  //   }];
+  //   const searchText = '';
+  //   render(
+  //     <Post posts={sortPosts} seach={searchText} />,
+  //     { wrapper: BrowserRouter },
+  //   );
+
+  //   expect(screen.getByText(/sort by:/i)).toBeInTheDocument();
+  //   expect(screen.getByText('Price')).toBeInTheDocument();
+  // });
 });
 
 describe('PostList Component', () => {
