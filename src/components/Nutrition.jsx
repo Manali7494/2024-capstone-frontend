@@ -62,7 +62,15 @@ export function NutritionDrawer({
             <Box data-testid="drawer-content">
 
               <Box textAlign="center">
-                <Typography variant="h5" gutterBottom>Nutrition</Typography>
+
+                <Typography
+                  variant="h5"
+                  component="div"
+                  sx={{ fontFamily: 'cursive', color: 'primary.main', textAlign: 'center' }}
+                  gutterBottom
+                >
+                  Nutrition
+                </Typography>
               </Box>
               { !parseInt(nutritionDetails.calories, 10) ? (
                 <Box display="flex" justifyContent="center" alignItems="center">
@@ -161,7 +169,7 @@ function Nutrition({ postId, user }) {
     setIsLoading(true);
     try {
       const response = await fetch(`${config.backend_url}/posts/${postId}/nutrition?userId=${user.id}`);
-      if (!response.ok) {
+      if (!response?.ok) {
         throw new Error('Network response was not ok');
       }
       const data = await response.json();

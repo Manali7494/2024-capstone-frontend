@@ -168,6 +168,10 @@ describe('Post Component', () => {
     const postListExpiry = screen.getAllByTestId(/card-item-/i);
     const firstPostExpiry = postListExpiry[0];
     expect(within(firstPostExpiry).getByText(/Expiry Date:\s*2024-12-31/)).toBeInTheDocument();
+    fireEvent.click(screen.getByTestId('sort-direction-desc'));
+    expect(within(screen.getAllByTestId(/card-item-/i)[0])
+      .getByText(/Expiry Date:\s*2024-11-20/))
+      .toBeInTheDocument();
   });
 
   it('sorts by quantity and price', async () => {
