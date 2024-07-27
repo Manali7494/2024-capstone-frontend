@@ -26,8 +26,8 @@ describe('Profile', () => {
 
     // Profile
     expect(screen.getByText('Profile')).toBeInTheDocument();
-    expect(screen.getByText('Name:')).toBeInTheDocument();
-    expect(screen.getByText('Username:')).toBeInTheDocument();
+    await expect(screen.findByTestId('name')).resolves.toBeInTheDocument();
+    await expect(screen.findByTestId('username')).resolves.toBeInTheDocument();
 
     await waitFor(() => {
       expect(screen.getByDisplayValue('John Doe')).toBeInTheDocument();
@@ -36,8 +36,8 @@ describe('Profile', () => {
 
     // Contact Information
     expect(screen.getByText('Contact Information')).toBeInTheDocument();
-    expect(screen.getByText('Contact Email:')).toBeInTheDocument();
-    expect(screen.getByText('Contact Number:')).toBeInTheDocument();
+    await expect(screen.findByTestId('contact-email')).resolves.toBeInTheDocument();
+    await expect(screen.findByTestId('contact-number')).resolves.toBeInTheDocument();
 
     await waitFor(() => {
       expect(screen.getByDisplayValue('john.doe@example.com')).toBeInTheDocument();
