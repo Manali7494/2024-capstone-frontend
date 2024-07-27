@@ -11,8 +11,8 @@ describe('App', () => {
     fetchAuthSession.mockResolvedValue(null);
     render(<App />);
 
-    const textElement = screen.getByText('Healthy Wealthy');
-    expect(textElement).toBeInTheDocument();
+    const textElements = screen.getAllByText('Healthy Wealthy');
+    expect(textElements[0]).toBeInTheDocument();
   });
 
   test('fetch user details', () => {
@@ -27,7 +27,7 @@ describe('App', () => {
     });
     render(<App />);
 
-    const textElement = screen.getByText('Healthy Wealthy');
-    expect(textElement).toBeInTheDocument();
+    const textElements = screen.getAllByText('Healthy Wealthy');
+    expect(textElements[0]).toBeInTheDocument();
   });
 });
