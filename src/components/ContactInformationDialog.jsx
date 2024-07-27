@@ -2,6 +2,7 @@
 import React, { useState } from 'react';
 import {
   Dialog, DialogTitle, DialogContent, TextField, DialogActions, Button,
+  Typography,
 } from '@mui/material';
 import PropTypes from 'prop-types';
 
@@ -18,7 +19,7 @@ function ContactInformationDialog({ userId }) {
     const fetchContactInformation = async () => {
       try {
         const response = await fetch(`${config.backend_url}/users/${userId}/contactInformation`);
-        if (!response.ok) {
+        if (!response?.ok) {
           throw new Error('Network response was not ok');
         }
         const data = await response.json();
@@ -45,7 +46,17 @@ function ContactInformationDialog({ userId }) {
         Contact Information
       </Button>
       <Dialog open={open} onClose={handleClose}>
-        <DialogTitle>Contact Information</DialogTitle>
+        <DialogTitle>
+
+          <Typography
+            variant="h5"
+            component="div"
+            sx={{ fontFamily: 'cursive', color: 'primary.main', textAlign: 'center' }}
+            gutterBottom
+          >
+            Contact Information
+          </Typography>
+        </DialogTitle>
         <DialogContent>
           <TextField
             autoFocus

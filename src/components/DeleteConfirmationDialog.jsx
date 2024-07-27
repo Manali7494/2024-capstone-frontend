@@ -30,7 +30,7 @@ function DeleteConfirmationDialog({
         body: JSON.stringify({ userId: user.id }),
       });
 
-      if (response.ok) {
+      if (response?.ok) {
         setSuccessMessage('Post successfully deleted');
         setTimeout(() => {
           navigate('/posts');

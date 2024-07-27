@@ -55,7 +55,12 @@ export function Post({
 
   return (
     <Box sx={{ flexGrow: 1, m: 2 }}>
-      <Typography variant="h4" component="div" gutterBottom>
+      <Typography
+        variant="h4"
+        component="div"
+        sx={{ fontFamily: 'cursive', color: 'primary.main', textAlign: 'center' }}
+        gutterBottom
+      >
         Posts
       </Typography>
 
