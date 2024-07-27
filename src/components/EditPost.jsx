@@ -97,7 +97,7 @@ function EditPost({ user }) {
   };
 
   if (loading) {
-    return <EditPostLoading />;
+    return <EditPostLoading title="Edit Post" />;
   }
 
   const showImage = Boolean(post.imageUrl) || Boolean(imagePreviewUrl);

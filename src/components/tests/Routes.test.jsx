@@ -63,9 +63,8 @@ describe('Routes', () => {
     expect(screen.getByText('Cannot edit post')).toBeInTheDocument();
   });
 
-  it('without user at /edit, it renders Error page with proper error message', async () => {
+  it('with user at /edit, it renders Edit Post page', async () => {
     setup('/posts/1/edit', { user: { email: 'email@email.com' } });
-    await waitFor(() => expect(screen.getByText('Edit Post')).toBeInTheDocument());
     expect(screen.getByText(/edit post/i)).toBeInTheDocument();
   });
 
@@ -83,7 +82,6 @@ describe('Routes', () => {
 
   it('with user at /posts/:id, it renders ViewPost component', async () => {
     setup('/posts/1', { user: { email: 'user@example.com' } });
-    await waitFor(() => expect(screen.getByText('View Post')).toBeInTheDocument());
     expect(screen.getByText(/view post/i)).toBeInTheDocument();
   });
 

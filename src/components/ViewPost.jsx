@@ -47,7 +47,7 @@ function ViewPost({ user }) {
   }, [id, user]);
 
   if (loading) {
-    return <EditPostLoading />;
+    return <EditPostLoading title="View Post" />;
   }
 
   const handleInterestClick = async () => {
