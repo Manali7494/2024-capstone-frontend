@@ -93,3 +93,55 @@ describe('SuggestedPosts with interested post', () => {
     });
   });
 });
+
+describe('SuggestedPosts with no interested post', () => {
+  describe('check post status', () => {
+    const mockUser = { id: 1 };
+
+    const bananaPost = {
+      id: 1,
+      name: 'Banana',
+      quantity: 10,
+      price: 100,
+      purchaseDate: '2024-01-01',
+      expiryDate: '2024-12-31',
+      imageUrl: 'https://via.placeholder.com/450?text=Post+1',
+    };
+    beforeEach(() => {
+      cy.intercept('GET', `${config.backend_url}/posts/${bananaPost.uri}?userId=${mockUser.id}`, {
+        statusCode: 200,
+        body: bananaPost,
+      }).as('getPost');
+
+      cy.mount(<ViewPost id={bananaPost.id} user={mockUser} />);
+    });
+
+    it('displays the banana post correctly', () => {
+      cy.wait('@getPost');
+
+      cy.contains('View Post').should('exist');
+      cy.contains(/Interested/).should('exist');
+    });
+  });
+  describe('view suggested posts', () => {
+    const mockUser = { id: 1 };
+    beforeEach(() => {
+      cy.intercept('GET', `${config.backend_url}/posts/suggested/${mockUser.id}`, {
+        statusCode: 200,
+        body: {
+          code: 'USER_NO_PREFERENCE',
+        },
+      }).as('getSuggestedPosts');
+
+      cy.mount(<SuggestedPosts user={mockUser} />);
+    });
+
+    it(' displays the relevant message when code = USER_NO_PREFERENCE ', () => {
+      cy.wait('@getSuggestedPosts');
+
+      cy.contains('Suggested Posts').should('exist');
+
+      cy.contains(/No posts selected. Click on “interested” button on a post to see suggestions/i).should('exist');
+    });
+  });
+});
