@@ -7,7 +7,10 @@ import {
 import PropTypes from 'prop-types';
 import config from '../config';
 
-export function SuggestedPostsContent({ posts }) {
+export function SuggestedPostsContent({ posts, code = '' }) {
+  if (code) {
+    return console.log('code', code);
+  }
   return (
 
     <Box sx={{ flexGrow: 1, padding: 2 }}>
@@ -85,31 +88,33 @@ SuggestedPostsContent.propTypes = {
       expiryDate: PropTypes.string,
     }).isRequired,
   })).isRequired,
+  code: PropTypes.string,
 };
-
+SuggestedPostsContent.defaultProps = {
+  code: '',
+};
 function SuggestedPosts({ user }) {
   const [posts, setPosts] = useState([]);
+  const [code, setCode] = useState('');
 
   useEffect(() => {
     const fetchSuggestedPosts = async () => {
       const response = await fetch(`${config.backend_url}/posts/suggested/${user.id}`);
       const data = await response.json();
-      setPosts(data);
+      if (data.code) {
+        setCode(data.code);
+      } else {
+        setPosts(data);
+      }
     };
 
     fetchSuggestedPosts();
   }, [user.id]);
 
   return (
-    <SuggestedPostsContent posts={posts} />
+    <SuggestedPostsContent posts={posts} code={code} />
   );
 }
-
-SuggestedPostsContent.propTypes = {
-  user: PropTypes.shape({
-    id: PropTypes.number.isRequired,
-  }).isRequired,
-};
 
 SuggestedPosts.propTypes = {
   user: PropTypes.shape({
