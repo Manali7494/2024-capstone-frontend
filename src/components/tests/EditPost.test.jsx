@@ -32,18 +32,18 @@ jest.mock('react-router-dom', () => ({
 describe('EditPost Component', () => {
   test('displays the correct heading', async () => {
     render(<EditPost />, { wrapper: BrowserRouter });
-    await waitFor(() => expect(screen.getByText('Edit Post')).toBeInTheDocument());
+    await waitFor(() => expect(screen.getByLabelText('Name')).toBeInTheDocument());
   });
 
   it('should display the Update Post button', async () => {
     render(<EditPost user={mockUser} />, { wrapper: BrowserRouter });
-    await waitFor(() => expect(screen.getByText('Edit Post')).toBeInTheDocument());
+    await waitFor(() => expect(screen.getByLabelText('Name')).toBeInTheDocument());
     expect(screen.getByRole('button', { name: 'Update Post' })).toBeInTheDocument();
   });
 
   it('should display all input fields', async () => {
     render(<EditPost user={mockUser} />, { wrapper: BrowserRouter });
-    await waitFor(() => expect(screen.getByText('Edit Post')).toBeInTheDocument());
+    await waitFor(() => expect(screen.getByLabelText('Name')).toBeInTheDocument());
     expect(screen.getByLabelText('Name')).toBeInTheDocument();
     expect(screen.getByLabelText('Description')).toBeInTheDocument();
     expect(screen.getByLabelText('Price')).toBeInTheDocument();
@@ -55,7 +55,7 @@ describe('EditPost Component', () => {
 
   it('should allow typing in the Name input field', async () => {
     render(<EditPost user={mockUser} />, { wrapper: BrowserRouter });
-    await waitFor(() => expect(screen.getByText('Edit Post')).toBeInTheDocument());
+    await waitFor(() => expect(screen.getByLabelText('Name')).toBeInTheDocument());
     const nameInput = screen.getByLabelText('Name');
     fireEvent.change(nameInput, { target: { value: 'Test Name' } });
     expect(nameInput.value).toBe('Test Name');
@@ -63,7 +63,7 @@ describe('EditPost Component', () => {
 
   it('should allow typing in the Description input field', async () => {
     render(<EditPost user={mockUser} />, { wrapper: BrowserRouter });
-    await waitFor(() => expect(screen.getByText('Edit Post')).toBeInTheDocument());
+    await waitFor(() => expect(screen.getByLabelText('Name')).toBeInTheDocument());
     const descriptionInput = screen.getByLabelText('Description');
     fireEvent.change(descriptionInput, { target: { value: 'Test Description' } });
     expect(descriptionInput.value).toBe('Test Description');
@@ -71,7 +71,7 @@ describe('EditPost Component', () => {
 
   it('should allow typing in the Price input field', async () => {
     render(<EditPost user={mockUser} />, { wrapper: BrowserRouter });
-    await waitFor(() => expect(screen.getByText('Edit Post')).toBeInTheDocument());
+    await waitFor(() => expect(screen.getByLabelText('Name')).toBeInTheDocument());
     const priceInput = screen.getByLabelText('Price');
     fireEvent.change(priceInput, { target: { value: '100' } });
     expect(priceInput.value).toBe('100');
@@ -79,7 +79,7 @@ describe('EditPost Component', () => {
 
   it('should allow typing in the Quantity input field', async () => {
     render(<EditPost user={mockUser} />, { wrapper: BrowserRouter });
-    await waitFor(() => expect(screen.getByText('Edit Post')).toBeInTheDocument());
+    await waitFor(() => expect(screen.getByLabelText('Name')).toBeInTheDocument());
     const quantityInput = screen.getByLabelText('Quantity');
     fireEvent.change(quantityInput, { target: { value: '5' } });
     expect(quantityInput.value).toBe('5');
@@ -87,7 +87,7 @@ describe('EditPost Component', () => {
 
   it('should allow setting the Purchase Date', async () => {
     render(<EditPost user={mockUser} />, { wrapper: BrowserRouter });
-    await waitFor(() => expect(screen.getByText('Edit Post')).toBeInTheDocument());
+    await waitFor(() => expect(screen.getByLabelText('Name')).toBeInTheDocument());
     const purchaseDateInput = screen.getByLabelText('Purchase Date');
     fireEvent.change(purchaseDateInput, { target: { value: '2024-01-01' } });
     expect(purchaseDateInput.value).toBe('2024-01-01');
@@ -95,7 +95,7 @@ describe('EditPost Component', () => {
 
   it('should allow setting the Expiry Date', async () => {
     render(<EditPost user={mockUser} />, { wrapper: BrowserRouter });
-    await waitFor(() => expect(screen.getByText('Edit Post')).toBeInTheDocument());
+    await waitFor(() => expect(screen.getByLabelText('Name')).toBeInTheDocument());
     const expiryDateInput = screen.getByLabelText('Expiry Date');
     fireEvent.change(expiryDateInput, { target: { value: '2024-12-31' } });
     expect(expiryDateInput.value).toBe('2024-12-31');
@@ -103,7 +103,7 @@ describe('EditPost Component', () => {
   it('should submit form data correctly and display success message', async () => {
     render(<EditPost user={mockUser} />, { wrapper: BrowserRouter });
 
-    await waitFor(() => expect(screen.getByText('Edit Post')).toBeInTheDocument());
+    await waitFor(() => expect(screen.getByLabelText('Name')).toBeInTheDocument());
 
     fireEvent.change(screen.getByLabelText('Name'), { target: { value: 'Test Name' } });
     fireEvent.change(screen.getByLabelText('Price'), { target: { value: '50' } });
@@ -121,7 +121,7 @@ describe('EditPost Component', () => {
 
   it('shows an error message when the name field is empty', async () => {
     render(<EditPost user={mockUser} />, { wrapper: BrowserRouter });
-    await waitFor(() => expect(screen.getByText('Edit Post')).toBeInTheDocument());
+    await waitFor(() => expect(screen.getByLabelText('Name')).toBeInTheDocument());
     const submitButton = screen.getByRole('button', { name: /update post/i });
 
     fireEvent.click(submitButton);
@@ -131,7 +131,7 @@ describe('EditPost Component', () => {
 
   it('shows an error message when the price field is empty', async () => {
     render(<EditPost user={mockUser} />, { wrapper: BrowserRouter });
-    await waitFor(() => expect(screen.getByText('Edit Post')).toBeInTheDocument());
+    await waitFor(() => expect(screen.getByLabelText('Name')).toBeInTheDocument());
     const submitButton = screen.getByRole('button', { name: /update post/i });
 
     fireEvent.click(submitButton);
@@ -141,7 +141,7 @@ describe('EditPost Component', () => {
 
   it('shows an error message when the quantity field is empty', async () => {
     render(<EditPost user={mockUser} />, { wrapper: BrowserRouter });
-    await waitFor(() => expect(screen.getByText('Edit Post')).toBeInTheDocument());
+    await waitFor(() => expect(screen.getByLabelText('Name')).toBeInTheDocument());
     const submitButton = screen.getByRole('button', { name: /update post/i });
 
     fireEvent.click(submitButton);
@@ -151,7 +151,7 @@ describe('EditPost Component', () => {
 
   it('shows an error message when the purchase date is empty', async () => {
     render(<EditPost user={mockUser} />, { wrapper: BrowserRouter });
-    await waitFor(() => expect(screen.getByText('Edit Post')).toBeInTheDocument());
+    await waitFor(() => expect(screen.getByLabelText('Name')).toBeInTheDocument());
     const submitButton = screen.getByRole('button', { name: /update post/i });
 
     fireEvent.click(submitButton);
@@ -161,7 +161,7 @@ describe('EditPost Component', () => {
 
   it('shows a button called delete', async () => {
     render(<EditPost user={mockUser} />, { wrapper: BrowserRouter });
-    await waitFor(() => expect(screen.getByText('Edit Post')).toBeInTheDocument());
+    await waitFor(() => expect(screen.getByLabelText('Name')).toBeInTheDocument());
 
     const deleteButton = screen.getByRole('button', { name: /delete/i });
 
@@ -176,7 +176,7 @@ describe('EditPost Component', () => {
     }));
 
     const { getByTestId } = render(<EditPost user={mockUser} />, { wrapper: BrowserRouter });
-    await waitFor(() => expect(screen.getByText('Edit Post')).toBeInTheDocument());
+    await waitFor(() => expect(screen.getByLabelText('Name')).toBeInTheDocument());
 
     const fileInput = getByTestId('image');
     const file = new Blob(['image'], { type: 'image/png' });
