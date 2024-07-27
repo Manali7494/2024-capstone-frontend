@@ -12,7 +12,6 @@ export function SuggestedPostsContent({ posts, code = '' }) {
     return console.log('code', code);
   }
   return (
-
     <Box sx={{ flexGrow: 1, padding: 2 }}>
       <Divider />
       <Typography
