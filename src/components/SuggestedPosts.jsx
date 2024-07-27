@@ -7,19 +7,7 @@ import {
 import PropTypes from 'prop-types';
 import config from '../config';
 
-function SuggestedPosts({ user }) {
-  const [posts, setPosts] = useState([]);
-
-  useEffect(() => {
-    const fetchSuggestedPosts = async () => {
-      const response = await fetch(`${config.backend_url}/posts/suggested/${user.id}`);
-      const data = await response.json();
-      setPosts(data);
-    };
-
-    fetchSuggestedPosts();
-  }, [user.id]);
-
+export function SuggestedPostsContent({ posts }) {
   return (
 
     <Box sx={{ flexGrow: 1, padding: 2 }}>
@@ -85,11 +73,48 @@ function SuggestedPosts({ user }) {
     </Box>
   );
 }
+SuggestedPostsContent.propTypes = {
+  posts: PropTypes.arrayOf(PropTypes.shape({
+    post: PropTypes.shape({
+      id: PropTypes.number.isRequired,
+      name: PropTypes.string.isRequired,
+      quantity: PropTypes.number.isRequired,
+      price: PropTypes.number.isRequired,
+      purchaseDate: PropTypes.string.isRequired,
+      imageUrl: PropTypes.string,
+      expiryDate: PropTypes.string,
+    }).isRequired,
+  })).isRequired,
+};
 
-export default SuggestedPosts;
+function SuggestedPosts({ user }) {
+  const [posts, setPosts] = useState([]);
+
+  useEffect(() => {
+    const fetchSuggestedPosts = async () => {
+      const response = await fetch(`${config.backend_url}/posts/suggested/${user.id}`);
+      const data = await response.json();
+      setPosts(data);
+    };
+
+    fetchSuggestedPosts();
+  }, [user.id]);
+
+  return (
+    <SuggestedPostsContent posts={posts} />
+  );
+}
+
+SuggestedPostsContent.propTypes = {
+  user: PropTypes.shape({
+    id: PropTypes.number.isRequired,
+  }).isRequired,
+};
 
 SuggestedPosts.propTypes = {
   user: PropTypes.shape({
     id: PropTypes.number.isRequired,
   }).isRequired,
 };
+
+export default SuggestedPosts;
