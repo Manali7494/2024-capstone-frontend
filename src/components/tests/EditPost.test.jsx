@@ -33,10 +33,6 @@ describe('EditPost Component', () => {
   test('displays the correct heading', async () => {
     render(<EditPost />, { wrapper: BrowserRouter });
     await waitFor(() => expect(screen.getByText('Edit Post')).toBeInTheDocument());
-
-    const heading = await screen.getByRole('heading', { name: /edit post/i });
-
-    expect(heading).toBeInTheDocument();
   });
 
   it('should display the Update Post button', async () => {

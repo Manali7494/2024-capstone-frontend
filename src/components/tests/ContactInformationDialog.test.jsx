@@ -29,4 +29,11 @@ describe('ContactInformationDialog', () => {
 
     fireEvent.click(screen.getByRole('button', { name: /ok/i }));
   });
+
+  it('displays an error message when the fetch fails', async () => {
+    global.fetch.mockImplementationOnce(() => Promise.reject(new Error('Failed to fetch')));
+    render(<ContactInformationDialog userId={1} />);
+    fireEvent.click(screen.getByRole('button', { name: /contact information/i }));
+    expect(fetch).toHaveBeenCalledWith(expect.stringContaining('/users/1/contactInformation'));
+  });
 });

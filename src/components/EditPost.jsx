@@ -41,7 +41,7 @@ function EditPost({ user }) {
     const fetchPostData = async () => {
       try {
         const response = await fetch(`${config.backend_url}/posts/${id}`);
-        if (!response.ok) {
+        if (!response?.ok) {
           throw new Error('Could not fetch post data');
         }
         const data = await response.json();
@@ -97,7 +97,7 @@ function EditPost({ user }) {
   };
 
   if (loading) {
-    return <EditPostLoading />;
+    return <EditPostLoading title="Edit Post" />;
   }
 
   const showImage = Boolean(post.imageUrl) || Boolean(imagePreviewUrl);
@@ -106,7 +106,13 @@ function EditPost({ user }) {
     <Grid container justifyContent="center">
       <Grid item xs={12} sm={8} md={6}>
         <Paper elevation={3} style={{ padding: '2em', marginTop: '2em' }}>
-          <Typography variant="h5" gutterBottom>
+
+          <Typography
+            variant="h4"
+            component="div"
+            sx={{ fontFamily: 'cursive', color: 'primary.main', textAlign: 'center' }}
+            gutterBottom
+          >
             Edit Post
           </Typography>
           {displayError && (

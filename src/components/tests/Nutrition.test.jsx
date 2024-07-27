@@ -61,6 +61,7 @@ describe('Nutrition', () => {
       render(<NutritionDrawer {...mockNutritionDrawerProps} />);
 
       await waitFor(() => expect(screen.getByText(/macronutrients/i)).toBeInTheDocument());
+      screen.getByText(/macronutrients/i).click();
       await waitFor(() => expect(screen.getByText(/calories/i)).toBeInTheDocument());
     });
 
@@ -79,7 +80,6 @@ describe('Nutrition', () => {
   describe('Nutrition Component', () => {
     const mockPostId = '123';
     const mockUser = { id: 'user1' };
-
     it('renders Nutrition', () => {
       const { getByText } = render(<Nutrition postId={mockPostId} user={mockUser} />);
       expect(getByText(/Nutrition/i)).toBeInTheDocument();
