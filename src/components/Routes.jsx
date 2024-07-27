@@ -53,7 +53,7 @@ function AppRoutes({
       <Route
         path="/profile"
         element={(user
-          ? <Profile /> : <ErrorPage errorMessage="Cannot edit profile. Please login" />)}
+          ? <Profile user={user} /> : <ErrorPage errorMessage="Cannot edit profile. Please login" />)}
       />
 
     </Routes>
