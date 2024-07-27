@@ -81,6 +81,12 @@ describe('SuggestedPostsContent', () => {
     const errorMessage = screen.getByText(/No posts selected. Click on “interested” button on a post to see suggestions/i);
     expect(errorMessage).toBeInTheDocument();
   });
+
+  it('displays the message text if code is USER_INVALID_PREFERENCE', () => {
+    render(<SuggestedPostsContent code="USER_INVALID_PREFERENCE" />);
+    const errorMessage = screen.getByText(/Please select valid posts with nutrition to see suggestions/i);
+    expect(errorMessage).toBeInTheDocument();
+  });
 });
 
 describe('SuggestedPosts', () => {
