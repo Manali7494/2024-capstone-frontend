@@ -90,4 +90,10 @@ describe('Routes', () => {
     expect(screen.getByText('Error')).toBeInTheDocument();
     expect(screen.getByText('Cannot view post')).toBeInTheDocument();
   });
+
+  it('without user at /profile, it renders ErrorPage with proper message', () => {
+    setup('/profile', { user: null });
+    expect(screen.getByText('Error')).toBeInTheDocument();
+    expect(screen.getByText('Cannot edit profile. Please login')).toBeInTheDocument();
+  });
 });

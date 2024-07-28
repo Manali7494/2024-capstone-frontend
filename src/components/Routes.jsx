@@ -10,6 +10,7 @@ import ErrorPage from './Error';
 import EditPost from './EditPost';
 import ViewPost from './ViewPost';
 import { PostList } from './PostList';
+import Profile from './Profile';
 
 function AppRoutes({
   setUserDetails, setUser, setSnackbar, user,
@@ -48,6 +49,11 @@ function AppRoutes({
         path="/posts"
         element={(user
           ? <PostList /> : <ErrorPage errorMessage="Cannot view posts. Please login" />)}
+      />
+      <Route
+        path="/profile"
+        element={(user
+          ? <Profile /> : <ErrorPage errorMessage="Cannot edit profile. Please login" />)}
       />
 
     </Routes>
