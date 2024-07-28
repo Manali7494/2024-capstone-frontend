@@ -11,9 +11,21 @@ import PropTypes from 'prop-types';
 import config from '../config';
 import EditPostLoading from './EditPostLoading';
 
+const sortPosts = ({ posts, filterInterested }) => {
+  if (filterInterested) {
+    return posts.filter((post) => post.interested_count > 0)
+      .sort((a, b) => b.interested_count - a.interested_count);
+  }
+  return posts;
+};
 function Shop({ user }) {
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [filterInterested, setFilterInterested] = useState(false);
+
+  const handleToggle = () => {
+    setFilterInterested((prevState) => !prevState);
+  };
   useEffect(() => {
     setLoading(true);
     const fetchItems = async () => {
@@ -34,7 +46,6 @@ function Shop({ user }) {
   }
   return (
     <Box>
-
       <Toolbar>
         <Box sx={{
           flexGrow: 1, display: 'flex', justifyContent: 'space-between', alignItems: 'center',
@@ -51,7 +62,7 @@ function Shop({ user }) {
             Shop
           </Typography>
           <div>
-            <Switch />
+            <Switch checked={filterInterested} onChange={handleToggle} />
             User Interested
           </div>
         </Box>
@@ -59,7 +70,6 @@ function Shop({ user }) {
 
       <Paper elevation={3} style={{ marginTop: '100px' }}>
         <Grid container spacing={4} justifyContent="center">
-
           { posts.length === 0
             ? (
               <Box display="flex" justifyContent="center" alignItems="center" height="20vh">
@@ -68,7 +78,7 @@ function Shop({ user }) {
                 </Typography>
               </Box>
             )
-            : posts.map((item) => (
+            : sortPosts({ posts, filterInterested }).map((item) => (
               <Grid item xs={12} key={item.id}>
                 <Card style={{ margin: '0 auto', width: '50vw' }} data-testid={`card-item-${item.id}`}>
                   <CardMedia
