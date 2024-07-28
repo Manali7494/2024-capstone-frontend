@@ -75,6 +75,12 @@ describe('SuggestedPostsContent', () => {
       expect(screen.queryByText(`Expiry Date: ${postWithoutExpiryDate.post.expiryDate}`)).not.toBeInTheDocument();
     }
   });
+
+  it('displays the error text if code is USER_NO_PREFERENCE', () => {
+    render(<SuggestedPostsContent code="USER_NO_PREFERENCE" />);
+    const errorMessage = screen.getByText(/No posts selected. Click on “interested” button on a post to see suggestions/i);
+    expect(errorMessage).toBeInTheDocument();
+  });
 });
 
 describe('SuggestedPosts', () => {
