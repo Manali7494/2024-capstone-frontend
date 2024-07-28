@@ -5,6 +5,7 @@ import {
 } from '@mui/material';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
+import SuggestedPosts from './SuggestedPosts';
 
 function Home({ user }) {
   return (
@@ -62,6 +63,9 @@ function Home({ user }) {
                   Create New Post
                 </Button>
               </Box>
+              <div>
+                <SuggestedPosts user={user} />
+              </div>
             </>
           )}
         </Box>
