@@ -73,10 +73,32 @@ const renderContent = ({ code, posts }) => {
           No posts selected. Click on “interested” button on a post to see suggestions
         </Typography>
       </Paper>
+    );
+  }
+  if (code === 'USER_INVALID_PREFERENCE') {
+    return (
+      <Paper
+        elevation={3}
+        sx={{
+          padding: '10px',
+          marginTop: '20px',
+          textAlign: 'center',
+        }}
+      >
+        <Typography
+          variant="h6"
+          component="p"
+          sx={{
+            marginTop: '20px',
+          }}
+          gutterBottom
+        >
+          Please select valid posts with nutrition to see suggestions
+        </Typography>
+      </Paper>
 
     );
   }
-
   return (
     <Grid container spacing={6} justifyContent="center">
       {renderPosts(posts)}

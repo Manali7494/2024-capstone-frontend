@@ -145,3 +145,56 @@ describe('SuggestedPosts with no interested post', () => {
     });
   });
 });
+
+describe('SuggestedPosts with invalid interested post', () => {
+  describe('check post status', () => {
+    const mockUser = { id: 1 };
+
+    const abcdPost = {
+      id: 1,
+      name: 'abcd',
+      quantity: 10,
+      price: 100,
+      purchaseDate: '2024-01-01',
+      expiryDate: '2024-12-31',
+      imageUrl: 'https://via.placeholder.com/450?text=Post+1',
+    };
+    beforeEach(() => {
+      cy.intercept('GET', `${config.backend_url}/posts/${abcdPost.uri}?userId=${mockUser.id}`, {
+        statusCode: 200,
+        body: abcdPost,
+      }).as('getPost');
+
+      cy.mount(<ViewPost id={abcdPost.id} user={mockUser} />);
+    });
+
+    it('displays the banana post correctly', () => {
+      cy.wait('@getPost');
+
+      cy.contains('View Post').should('exist');
+      cy.contains(/Interested/i).click();
+      cy.contains(/Interested/).should('exist');
+    });
+  });
+  describe('view suggested posts', () => {
+    const mockUser = { id: 1 };
+    beforeEach(() => {
+      cy.intercept('GET', `${config.backend_url}/posts/suggested/${mockUser.id}`, {
+        statusCode: 200,
+        body: {
+          code: 'USER_INVALID_PREFERENCE',
+        },
+      }).as('getSuggestedPosts');
+
+      cy.mount(<SuggestedPosts user={mockUser} />);
+    });
+
+    it(' displays the relevant message when code = USER_INVALID_PREFERENCE ', () => {
+      cy.wait('@getSuggestedPosts');
+
+      cy.contains('Suggested Posts').should('exist');
+
+      cy.contains(/Please select valid posts with nutrition to see suggestions/i).should('exist');
+    });
+  });
+});
