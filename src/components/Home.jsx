@@ -62,6 +62,15 @@ function Home({ user }) {
                 >
                   Create New Post
                 </Button>
+                <Button
+                  variant="contained"
+                  color="primary"
+                  component={Link}
+                  data-testId="add-post"
+                  to="/shop"
+                >
+                  Go to your Shop
+                </Button>
               </Box>
               <div>
                 <SuggestedPosts user={user} />
