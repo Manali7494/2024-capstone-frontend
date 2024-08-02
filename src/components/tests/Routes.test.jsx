@@ -96,4 +96,10 @@ describe('Routes', () => {
     expect(screen.getByText('Error')).toBeInTheDocument();
     expect(screen.getByText('Cannot edit profile. Please login')).toBeInTheDocument();
   });
+
+  it('with user at /profile, it renders ProfilePage', () => {
+    const user = { id: '123' };
+    setup('/profile', { user });
+    expect(screen.getByText('Profile')).toBeInTheDocument();
+  });
 });
