@@ -81,6 +81,7 @@ function ViewPost({ user }) {
         color: isUserInterested ? 'white' : 'black',
       }}
       startIcon={<Favorite />}
+      data-testid={isUserInterested ? 'interested' : 'not-interested'}
     >
       Interested
     </Button>
