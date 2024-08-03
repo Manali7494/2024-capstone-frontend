@@ -2,9 +2,10 @@ import React, { useEffect, useState } from 'react';
 import {
   Box, Card, CardContent, Typography, Grid,
   CardMedia, CardActions, Button,
-  Link, Divider,
+  Divider,
   Paper,
 } from '@mui/material';
+import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import config from '../config';
 
