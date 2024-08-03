@@ -59,7 +59,7 @@ function Shop({ user }) {
             }}
             gutterBottom
           >
-            Shop
+            My Shop
           </Typography>
           <div>
             <Switch checked={filterInterested} onChange={handleToggle} />
@@ -72,10 +72,20 @@ function Shop({ user }) {
         <Grid container spacing={4} justifyContent="center">
           { posts.length === 0
             ? (
-              <Box display="flex" justifyContent="center" alignItems="center" height="20vh">
-                <Typography variant="h6" color="textSecondary" sx={{ color: 'red' }}>
+              <Box display="flex" flexDirection="column" justifyContent="center" alignItems="center" height="20vh">
+                <Typography variant="h6" color="textSecondary" sx={{ color: 'red', marginBottom: 2 }}>
                   No posts added. Create a post to see it in the list.
                 </Typography>
+                <Button
+                  variant="contained"
+                  color="primary"
+                  component={Link}
+                  data-testId="add-post"
+                  to="/new"
+                  fullWidth
+                >
+                  Create Post
+                </Button>
               </Box>
             )
             : sortPosts({ posts, filterInterested }).map((item) => (
