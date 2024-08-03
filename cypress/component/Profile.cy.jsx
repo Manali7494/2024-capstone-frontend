@@ -51,4 +51,20 @@ describe('Profile Component', () => {
     cy.get('[data-testid="contact-email"] input').should('be.disabled');
     cy.get('[data-testid="contact-number"] input').should('be.disabled');
   });
+
+  it('shows error message when email and password is invalid', () => {
+    cy.get('[data-testid="contact-email"]').should('exist');
+    cy.get('[data-testid="contact-email"] input').should('be.disabled');
+
+    cy.get('[data-testid="contact-number"]').should('exist');
+    cy.get('[data-testid="contact-number"] input').should('be.disabled');
+
+    cy.get('[data-testid="edit-button"]').click();
+    cy.get('[data-testid="contact-email"]').type('{selectall}{backspace}');
+    cy.get('[data-testid="contact-number"]').type('{selectall}{backspace}');
+
+    cy.get('[data-testid="save-button').click();
+    cy.contains('Email is required.').should('be.visible');
+    cy.contains('Phone number is required.').should('be.visible');
+  });
 });

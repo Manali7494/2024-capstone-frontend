@@ -16,6 +16,7 @@ function Profile({ user }) {
   });
   const [editMode, setEditMode] = useState(false);
   const [contactInformation, setContactInformation] = useState(profileData);
+  const [errors, setErrors] = useState({ email: null, phone: null });
 
   useEffect(() => {
     async function fetchProfile() {
@@ -35,29 +36,50 @@ function Profile({ user }) {
     setEditMode(true);
   };
 
-  const handleSave = async () => {
-    const response = await fetch(`${config.backend_url}/users/${user.id}/contactInformation`, {
-      method: 'PUT',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        email: contactInformation.email,
-        phone: contactInformation.phone,
-      }),
-    });
+  const handleSave = async (e) => {
+    e.preventDefault();
 
-    if (response?.ok) {
-      setProfileData(contactInformation);
-      setEditMode(false);
+    const newErrors = { email: null, phone: null };
+    let valid = true;
+    console.log('contactInformation', contactInformation);
+    if (!contactInformation.email) {
+      newErrors.email = 'Email is required.';
+      valid = false;
+    }
+
+    if (!contactInformation.phone) {
+      newErrors.phone = 'Phone number is required.';
+      valid = false;
+    }
+
+    if (valid) {
+      const response = await fetch(`${config.backend_url}/users/${user.id}/contactInformation`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          email: contactInformation.email,
+          phone: contactInformation.phone,
+        }),
+      });
+
+      if (response?.ok) {
+        setProfileData(contactInformation);
+        setEditMode(false);
+        setErrors({ phone: null, email: null });
+      } else {
+        console.error('Failed to update profile');
+      }
     } else {
-      console.error('Failed to update profile');
+      setErrors(newErrors);
     }
   };
 
   const handleCancel = () => {
     setContactInformation(profileData);
     setEditMode(false);
+    setErrors({ email: null, phone: null });
   };
 
   const handleChange = (e) => {
@@ -116,6 +138,8 @@ function Profile({ user }) {
             value={contactInformation.email}
             onChange={handleChange}
             disabled={!editMode}
+            error={!!errors.email}
+            helperText={errors.email}
             fullWidth
             margin="normal"
             data-testid="contact-email"
@@ -129,6 +153,8 @@ function Profile({ user }) {
             onChange={handleChange}
             disabled={!editMode}
             fullWidth
+            error={!!errors.phone}
+            helperText={errors.phone}
             margin="normal"
             data-testid="contact-number"
           />
