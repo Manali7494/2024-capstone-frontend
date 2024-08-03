@@ -161,15 +161,15 @@ function Profile({ user }) {
         </Box>
         {editMode ? (
           <>
-            <Button variant="contained" color="primary" type="button" onClick={handleSave}>
+            <Button variant="contained" color="primary" type="button" data-testid="save-button" onClick={handleSave}>
               Save
             </Button>
-            <Button variant="contained" color="secondary" type="button" onClick={handleCancel} sx={{ ml: 2 }}>
+            <Button variant="contained" color="secondary" type="button" data-testid="cancel-button" onClick={handleCancel} sx={{ ml: 2 }}>
               Cancel
             </Button>
           </>
         ) : (
-          <Button variant="contained" color="primary" type="button" onClick={handleEdit}>
+          <Button variant="contained" color="primary" type="button" data-testid="edit-button" onClick={handleEdit}>
             Edit Contact
           </Button>
         )}
