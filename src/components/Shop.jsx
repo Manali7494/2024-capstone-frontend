@@ -11,7 +11,7 @@ import PropTypes from 'prop-types';
 import config from '../config';
 import EditPostLoading from './EditPostLoading';
 
-const sortPosts = ({ posts, filterInterested }) => {
+export const sortPosts = ({ posts, filterInterested }) => {
   if (filterInterested) {
     return posts.filter((post) => post.interested_count > 0)
       .sort((a, b) => b.interested_count - a.interested_count);
@@ -22,7 +22,6 @@ function Shop({ user }) {
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(false);
   const [filterInterested, setFilterInterested] = useState(false);
-
   const handleToggle = () => {
     setFilterInterested((prevState) => !prevState);
   };
@@ -59,10 +58,10 @@ function Shop({ user }) {
             }}
             gutterBottom
           >
-            Shop
+            My Shop
           </Typography>
           <div>
-            <Switch checked={filterInterested} onChange={handleToggle} />
+            <Switch data-testid="user-interested-switch" checked={filterInterested} onChange={handleToggle} />
             User Interested
           </div>
         </Box>
@@ -72,10 +71,20 @@ function Shop({ user }) {
         <Grid container spacing={4} justifyContent="center">
           { posts.length === 0
             ? (
-              <Box display="flex" justifyContent="center" alignItems="center" height="20vh">
-                <Typography variant="h6" color="textSecondary" sx={{ color: 'red' }}>
+              <Box display="flex" flexDirection="column" justifyContent="center" alignItems="center" height="20vh">
+                <Typography variant="h6" color="textSecondary" sx={{ color: 'red', marginBottom: 2 }}>
                   No posts added. Create a post to see it in the list.
                 </Typography>
+                <Button
+                  variant="contained"
+                  color="primary"
+                  component={Link}
+                  data-testId="add-post"
+                  to="/new"
+                  fullWidth
+                >
+                  Create Post
+                </Button>
               </Box>
             )
             : sortPosts({ posts, filterInterested }).map((item) => (

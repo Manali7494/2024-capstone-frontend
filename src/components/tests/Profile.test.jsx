@@ -74,4 +74,24 @@ describe('Profile', () => {
 
     fireEvent.click(screen.getByText('Cancel'));
   });
+
+  test('displays error messages for invalid email and phone number', async () => {
+    global.fetch.mockResolvedValue({
+      ok: true,
+      json: jest.fn().mockResolvedValueOnce({
+        name: 'Example User',
+        username: 'exampleuser',
+        email: '',
+        phone: '',
+      }),
+    });
+    render(<Profile user={user} />);
+    fireEvent.click(screen.getByText('Edit Contact'));
+    expect(screen.getByTestId('contact-email')).not.toBeDisabled();
+    expect(screen.getByTestId('contact-number')).not.toBeDisabled();
+
+    fireEvent.click(screen.getByTestId('save-button'));
+    expect(screen.getByText('Email is required.')).toBeInTheDocument();
+    expect(screen.getByText('Phone number is required.')).toBeInTheDocument();
+  });
 });
