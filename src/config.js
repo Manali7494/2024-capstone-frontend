@@ -1,5 +1,5 @@
 const config = {
-  backend_url: 'https://d1ec5a497e5cmh.cloudfront.net',
+  backend_url: 'http://localhost:8080',
 };
 
 export default config;
