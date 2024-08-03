@@ -51,4 +51,19 @@ describe('Shop', () => {
     expect(screen.getByText(/Purchase Date:\s*2024-01-01/)).toBeInTheDocument();
     expect(screen.getByText(/Expiry Date:\s*2024-12-31/)).toBeInTheDocument();
   });
+
+  it('displays "no posts" message if no posts after fetching', async () => {
+    global.fetch.mockResolvedValue({
+      ok: true,
+      json: jest.fn().mockResolvedValue([]),
+    });
+    render(<Shop user={user} />, { wrapper: BrowserRouter });
+
+    await waitFor(() => screen.getByText(/No posts/i));
+    expect(screen.getByText(/Shop/i)).toBeInTheDocument();
+    expect(screen.getByText(/User Interested/i)).toBeInTheDocument();
+    expect(screen.getByText(/No posts added. Create a post to see it in the list./i)).toBeInTheDocument();
+    expect(screen.getByText(/Create Post/i)).toBeInTheDocument();
+    expect(screen.queryByText(/card-item-1/i)).not.toBeInTheDocument();
+  });
 });
