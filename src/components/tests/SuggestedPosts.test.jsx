@@ -3,6 +3,7 @@ import {
   render, screen, within,
 } from '@testing-library/react';
 import '@testing-library/jest-dom/extend-expect';
+import { BrowserRouter } from 'react-router-dom';
 import SuggestedPosts, { SuggestedPostsContent } from '../SuggestedPosts';
 import config from '../../config';
 
@@ -32,12 +33,18 @@ describe('SuggestedPostsContent', () => {
   ];
 
   it('renders Suggested Posts title', () => {
-    render(<SuggestedPostsContent posts={mockPosts} />);
+    render(
+      <SuggestedPostsContent posts={mockPosts} />,
+      { wrapper: BrowserRouter },
+    );
     expect(screen.getByText('Suggested Posts')).toBeInTheDocument();
   });
 
   it('displays posts with correct data', () => {
-    render(<SuggestedPostsContent posts={mockPosts} />);
+    render(
+      <SuggestedPostsContent posts={mockPosts} />,
+      { wrapper: BrowserRouter },
+    );
 
     const postList = screen.getAllByTestId(/card-item-/i);
     const firstPost = postList[0];
@@ -54,7 +61,10 @@ describe('SuggestedPostsContent', () => {
   });
 
   it('uses fallback image when imageUrl is not provided', () => {
-    render(<SuggestedPostsContent posts={mockPosts} />);
+    render(
+      <SuggestedPostsContent posts={mockPosts} />,
+      { wrapper: BrowserRouter },
+    );
 
     const fallbackImage = 'https://via.placeholder.com/450?text=No+Image+Available';
     mockPosts.forEach(({ post }) => {
@@ -68,7 +78,10 @@ describe('SuggestedPostsContent', () => {
   });
 
   it('does not display expiry date when not provided', () => {
-    render(<SuggestedPostsContent posts={mockPosts} />);
+    render(
+      <SuggestedPostsContent posts={mockPosts} />,
+      { wrapper: BrowserRouter },
+    );
 
     const postWithoutExpiryDate = mockPosts.find(({ post }) => !post.expiryDate);
     if (postWithoutExpiryDate) {
@@ -77,13 +90,19 @@ describe('SuggestedPostsContent', () => {
   });
 
   it('displays the error text if code is USER_NO_PREFERENCE', () => {
-    render(<SuggestedPostsContent code="USER_NO_PREFERENCE" />);
+    render(
+      <SuggestedPostsContent code="USER_NO_PREFERENCE" />,
+      { wrapper: BrowserRouter },
+    );
     const errorMessage = screen.getByText(/No posts selected. Click on “interested” button on a post to see suggestions/i);
     expect(errorMessage).toBeInTheDocument();
   });
 
   it('displays the message text if code is USER_INVALID_PREFERENCE', () => {
-    render(<SuggestedPostsContent code="USER_INVALID_PREFERENCE" />);
+    render(
+      <SuggestedPostsContent code="USER_INVALID_PREFERENCE" />,
+      { wrapper: BrowserRouter },
+    );
     const errorMessage = screen.getByText(/Please select valid posts with nutrition to see suggestions/i);
     expect(errorMessage).toBeInTheDocument();
   });

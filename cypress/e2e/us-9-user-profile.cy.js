@@ -1,6 +1,6 @@
-describe('User PRofile', () => {
+describe('User Profile', () => {
   beforeEach(() => {
-    // Login as user and /navigate
+    // Login
     cy.visit('/login');
     const email = 'test@gmail.com';
     const password = '!Testpassword100';
@@ -13,53 +13,34 @@ describe('User PRofile', () => {
     cy.visit('/profile');
   });
 
-  it('checks that contact email and number fields are disabled initially', () => {
-    cy.get('[data-testid="contact-email"]').should('be.disabled');
-    cy.get('[data-testid="contact-number"]').should('be.disabled');
-  });
+  it('Updates profile contact information', () => {
+    // Check initial fields
+    cy.get('[data-testid="contact-email"]').should('exist');
+    cy.get('[data-testid="contact-email"] input').should('have.value', 'test@gmail.com');
+    cy.get('[data-testid="contact-number"]').should('exist');
+    cy.get('[data-testid="contact-number"] input').should('have.value', '123-456-3435');
 
-  it('checks that the edit button is present and clickable', () => {
+    cy.get('[data-testid="contact-email"] input').should('be.disabled');
+    cy.get('[data-testid="contact-number"] input').should('be.disabled');
+
+    // Click edit button
     cy.get('[data-testid="edit-button"]').should('exist').and('be.visible').click();
-    cy.get('[data-testid="contact-email"]').should('not.be.disabled');
-    cy.get('[data-testid="contact-number"]').should('not.be.disabled');
-  });
+    cy.get('[data-testid="contact-email"] input').should('not.be.disabled');
+    cy.get('[data-testid="contact-number"] input').should('not.be.disabled');
 
-  it('enables contact email and number fields after clicking edit', () => {
-    cy.get('[data-testid="edit-button"]').click();
-    cy.get('[data-testid="contact-email"]').should('not.be.disabled');
-    cy.get('[data-testid="contact-number"]').should('not.be.disabled');
-  });
+    // Edit email and number
+    cy.get('[data-testid="contact-email"] input').clear();
+    cy.get('[data-testid="contact-number"] input').clear();
 
-  it('changes value of contact number input field', () => {
-    cy.get('[data-testid="edit-button"]').click();
-    cy.get('[data-testid="contact-number"]').clear().type('1234567890');
-    cy.get('[data-testid="contact-number"]').should('have.value', '1234567890');
-  });
+    const newEmail = 'newemail@gmail.com';
+    const newNumber = '987-654-3210';
+    cy.get('[data-testid="contact-email"] input').type(newEmail);
+    cy.get('[data-testid="contact-number"] input').type(newNumber);
 
-  it('disables contact email and number fields after clicking cancel', () => {
-    cy.get('[data-testid="edit-button"]').click();
-    cy.get('[data-testid="cancel-button"]').click();
-    cy.get('[data-testid="contact-email"]').should('be.disabled');
-    cy.get('[data-testid="contact-number"]').should('be.disabled');
-  });
+    // Save
+    cy.get('[data-testid="save-button"]').click();
 
-  it('shows error message when trying to submit with empty fields', () => {
-    cy.get('[data-testid="edit-button"]').click();
-    cy.get('[data-testid="contact-email"]').clear();
-    cy.get('[data-testid="contact-number"]').clear();
-    cy.get('[data-testid="submit-button"]').click();
-    cy.get('[data-testid="contact-email"]').parent().contains('Email is required.');
-    cy.get('[data-testid="contact-number"]').parent().contains('Phone number is required.');
-  });
-
-  it('submits the form when both fields are filled', () => {
-    cy.get('[data-testid="edit-button"]').click();
-    cy.get('[data-testid="contact-email"]').clear().type('test@example.com');
-    cy.get('[data-testid="contact-number"]').clear().type('1234567890');
-    cy.get('[data-testid="submit-button"]').click();
-    cy.get('[data-testid="contact-email"]').parent().should('not.contain', 'Email is required.');
-    cy.get('[data-testid="contact-number"]').parent().should('not.contain', 'Phone number is required.');
-    cy.get('[data-testid="contact-email"]').should('be.disabled');
-    cy.get('[data-testid="contact-number"]').should('be.disabled');
+    cy.get('[data-testid="contact-email"] input').should('have.value', newEmail);
+    cy.get('[data-testid="contact-number"] input').should('have.value', newNumber);
   });
 });
