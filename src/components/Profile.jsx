@@ -89,7 +89,7 @@ function Profile({ user }) {
       [id]: value,
     }));
   };
-  console.log('errors', errors);
+
   return (
     <Container>
       <Typography
