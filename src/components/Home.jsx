@@ -1,7 +1,7 @@
 import React from 'react';
 import {
   Typography, Button, Container, Box,
-  Card, CardContent,
+  Card, CardContent, Grid,
 } from '@mui/material';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
@@ -44,24 +44,56 @@ function Home({ user }) {
                 <Typography variant="h6">
                   Explore features of Healthy Wealthy App.
                 </Typography>
-                <Button
-                  variant="contained"
-                  color="primary"
-                  component={Link}
-                  data-testId="view-posts"
-                  to="/posts"
-                >
-                  View Posts
-                </Button>
-                <Button
-                  variant="contained"
-                  color="primary"
-                  component={Link}
-                  data-testId="add-post"
-                  to="/new"
-                >
-                  Create New Post
-                </Button>
+                <Grid container spacing={2} sx={{ paddingLeft: 4, paddingRight: 4 }}>
+                  <Grid item xs={6}>
+                    <Button
+                      variant="contained"
+                      color="primary"
+                      component={Link}
+                      data-testId="profile"
+                      to="/profile"
+                      fullWidth
+                    >
+                      Profile
+                    </Button>
+                  </Grid>
+                  <Grid item xs={6}>
+                    <Button
+                      variant="contained"
+                      color="primary"
+                      component={Link}
+                      data-testId="shop"
+                      to="/shop"
+                      fullWidth
+                    >
+                      Your Shop
+                    </Button>
+                  </Grid>
+                  <Grid item xs={6}>
+                    <Button
+                      variant="contained"
+                      color="primary"
+                      component={Link}
+                      data-testId="view-posts"
+                      to="/posts"
+                      fullWidth
+                    >
+                      View Posts
+                    </Button>
+                  </Grid>
+                  <Grid item xs={6}>
+                    <Button
+                      variant="contained"
+                      color="primary"
+                      component={Link}
+                      data-testId="add-post"
+                      to="/new"
+                      fullWidth
+                    >
+                      Create Post
+                    </Button>
+                  </Grid>
+                </Grid>
               </Box>
               <div>
                 <SuggestedPosts user={user} />
