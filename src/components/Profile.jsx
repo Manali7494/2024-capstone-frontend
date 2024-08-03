@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import {
@@ -13,6 +14,8 @@ function Profile({ user }) {
     email: '',
     phone: '',
   });
+  const [editMode, setEditMode] = useState(false);
+  const [contactInformation, setContactInformation] = useState(profileData);
 
   useEffect(() => {
     async function fetchProfile() {
@@ -22,10 +25,48 @@ function Profile({ user }) {
       }
       const data = await response.json();
       setProfileData(data);
+      setContactInformation(data);
     }
 
     fetchProfile();
   }, [user]);
+
+  const handleEdit = () => {
+    setEditMode(true);
+  };
+
+  const handleSave = async () => {
+    const response = await fetch(`${config.backend_url}/users/${user.id}/contactInformation`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        email: contactInformation.email,
+        phone: contactInformation.phone,
+      }),
+    });
+
+    if (response?.ok) {
+      setProfileData(contactInformation);
+      setEditMode(false);
+    } else {
+      console.error('Failed to update profile');
+    }
+  };
+
+  const handleCancel = () => {
+    setContactInformation(profileData);
+    setEditMode(false);
+  };
+
+  const handleChange = (e) => {
+    const { id, value } = e.target;
+    setContactInformation((prevData) => ({
+      ...prevData,
+      [id]: value,
+    }));
+  };
 
   return (
     <Container>
@@ -60,7 +101,6 @@ function Profile({ user }) {
         />
       </Box>
       <Paper elevation={3} sx={{ padding: 2 }}>
-
         <Typography
           variant="h6"
           component="div"
@@ -73,8 +113,9 @@ function Profile({ user }) {
           <TextField
             label="Contact Email"
             id="email"
-            value={profileData.email}
-            disabled
+            value={contactInformation.email}
+            onChange={handleChange}
+            disabled={!editMode}
             fullWidth
             margin="normal"
             data-testid="contact-email"
@@ -84,14 +125,28 @@ function Profile({ user }) {
           <TextField
             label="Contact Number"
             id="phone"
-            value={profileData.phone}
-            disabled
+            value={contactInformation.phone}
+            onChange={handleChange}
+            disabled={!editMode}
             fullWidth
             margin="normal"
             data-testid="contact-number"
           />
         </Box>
-        <Button variant="contained" color="primary" type="button">Edit Contact</Button>
+        {editMode ? (
+          <>
+            <Button variant="contained" color="primary" type="button" data-testid="save-button" onClick={handleSave}>
+              Save
+            </Button>
+            <Button variant="contained" color="secondary" type="button" data-testid="cancel-button" onClick={handleCancel} sx={{ ml: 2 }}>
+              Cancel
+            </Button>
+          </>
+        ) : (
+          <Button variant="contained" color="primary" type="button" data-testid="edit-button" onClick={handleEdit}>
+            Edit Contact
+          </Button>
+        )}
       </Paper>
     </Container>
   );

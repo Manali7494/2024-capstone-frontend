@@ -1,5 +1,7 @@
 import React from 'react';
-import { render, screen, waitFor } from '@testing-library/react';
+import {
+  render, screen, waitFor, fireEvent,
+} from '@testing-library/react';
 import '@testing-library/jest-dom/extend-expect';
 import Profile from '../Profile';
 
@@ -45,5 +47,31 @@ describe('Profile', () => {
     });
 
     expect(screen.getByRole('button', { name: 'Edit Contact' })).toBeInTheDocument();
+  });
+
+  test('verify contact information', async () => {
+    global.fetch.mockResolvedValue({
+      ok: true,
+      json: jest.fn().mockResolvedValueOnce({
+        name: 'John Doe',
+        username: 'johndoe',
+        email: 'john.doe@example.com',
+        phone: '123-456-7890',
+      }),
+    });
+
+    render(<Profile user={{ id: '1' }} />);
+
+    await waitFor(() => {
+      expect(screen.getByDisplayValue('john.doe@example.com')).toBeInTheDocument();
+      expect(screen.getByDisplayValue('123-456-7890')).toBeInTheDocument();
+    });
+
+    fireEvent.click(screen.getByText('Edit Contact'));
+
+    expect(screen.getByTestId('contact-email')).not.toBeDisabled();
+    expect(screen.getByTestId('contact-number')).not.toBeDisabled();
+
+    fireEvent.click(screen.getByText('Cancel'));
   });
 });
