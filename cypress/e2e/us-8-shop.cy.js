@@ -14,18 +14,18 @@ describe('Shop', () => {
   });
 
   it('should display the "Shop" posts', () => {
-    cy.get('h4').contains('Shop').should('have.css', 'text-align', 'center');
+    cy.contains(/My shop/i).should('be.visible');
 
-    cy.get('input[type="checkbox"]').parent().should('have.css', 'justify-content', 'flex-end');
-
-    cy.get('input[type="checkbox"]').should('exist');
-
+    cy.get('[data-testid="user-interested-switch"]').should('exist');
+    cy.get('[data-testid="user-interested-switch"]').should('not.be.checked');
     cy.get('[data-testid^="card-item-"]').should('have.length.greaterThan', 0);
   });
 
-  it('should update the list when the toggle button is clicked', () => {
-    cy.get('input[type="checkbox"]').click();
-
+  it('should update the list when the "User Interested" button is clicked', () => {
+    cy.contains(/My shop/i).should('be.visible');
+    cy.get('[data-testid="user-interested-switch"]').should('exist');
+    cy.get('[data-testid="user-interested-switch"]').click();
+    cy.get('[data-testid="user-interested-switch"]').should('exist');
     cy.get('[data-testid^="card-item-"]').should('have.length.greaterThan', 0);
   });
 });
