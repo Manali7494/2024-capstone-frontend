@@ -169,9 +169,6 @@ function Nutrition({ postId, user }) {
     setIsLoading(true);
     try {
       const response = await fetch(`${config.backend_url}/posts/${postId}/nutrition?userId=${user.id}`);
-      if (!response?.ok) {
-        throw new Error('Network response was not ok');
-      }
       const data = await response.json();
       setNutritionDetails(data);
     } catch (error) {

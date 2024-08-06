@@ -9,7 +9,7 @@ import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import config from '../config';
 
-const renderPosts = (posts) => posts.map(({ post }) => (
+const renderPosts = (posts) => posts.map((post) => (
   <Grid item xs={12} sm={6} md={4} key={post.id}>
     <Card style={{ margin: '0 auto', width: '200px' }} data-testid={`card-item-${post.id}`}>
       <CardMedia

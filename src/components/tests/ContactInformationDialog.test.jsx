@@ -5,14 +5,19 @@ import {
 import '@testing-library/jest-dom';
 import ContactInformationDialog from '../ContactInformationDialog';
 
-global.fetch = jest.fn(() => Promise.resolve({
-  ok: true,
-  json: () => Promise.resolve({ contact_email: 'test@example.com', contact_number: '123-456-7890' }),
-}));
+global.fetch = jest.fn();
 
 describe('ContactInformationDialog', () => {
   beforeEach(() => {
     fetch.mockClear();
+  });
+
+  global.fetch.mockResolvedValue({
+    ok: true,
+    json: jest.fn().mockResolvedValue({
+      contact_email: 'test@example.com',
+      contact_number: '123-456-7890',
+    }),
   });
 
   it('opens the dialog and displays contact information', async () => {

@@ -18,6 +18,8 @@ const mockNutritionData = {
   },
 };
 
+global.fetch = jest.fn();
+
 describe('Nutrition', () => {
   describe('Nutrition Drawer', () => {
     const mockNutritionDrawerProps = {

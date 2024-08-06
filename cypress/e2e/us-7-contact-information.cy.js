@@ -15,7 +15,7 @@ describe('View Contact Information', () => {
 
   it('views contact information for a Post', () => {
     // Search and open
-    cy.get('#search').type('Banana');
+    cy.get('#search').type('apple');
     cy.get('[data-testid="search-button"]').click();
     cy.contains('a', 'Detail').click();
     cy.contains('View Post').should('be.visible');
@@ -23,8 +23,8 @@ describe('View Contact Information', () => {
     cy.contains('button', /Contact Information/i).click();
 
     // Validate Contact Information
-    cy.get('[data-testid="contact-email"]').should('exist');
-    cy.get('[data-testid="contact-number"]').should('exist');
+    cy.get('[data-testid="contact-email"]').should('exist').and('not.be.empty');
+    cy.get('[data-testid="contact-number"]').should('exist').and('not.be.empty');
 
     // Close dialog
     cy.contains('button', /Ok/i).click();

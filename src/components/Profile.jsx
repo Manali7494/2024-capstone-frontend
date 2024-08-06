@@ -21,9 +21,6 @@ function Profile({ user }) {
   useEffect(() => {
     async function fetchProfile() {
       const response = await fetch(`${config.backend_url}/users/${user.id}/profile`);
-      if (!response?.ok) {
-        throw new Error('Network response was not ok');
-      }
       const data = await response.json();
       setProfileData(data);
       setContactInformation(data);
@@ -41,7 +38,6 @@ function Profile({ user }) {
 
     const newErrors = { email: null, phone: null };
     let valid = true;
-    console.log('contactInformation', contactInformation);
     if (!contactInformation.email) {
       newErrors.email = 'Email is required.';
       valid = false;
@@ -53,7 +49,7 @@ function Profile({ user }) {
     }
 
     if (valid) {
-      const response = await fetch(`${config.backend_url}/users/${user.id}/contactInformation`, {
+      await fetch(`${config.backend_url}/users/${user.id}/contactInformation`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -64,13 +60,9 @@ function Profile({ user }) {
         }),
       });
 
-      if (response?.ok) {
-        setProfileData(contactInformation);
-        setEditMode(false);
-        setErrors({ phone: null, email: null });
-      } else {
-        console.error('Failed to update profile');
-      }
+      setProfileData(contactInformation);
+      setEditMode(false);
+      setErrors({ phone: null, email: null });
     } else {
       setErrors(newErrors);
     }

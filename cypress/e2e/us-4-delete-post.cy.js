@@ -9,7 +9,11 @@ describe('Delete Post', () => {
     cy.get('form').submit();
 
     cy.contains('Login successful').should('exist');
-    cy.visit('/posts/1/edit');
+    cy.visit('/posts');
+    cy.get('#search').type('banana');
+    cy.get('[data-testid="search-button"]').click();
+    cy.contains('a', 'Detail').click();
+    cy.contains('a', 'Edit').click();
   });
 
   it('deletes the post', () => {

@@ -39,25 +39,21 @@ describe('SuggestedPosts with interested post', () => {
     const mockUser = { id: 1 };
     const mockPosts = [
       {
-        post: {
-          id: 1,
-          name: 'Banana',
-          quantity: 10,
-          price: 100,
-          purchaseDate: '2024-01-01',
-          expiryDate: '2024-12-31',
-          imageUrl: 'https://via.placeholder.com/450?text=Post+1',
-        },
+        id: 1,
+        name: 'Banana',
+        quantity: 10,
+        price: 100,
+        purchaseDate: '2024-01-01',
+        expiryDate: '2024-12-31',
+        imageUrl: 'https://via.placeholder.com/450?text=Post+1',
       },
       {
-        post: {
-          id: 2,
-          name: 'Post 2',
-          quantity: 5,
-          price: 50,
-          purchaseDate: '2024-02-01',
-          imageUrl: '',
-        },
+        id: 2,
+        name: 'Post 2',
+        quantity: 5,
+        price: 50,
+        purchaseDate: '2024-02-01',
+        imageUrl: '',
       },
     ];
 

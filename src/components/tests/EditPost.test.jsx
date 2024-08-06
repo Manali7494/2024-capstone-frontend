@@ -17,10 +17,7 @@ const mockPostData = {
   expiryDate: '2024-12-31',
 };
 
-global.fetch = jest.fn(() => Promise.resolve({
-  ok: true,
-  json: () => Promise.resolve(mockPostData),
-}));
+global.fetch = jest.fn();
 
 jest.mock('react-router-dom', () => ({
   ...jest.requireActual('react-router-dom'),
@@ -30,6 +27,11 @@ jest.mock('react-router-dom', () => ({
 }));
 
 describe('EditPost Component', () => {
+  global.fetch.mockResolvedValue({
+    ok: true,
+    json: jest.fn().mockResolvedValue(mockPostData),
+  });
+
   test('displays the correct heading', async () => {
     render(<EditPost />, { wrapper: BrowserRouter });
     await waitFor(() => expect(screen.getByLabelText('Name')).toBeInTheDocument());

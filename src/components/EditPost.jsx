@@ -41,9 +41,6 @@ function EditPost({ user }) {
     const fetchPostData = async () => {
       try {
         const response = await fetch(`${config.backend_url}/posts/${id}`);
-        if (!response?.ok) {
-          throw new Error('Could not fetch post data');
-        }
         const data = await response.json();
         setPost({
           id: data.id,
@@ -73,7 +70,6 @@ function EditPost({ user }) {
     const newErrors = {};
     if (!post.name?.trim()) newErrors.name = 'Name is required';
     if (!post.price?.trim()) newErrors.price = 'Unit Price is required. It can be 0 if the item is free';
-    console.log('post.quantity', post.quantity);
     if (!post.quantity?.trim() || Number(post.quantity) === 0) newErrors.quantity = 'Quantity is required';
     if (!post.purchaseDate?.trim()) newErrors.purchaseDate = 'Purchase Date is required';
     setErrors(newErrors);

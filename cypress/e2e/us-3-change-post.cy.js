@@ -9,16 +9,19 @@ describe('Change Post', () => {
     cy.get('form').submit();
 
     cy.contains('Login successful').should('exist');
-    cy.visit('/posts/1/edit');
+    cy.visit('/posts');
+    cy.get('#search').type('banana');
+    cy.get('[data-testid="search-button"]').click();
+    cy.contains('a', 'Detail').click();
+    cy.contains('a', 'Edit').click();
   });
 
   it('updates the fields', () => {
-    const newName = 'Updated Test Name';
     const newDescription = 'Updated Test Description';
     const newPurchaseDate = '2025-01-01';
     const newExpiryDate = '2025-12-31';
     cy.get('[data-testid=name]').should('not.be.disabled');
-    cy.get('[data-testid=name]').type(newName);
+    cy.get('[data-testid="description"]').type('{selectall}{backspace}');
     cy.get('[data-testid=description]').type(newDescription);
     cy.get('[data-testid=purchaseDate]').type(newPurchaseDate);
     cy.get('[data-testid=expiryDate]').type(newExpiryDate);

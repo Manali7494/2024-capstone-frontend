@@ -10,25 +10,23 @@ import config from '../../config';
 describe('SuggestedPostsContent', () => {
   const mockPosts = [
     {
-      post: {
-        id: 1,
-        name: 'Post 1',
-        quantity: 10,
-        price: 100,
-        purchaseDate: '2024-01-01',
-        expiryDate: '2024-12-31',
-        imageUrl: 'https://via.placeholder.com/450?text=Post+1',
-      },
+      id: 1,
+      name: 'Post 1',
+      quantity: 10,
+      price: 100,
+      purchaseDate: '2024-01-01',
+      expiryDate: '2024-12-31',
+      imageUrl: 'https://via.placeholder.com/450?text=Post+1',
+
     },
     {
-      post: {
-        id: 2,
-        name: 'Post 2',
-        quantity: 5,
-        price: 50,
-        purchaseDate: '2024-02-01',
-        imageUrl: '',
-      },
+      id: 2,
+      name: 'Post 2',
+      quantity: 5,
+      price: 50,
+      purchaseDate: '2024-02-01',
+      imageUrl: '',
+
     },
   ];
 
@@ -67,7 +65,7 @@ describe('SuggestedPostsContent', () => {
     );
 
     const fallbackImage = 'https://via.placeholder.com/450?text=No+Image+Available';
-    mockPosts.forEach(({ post }) => {
+    mockPosts.forEach((post) => {
       const image = screen.getByAltText(post.name);
       if (post.imageUrl) {
         expect(image).toHaveAttribute('src', post.imageUrl);
@@ -83,9 +81,9 @@ describe('SuggestedPostsContent', () => {
       { wrapper: BrowserRouter },
     );
 
-    const postWithoutExpiryDate = mockPosts.find(({ post }) => !post.expiryDate);
+    const postWithoutExpiryDate = mockPosts.find((post) => !post.expiryDate);
     if (postWithoutExpiryDate) {
-      expect(screen.queryByText(`Expiry Date: ${postWithoutExpiryDate.post.expiryDate}`)).not.toBeInTheDocument();
+      expect(screen.queryByText(`Expiry Date: ${postWithoutExpiryDate.expiryDate}`)).not.toBeInTheDocument();
     }
   });
 

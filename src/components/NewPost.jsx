@@ -66,15 +66,14 @@ function NewPost({ user }) {
         method: 'POST',
         body: formData,
       });
-      if (result.ok) {
-        const data = await result.json();
-        const postId = data.id;
-        setSuccessMessage('Post created successfully');
 
-        setTimeout(() => {
-          navigate(`/posts/${postId}`);
-        }, 3000);
-      }
+      const data = await result.json();
+      const postId = data.id;
+      setSuccessMessage('Post created successfully');
+
+      setTimeout(() => {
+        navigate(`/posts/${postId}`);
+      }, 3000);
     } catch (error) {
       setDisplayErrorMessage('Failed to create post');
     }

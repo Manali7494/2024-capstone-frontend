@@ -94,4 +94,26 @@ describe('Profile', () => {
     expect(screen.getByText('Email is required.')).toBeInTheDocument();
     expect(screen.getByText('Phone number is required.')).toBeInTheDocument();
   });
+
+  test('it saves updated contact information', async () => {
+    global.fetch.mockResolvedValue({
+      ok: true,
+      json: jest.fn().mockResolvedValueOnce({
+        name: 'Example User',
+        username: 'exampleuser',
+        email: 'test@gmail.com',
+        phone: '123-456-7890',
+      }),
+    });
+    render(<Profile user={user} />);
+    fireEvent.click(screen.getByText('Edit Contact'));
+    expect(screen.getByTestId('contact-email')).not.toBeDisabled();
+    expect(screen.getByTestId('contact-number')).not.toBeDisabled();
+
+    const contactNumberElement = screen.getByTestId('contact-number');
+    const contactNumberInput = contactNumberElement.querySelector('input');
+    fireEvent.change(contactNumberInput, { target: { value: '123-458-8970' } });
+
+    fireEvent.click(screen.getByTestId('save-button'));
+  });
 });
